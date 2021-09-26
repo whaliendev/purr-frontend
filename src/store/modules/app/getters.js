@@ -1,5 +1,5 @@
 const getters = {
-  user: (state) => state.user
+  apiUrl: (state) => state.apiUrl,
 };
 
 export default getters;
