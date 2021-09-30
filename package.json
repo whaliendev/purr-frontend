@@ -3,12 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@element-plus/icons": "^0.0.11",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^3.0.0-4",
     "axios": "^0.21.4",
     "core-js": "^3.18.0",
     "dayjs": "^1.10.7",
@@ -33,6 +40,8 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
     "node-sass": "^6.0.1",
     "prettier": "^2.2.1",
     "sass": "^1.42.1",

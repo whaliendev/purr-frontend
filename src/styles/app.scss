@@ -1,4 +1,10 @@
-@import "base/variable";
-@import "base/override";
+@import "override/variables.scss";
+@import "override/override";
 
-@import "themes/light";
+@import '../../node_modules/element-plus/theme-chalk/src/index.scss';
+@import '../../node_modules/element-plus/theme-chalk/src/display';
+
+@import "core/animate";
+@import "core/preset";
+
+

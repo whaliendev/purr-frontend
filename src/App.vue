@@ -1,5 +1,5 @@
 <template>
-  <div>Hello, Purr!</div>
+  <router-view></router-view>
 </template>
 
 <script></script>

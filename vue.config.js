@@ -6,11 +6,13 @@ module.exports = {
       }),
     ],
   },
-  // css: {
-  //   loaderOptions: {
-  //     sass: {
-  //       prependData: `@import "@/styles/app.scss";`
-  //     }
-  //   }
-  // }
+  devServer: {
+    https: false,
+    proxy: {
+      '/api': {
+        target: 'http://purr.group',
+        changeOrigin: true,
+      },
+    },
+  },
 };

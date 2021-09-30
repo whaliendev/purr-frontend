@@ -2,11 +2,11 @@ import { createStore } from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
-import appModule from './modules/app';
+import app from './modules/app';
 
 const store = createStore({
   modules: {
-    appModule,
+    app,
   },
   state() {
     return {

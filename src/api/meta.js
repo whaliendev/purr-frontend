@@ -1,12 +1,14 @@
 import service from '../utils/service';
 
-const baseUrl = '/api';
+const baseUrl = '/api/meta';
 
-const adminApi = {};
+const metaApi = {};
 
-adminApi.isInstalled = () => {
+metaApi.isInstalled = () => {
   return service({
     url: `${baseUrl}/isInstalled`,
     method: 'get',
   });
 };
+
+export default metaApi;
