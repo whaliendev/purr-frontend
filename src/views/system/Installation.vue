@@ -132,8 +132,80 @@ export default defineComponent({
     const store = useStore();
 
     const VERSION = ref('1.0.0');
+
     // template ref strengthChecker
     const strengthChecker = ref(null);
+    // password checker for async validator
+    const passwordStrengthChecker = (rule, value, callback) => {
+      if (value.length < 8) {
+        callback(new Error('* 密码长度最低不小于8'));
+        return;
+      }
+      if (value.length > 30) {
+        callback(new Error('* 密码长度最长不超过30'));
+        return;
+      }
+
+      const strengthValue = {
+        caps: false,
+        length: false,
+        special: false,
+        numbers: false,
+        small: false
+      };
+      for (let index = 0; index < value.length; index++) {
+        let char = value.charCodeAt(index);
+        if (!strengthValue.caps && char >= 65 && char <= 90) {
+          strengthValue.caps = true;
+        } else if (!strengthValue.numbers && char >= 48 && char <= 57) {
+          strengthValue.numbers = true;
+        } else if (!strengthValue.small && char >= 97 && char <= 122) {
+          strengthValue.small = true;
+        } else if (
+          (!strengthValue.special && char >= 32 && char <= 47) ||
+          (char >= 58 && char <= 64) ||
+          (char >= 91 && char <= 96) ||
+          (char >= 123 && char <= 126)
+        ) {
+          strengthValue.special = true;
+        }
+      }
+
+      let strengthIndicator = 0;
+      for (const metric in strengthValue) {
+        if (strengthValue[metric]) strengthIndicator++;
+      }
+
+      const strongColor = getComputedStyle(
+        document.documentElement
+      ).getPropertyValue('--el-color-success');
+      const mediumColor = getComputedStyle(
+        document.documentElement
+      ).getPropertyValue('--el-color-warning');
+      const weakColor = getComputedStyle(
+        document.documentElement
+      ).getPropertyValue('--el-color-error');
+      if (strengthIndicator <= 2) {
+        strengthChecker.value.innerText = 'Weak';
+        strengthChecker.value.style.color = weakColor;
+        callback(
+          new Error(
+            '* 密码强度过弱，要求至少包含数字、大写字母、小写字母、特殊字符中的三种'
+          )
+        );
+      } else if (value.length >= 8 && strengthIndicator === 4) {
+        strengthChecker.value.innerText = 'Strong';
+        strengthChecker.value.style.color = strongColor;
+      } else {
+        strengthChecker.value.innerText = 'Medium';
+        strengthChecker.value.style.color = mediumColor;
+      }
+    };
+    const passwordConfirmChecker = (rule, value, callback) => {
+      if (value !== form.model.password) {
+        callback(new Error('* 两次输入密码不一致'));
+      }
+    };
     // form data
     const form = reactive({
       model: {
@@ -156,71 +228,7 @@ export default defineComponent({
         password: [
           { required: true, message: '* 密码不能为空', trigger: ['change'] },
           {
-            validator(rule, value, callback) {
-              if (value.length < 8) {
-                callback(new Error('* 密码长度最低不小于8'));
-                return;
-              }
-              if (value.length > 30) {
-                callback(new Error('* 密码长度最长不超过30'));
-                return;
-              }
-
-              const strengthValue = {
-                caps: false,
-                length: false,
-                special: false,
-                numbers: false,
-                small: false
-              };
-              for (let index = 0; index < value.length; index++) {
-                let char = value.charCodeAt(index);
-                if (!strengthValue.caps && char >= 65 && char <= 90) {
-                  strengthValue.caps = true;
-                } else if (!strengthValue.numbers && char >= 48 && char <= 57) {
-                  strengthValue.numbers = true;
-                } else if (!strengthValue.small && char >= 97 && char <= 122) {
-                  strengthValue.small = true;
-                } else if (
-                  (!strengthValue.special && char >= 32 && char <= 47) ||
-                  (char >= 58 && char <= 64) ||
-                  (char >= 91 && char <= 96) ||
-                  (char >= 123 && char <= 126)
-                ) {
-                  strengthValue.special = true;
-                }
-              }
-
-              let strengthIndicator = 0;
-              for (const metric in strengthValue) {
-                if (strengthValue[metric]) strengthIndicator++;
-              }
-
-              const strongColor = getComputedStyle(
-                document.documentElement
-              ).getPropertyValue('--el-color-success');
-              const mediumColor = getComputedStyle(
-                document.documentElement
-              ).getPropertyValue('--el-color-warning');
-              const weakColor = getComputedStyle(
-                document.documentElement
-              ).getPropertyValue('--el-color-error');
-              if (strengthIndicator <= 2) {
-                strengthChecker.value.innerText = 'Weak';
-                strengthChecker.value.style.color = weakColor;
-                callback(
-                  new Error(
-                    '* 密码强度过弱，要求至少包含数字、大写字母、小写字母、特殊字符中的三种'
-                  )
-                );
-              } else if (value.length >= 8 && strengthIndicator === 4) {
-                strengthChecker.value.innerText = 'Strong';
-                strengthChecker.value.style.color = strongColor;
-              } else {
-                strengthChecker.value.innerText = 'Medium';
-                strengthChecker.value.style.color = mediumColor;
-              }
-            },
+            validator: passwordStrengthChecker,
             trigger: 'change'
           }
         ],
@@ -231,11 +239,7 @@ export default defineComponent({
             trigger: 'change'
           },
           {
-            validator(rule, value, callback) {
-              if (value !== form.model.password) {
-                callback(new Error('* 两次输入密码不一致'));
-              }
-            },
+            validator: passwordConfirmChecker,
             trigger: 'change'
           }
         ],
@@ -275,29 +279,28 @@ export default defineComponent({
     };
 
     const handleInstall = () => {
-      console.log(installationForm.value.validate);
-      // installationForm.value.validate((valid) => {
-      //   if (valid) {
-      form.installing = true;
-      store
-        .dispatch('app/install', form.model)
-        .then((response) => {
-          logger.info(response);
-          const success = response.data.success;
-          if (success) {
-            form.installing = false;
-            setDocumentTitle(form.model.blogName);
-          } else {
-            form.installErrored = true;
-            form.installing = false;
-          }
-        })
-        .catch(() => {
-          form.installErrored = true;
-          form.installing = false;
-        });
-      //   }
-      // });
+      installationForm.value.validate((valid) => {
+        if (valid) {
+          form.installing = true;
+          store
+            .dispatch('app/install', form.model)
+            .then((response) => {
+              logger.info(response);
+              const success = response.data.success;
+              if (success) {
+                form.installing = false;
+                setDocumentTitle(form.model.blogName);
+              } else {
+                form.installErrored = true;
+                form.installing = false;
+              }
+            })
+            .catch(() => {
+              form.installErrored = true;
+              form.installing = false;
+            });
+        }
+      });
     };
 
     const handleInstallCallback = () => {
@@ -314,6 +317,7 @@ export default defineComponent({
     };
 
     // lifecycle hooks
+    // onCreated
     verifyIsInstalled();
     onBeforeMount(() => {
       form.model.hostname =
