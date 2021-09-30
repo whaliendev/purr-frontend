@@ -7,7 +7,7 @@ const loggerOptions = {
   showLogLevel: true,
   showMethodName: true,
   separator: ' ',
-  showConsoleColors: true,
+  showConsoleColors: true
 };
 
 export default loggerOptions;

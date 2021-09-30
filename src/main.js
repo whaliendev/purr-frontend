@@ -8,12 +8,10 @@ import BaseCard from './components/UI/BaseCard';
 
 import './config/fontawesome';
 import ElementPlus from 'element-plus';
-import { Setting } from '@element-plus/icons'
+import { Setting } from '@element-plus/icons';
 import loggerOptions from './config/logger';
 import VueLogger from 'vuejs3-logger';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-
 
 const app = createApp(App);
 

@@ -8,7 +8,7 @@ appApi.install = (data) => {
   return service({
     url: `${baseUrl}/install`,
     method: 'post',
-    data: data,
+    data: data
   });
 };
 

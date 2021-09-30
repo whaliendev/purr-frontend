@@ -9,7 +9,7 @@ const notificationTitle = '糟糕，异常他出现了';
 
 const service = axios.create({
   timeout: 10000,
-  withCredentials: true,
+  withCredentials: true
 });
 
 function setTokenToHeader(config) {
@@ -40,7 +40,7 @@ service.interceptors.response.use(
       // );
       ElMessage.error({
         center: true,
-        message: data.tip,
+        message: data.tip
       });
     }
     console.log(response);
@@ -67,14 +67,14 @@ service.interceptors.response.use(
           handled = true;
           ElNotification.error({
             title: notificationTitle,
-            message: '服务器对你说了no🤪',
+            message: '服务器对你说了no🤪'
           });
         }
 
         if (status === 401) {
           ElMessage.error({
             title: notificationTitle,
-            message: '你的登录状态是无效的，需要重新登录',
+            message: '你的登录状态是无效的，需要重新登录'
           });
           handled = true;
         }
@@ -82,7 +82,7 @@ service.interceptors.response.use(
         if (status === 404) {
           ElMessage.error({
             title: notificationTitle,
-            message: '貌似你的服务器出了点小问题，请检查一下服务器后重试',
+            message: '貌似你的服务器出了点小问题，请检查一下服务器后重试'
           });
           handled = true;
         }
@@ -99,7 +99,7 @@ service.interceptors.response.use(
               data.tip ||
               `当前请求失败，响应状态码为${status}，可能有用的错误信息: ${
                 data || '无'
-              }`,
+              }`
           });
         }
       }
@@ -109,7 +109,7 @@ service.interceptors.response.use(
         message: '貌似你的网络连接出了点问题，请检查之后重试',
         // position: 'bottom-right',
         duration: 5000,
-        offset: 20,
+        offset: 20
       });
     }
     return Promise.reject(error);

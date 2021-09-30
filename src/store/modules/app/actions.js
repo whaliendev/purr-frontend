@@ -13,6 +13,6 @@ const actions = {
           reject(error);
         });
     });
-  },
+  }
 };
 export default actions;

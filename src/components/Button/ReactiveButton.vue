@@ -16,50 +16,50 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'primary',
+      default: 'primary'
     },
     icon: {
       type: String,
-      default: null,
+      default: null
     },
     size: {
       type: String,
-      default: 'default',
+      default: 'default'
     },
     block: {
       type: Boolean,
-      default: false,
+      default: false
     },
     loading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     errored: {
       type: Boolean,
-      default: false,
+      default: false
     },
     text: {
       type: String,
-      default: '',
+      default: ''
     },
     loadedText: {
       type: String,
-      default: '',
+      default: ''
     },
     erroredText: {
       type: String,
-      default: '',
+      default: ''
     },
     nativeType: {
       type: String,
-      default: 'button',
-    },
+      default: 'button'
+    }
   },
   emits: ['callback', 'click'],
   data() {
     return {
       loaded: false,
-      hasError: false,
+      hasError: false
     };
   },
   watch: {
@@ -75,7 +75,7 @@ export default {
           this.$emit('callback');
         }, 400);
       }
-    },
+    }
   },
   computed: {
     computedType() {
@@ -95,13 +95,13 @@ export default {
         return this.hasError ? this.erroredText : this.loadedText;
       }
       return this.text;
-    },
+    }
   },
   methods: {
     handleClick() {
       this.$emit('click');
-    },
-  },
+    }
+  }
 };
 </script>
 

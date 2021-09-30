@@ -10,8 +10,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
     shadow: String,
-    info: Boolean,
-  },
+    info: Boolean
+  }
 });
 </script>
 

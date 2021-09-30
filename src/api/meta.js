@@ -7,7 +7,7 @@ const metaApi = {};
 metaApi.isInstalled = () => {
   return service({
     url: `${baseUrl}/isInstalled`,
-    method: 'get',
+    method: 'get'
   });
 };
 

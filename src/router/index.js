@@ -7,19 +7,19 @@ const router = createRouter({
       path: '/install',
       name: 'install',
       meta: {
-        title: '安装向导',
+        title: '安装向导'
       },
-      component: () => import('../views/system/Installation'),
+      component: () => import('../views/system/Installation')
     },
     {
       path: '/login',
       name: 'login',
       meta: {
-        title: '登录',
+        title: '登录'
       },
-      component: () => import('../views/user/Login'),
-    },
-  ],
+      component: () => import('../views/user/Login')
+    }
+  ]
 });
 
 export default router;

@@ -6,16 +6,16 @@ import app from './modules/app';
 
 const store = createStore({
   modules: {
-    app,
+    app
   },
   state() {
     return {
-      user: {},
+      user: {}
     };
   },
   actions,
   mutations,
-  getters,
+  getters
 });
 
 export default store;

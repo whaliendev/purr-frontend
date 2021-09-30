@@ -4,7 +4,7 @@ const getters = {
       return state.app.apiUrl;
     }
     return `${window.location.protocol}//${window.location.host}`;
-  },
+  }
 };
 
 export default getters;

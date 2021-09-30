@@ -7,11 +7,11 @@ export default {
   state() {
     return {
       app: {
-        apiUrl: '',
-      },
+        apiUrl: ''
+      }
     };
   },
   getters,
   actions,
-  mutations,
+  mutations
 };

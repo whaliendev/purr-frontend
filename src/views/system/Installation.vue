@@ -142,16 +142,16 @@ export default defineComponent({
         password: '',
         confirmPassword: '',
         hostname: '',
-        blogName: '',
+        blogName: ''
       },
       rules: {
         username: [
           { required: true, message: '* 用户名不能为空', trigger: ['change'] },
-          { max: 50, message: '* 用户昵称长度不能超过50', trigger: ['change'] },
+          { max: 50, message: '* 用户昵称长度不能超过50', trigger: ['change'] }
         ],
         email: [
           { required: true, message: '* email不能为空', trigger: ['change'] },
-          { type: 'email', message: '* 请输入合法的email', trigger: 'change' },
+          { type: 'email', message: '* 请输入合法的email', trigger: 'change' }
         ],
         password: [
           { required: true, message: '* 密码不能为空', trigger: ['change'] },
@@ -171,7 +171,7 @@ export default defineComponent({
                 length: false,
                 special: false,
                 numbers: false,
-                small: false,
+                small: false
               };
               for (let index = 0; index < value.length; index++) {
                 let char = value.charCodeAt(index);
@@ -221,14 +221,14 @@ export default defineComponent({
                 strengthChecker.value.style.color = mediumColor;
               }
             },
-            trigger: 'change',
-          },
+            trigger: 'change'
+          }
         ],
         confirmPassword: [
           {
             required: true,
             message: '* 确认密码不能为空',
-            trigger: 'change',
+            trigger: 'change'
           },
           {
             validator(rule, value, callback) {
@@ -236,31 +236,31 @@ export default defineComponent({
                 callback(new Error('* 两次输入密码不一致'));
               }
             },
-            trigger: 'change',
-          },
+            trigger: 'change'
+          }
         ],
         hostname: [
           {
             required: true,
             message: '* 博客地址不能为空',
-            trigger: ['change'],
-          },
+            trigger: ['change']
+          }
         ],
         blogName: [
           {
             required: true,
             message: '* 博客标题不能为空',
-            trigger: 'change',
+            trigger: 'change'
           },
           {
             max: 100,
             message: '* 博客标题过长',
-            trigger: 'change',
-          },
-        ],
+            trigger: 'change'
+          }
+        ]
       },
       installErrored: false,
-      installing: false,
+      installing: false
     });
     // form dom element
     const installationForm = ref(null);
@@ -307,7 +307,7 @@ export default defineComponent({
         ElMessage.success({
           center: true,
           message: '安装成功！',
-          duration: 1500,
+          duration: 1500
         });
         router.replace({ name: 'login' });
       }
@@ -326,9 +326,9 @@ export default defineComponent({
       form,
       installationForm,
       handleInstallCallback,
-      handleInstall,
+      handleInstall
     };
-  },
+  }
 });
 </script>
 
