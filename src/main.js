@@ -6,11 +6,9 @@ import App from './App';
 import './styles/app.scss';
 import BaseCard from './components/UI/BaseCard';
 
-import './config/fontawesome';
+import './plugins/fontawesome';
 import ElementPlus from 'element-plus';
-import { Setting } from '@element-plus/icons';
-import loggerOptions from './config/logger';
-import VueLogger from 'vuejs3-logger';
+import logger from './plugins/logger';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const app = createApp(App);
@@ -22,10 +20,10 @@ app.use(store);
 
 // core library
 app.use(ElementPlus);
-app.use(VueLogger, loggerOptions);
+app.use(logger);
 
 app.component('base-card', BaseCard);
-app.component('setting', Setting);
+// app.component('setting', Setting);
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 app.mount('#app');
