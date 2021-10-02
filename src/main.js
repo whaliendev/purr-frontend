@@ -10,6 +10,9 @@ import './plugins/fontawesome';
 import ElementPlus from 'element-plus';
 import logger from './plugins/logger';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+// import { Setting } from '@element-plus/icons';
+// import Setting from './components/Icon/Setting';
+// import Back from './components/Icon/Back';
 
 const app = createApp(App);
 
@@ -23,7 +26,6 @@ app.use(ElementPlus);
 app.use(logger);
 
 app.component('base-card', BaseCard);
-// app.component('setting', Setting);
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 app.mount('#app');

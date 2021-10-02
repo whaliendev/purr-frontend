@@ -21,6 +21,7 @@
                   ref="installationForm"
                   :model="form.model"
                   :rules="form.rules"
+                  @submit.prevent="submitForm"
                 >
                   <el-divider content-position="left">
                     博客作者信息
@@ -95,7 +96,6 @@
                     icon="el-icon-check"
                     :errored="form.installErrored"
                     :loading="form.installing"
-                    block
                     errored-text="安装失败"
                     loaded-text="安装成功"
                     size="large"
@@ -312,10 +312,15 @@ export default defineComponent({
         ElMessage.success({
           center: true,
           message: '安装成功！',
-          duration: 1500
+          duration: 1000
         });
         router.replace({ name: 'login' });
       }
+    };
+
+    const submitForm = () => {
+      handleInstall();
+      setTimeout(handleInstallCallback, 400);
     };
 
     // lifecycle hooks
@@ -332,7 +337,8 @@ export default defineComponent({
       form,
       installationForm,
       handleInstallCallback,
-      handleInstall
+      handleInstall,
+      submitForm
     };
   }
 });
