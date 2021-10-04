@@ -1,76 +1,116 @@
 <template>
   <div>
-    <el-row justify="center" align="middle">
+    <el-row align="middle" justify="center">
       <div class="bg"></div>
-      <el-col :xs="22" :sm="18" :md="16" :lg="16" :xl="12">
+      <el-col :lg="16" :md="16" :sm="18" :xl="12" :xs="22">
         <div class="container animated fadeInUp">
           <!--  login card  -->
-          <el-card shadow="always" id="#login-card" v-if="isLoginMode">
+          <el-card v-if="isLoginMode" id="#login-card" shadow="always">
             <section class="purr-logo">
               <span>Purr</span>
-              <el-icon :size="16" :color="iconColor" @click="toggleMode">
+              <el-icon :color="purrColorDanger" :size="16" @click="toggleMode">
                 <setting />
               </el-icon>
             </section>
-            <el-form :model="loginForm.model" :rules="loginForm.rules">
+            <el-form
+              ref="domLoginForm"
+              :model="loginForm.model"
+              :rules="loginForm.rules"
+              @submit.prevent="submitLoginForm"
+            >
               <el-form-item prop="username">
                 <el-input
-                  prefix-icon="el-icon-user"
-                  placeholder="用户名/邮箱"
                   v-model="loginForm.model.username"
+                  placeholder="用户名/邮箱"
+                  prefix-icon="el-icon-user"
                 ></el-input>
               </el-form-item>
               <el-form-item prop="password">
                 <el-input
-                  prefix-icon="el-icon-lock"
-                  placeholder="登录密码"
                   v-model="loginForm.model.password"
-                  type="password"
                   :show-password="true"
+                  placeholder="登录密码"
+                  prefix-icon="el-icon-lock"
+                  type="password"
                 ></el-input>
               </el-form-item>
+              <el-form-item prop="isSuccessful">
+                <slider-verification
+                  :is-successful="loginForm.model.isSuccessful"
+                  :slider-bg="purrColorDanger"
+                  :success-bg="purrColorSuccess"
+                  is-locked="false"
+                  @update:is-successful="loginForm.model.isSuccessful = $event"
+                >
+                  <template #icon>
+                    <font-awesome-icon :icon="['fas', 'plane']" />
+                  </template>
+                </slider-verification>
+              </el-form-item>
               <reactive-button
+                :errored="loginForm.errored"
+                :loading="loginForm.loading"
+                errored-text="登录失败"
+                loaded-text="登陆成功"
                 native-type="submit"
+                size="medium"
                 text="登录"
                 type="danger"
-                size="medium"
+                @callback="handleLoginCallback"
+                @click="handleLogin"
               >
               </reactive-button>
             </el-form>
           </el-card>
           <!--  end of login card-->
           <!--  start of settings card-->
-          <el-card shadow="always" id="#settings-card" v-if="!isLoginMode">
+          <el-card v-if="!isLoginMode" id="#settings-card" shadow="always">
             <section class="purr-logo">
               <span>Purr<small>API设置</small></span>
-              <el-icon :size="16" :color="iconColor" @click="toggleMode">
+              <el-icon :color="purrColorDanger" :size="16" @click="toggleMode">
                 <back />
               </el-icon>
             </section>
-            <el-form :model="settingsFrom.model" :rules="settingsFrom.rules">
+            <el-form
+              ref="domSettingsForm"
+              :model="settingsFrom.model"
+              :rules="settingsFrom.rules"
+              @submit.prevent="submitSettingsForm"
+            >
               <el-form-item prop="apiUrl">
                 <el-popover
-                  trigger="click"
-                  placement="bottom"
                   content="如果前后端不是分别部署，请不要修改此项"
+                  placement="bottom"
+                  trigger="click"
                 >
                   <template #reference>
                     <el-input
-                      prefix-icon="el-icon-link"
-                      placeholder="e.g.: https://purr.group, 注意不用携带/api"
                       v-model="settingsFrom.model.apiUrl"
+                      placeholder="e.g.: https://purr.group, 注意不用携带/api"
+                      prefix-icon="el-icon-link"
                     ></el-input>
                   </template>
                 </el-popover>
               </el-form-item>
               <reactive-button
                 size="medium"
-                type="danger"
                 text="恢复默认"
+                type="danger"
                 @click="resetApiUrl"
               >
               </reactive-button>
-              <reactive-button size="medium" type="danger" text="保存设置">
+              <reactive-button
+                :errored="settingsFrom.errored"
+                :loading="settingsFrom.loading"
+                errored-text="更新失败"
+                loaded-text="更新成功"
+                native-type="submit"
+                size="medium"
+                text="保存设置"
+                type="danger"
+                @callback="handleUpdateCallback"
+                @click="handleUpdate"
+              >
               </reactive-button>
             </el-form>
           </el-card>
@@ -86,13 +126,32 @@ import { computed, defineComponent, onBeforeMount, reactive, ref } from 'vue';
 import ReactiveButton from '../../components/Button/ReactiveButton';
 import Setting from '../../components/Icon/Setting';
 import Back from '../../components/Icon/Back';
+import SliderVerification from '../../components/Slider/SliderVerification';
+import { useStore } from 'vuex';
+import { useLogger } from 'vue-logger-plugin';
+import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
-  components: { Setting, Back, ReactiveButton },
+  components: { SliderVerification, Setting, Back, ReactiveButton },
   setup() {
-    const iconColor = ref(
+    const store = useStore();
+    const logger = useLogger();
+    const router = useRouter();
+
+    const purrColorDanger = ref(
       getComputedStyle(document.documentElement)
         .getPropertyValue('--el-color-danger')
+        .trim()
+    );
+    const purrColorWarning = ref(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--el-color-warning')
+        .trim()
+    );
+    const purrColorSuccess = ref(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--el-color-success')
         .trim()
     );
 
@@ -101,15 +160,19 @@ export default defineComponent({
     const isLoginMode = computed(() => loginMode.value === 'login');
     const toggleMode = () => {
       loginMode.value = loginMode.value === 'login' ? 'settings' : 'login';
-      console.log(loginMode.value);
     };
 
     // 与login相关的操作
+    const domLoginForm = ref(null);
     const loginForm = reactive({
       model: {
         username: '',
-        password: ''
+        password: '',
+        isSuccessful: false
       },
+      loading: false,
+      errored: false,
+
       rules: {
         username: [],
         password: [
@@ -120,13 +183,56 @@ export default defineComponent({
             message: '* 密码长度为8-30位',
             trigger: ['change']
           }
-        ]
-      },
-      loading: false
+        ],
+        isSuccessful: []
+      }
     });
+    const handleLogin = () => {
+      domLoginForm.value.validate((valid) => {
+        if (valid) {
+          loginForm.loading = true;
+          const loginData = {
+            username: loginForm.model.username,
+            password: loginForm.model.password
+          };
+          logger.info(loginData);
+          store
+            .dispatch('login', loginData)
+            .then((response) => {
+              if (response.data.success) {
+                loginForm.loading = false;
+              } else {
+                loginForm.errored = true;
+                loginForm.loading = false;
+              }
+            })
+            .catch(() => {
+              loginForm.errored = true;
+              loginForm.loading = false;
+            });
+        }
+      });
+    };
+    const handleLoginCallback = () => {
+      if (loginForm.errored) {
+        loginForm.errored = false;
+      } else {
+        ElMessage.success({
+          center: true,
+          message: '登录成功！',
+          duration: 1000
+        });
+        router.replace({ name: 'dashboard' });
+      }
+    };
+    const submitLoginForm = async () => {
+      await handleLogin();
+      setTimeout(handleLoginCallback, 400);
+    };
 
     // 与设置相关的操作
-    const settingsFrom = reactive({
+    const domSettingsForm = ref(null);
+    const settingsForm = reactive({
       model: {
         apiUrl: ''
       },
@@ -151,24 +257,77 @@ export default defineComponent({
       loading: false,
       errored: false
     });
+    const handleUpdate = () => {
+      domSettingsForm.value.validate((valid) => {
+        if (valid) {
+          settingsForm.loading = true;
+          const settingsData = {
+            apiUrl: settingsForm.model.apiUrl
+          };
+          logger.info(settingsData);
+          store.dispatch('app/updateApiUrl', settingsData).then((response) => {
+            if (response.data.success) {
+              settingsForm.loading = false;
+            } else {
+              settingsForm.loading = false;
+              settingsForm.errored = true;
+            }
+          });
+        }
+      });
+    };
+    const handleUpdateCallback = () => {
+      if (settingsForm.errored) {
+        settingsForm.errored = false;
+      } else {
+        ElMessage.success({
+          center: true,
+          message: '更新成功！',
+          duration: 1000
+        });
+      }
+    };
+    const submitSettingsForm = async () => {
+      await handleUpdate();
+      setTimeout(handleUpdateCallback, 400);
+    };
 
     onBeforeMount(() => {
-      settingsFrom.model.apiUrl =
+      settingsForm.model.apiUrl =
         window.location.protocol + '//' + window.location.host;
     });
     const resetApiUrl = () => {
-      settingsFrom.model.apiUrl =
-        window.location.protocol + '//' + window.location.host;
+      const url = window.location.protocol + '//' + window.location.host;
+      store.dispatch('app/updateApiUrl', { apiUrl: url }).then((response) => {
+        if (response.data.success) {
+          settingsForm.model.apiUrl = url;
+          ElMessage.success({
+            center: true,
+            message: '更新成功',
+            duration: 1000
+          });
+        }
+      });
     };
 
     return {
-      iconColor,
+      purrColorDanger,
+      purrColorSuccess,
+      purrColorWarning,
       isLoginMode,
       loginMode,
       toggleMode,
       loginForm,
-      settingsFrom,
-      resetApiUrl
+      settingsFrom: settingsForm,
+      resetApiUrl,
+      handleLogin,
+      domLoginForm,
+      handleLoginCallback,
+      domSettingsForm,
+      handleUpdate,
+      handleUpdateCallback,
+      submitLoginForm,
+      submitSettingsForm
     };
   }
 });

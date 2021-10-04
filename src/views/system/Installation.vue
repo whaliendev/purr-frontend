@@ -318,8 +318,8 @@ export default defineComponent({
       }
     };
 
-    const submitForm = () => {
-      handleInstall();
+    const submitForm = async () => {
+      await handleInstall();
       setTimeout(handleInstallCallback, 400);
     };
 
