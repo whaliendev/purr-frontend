@@ -18,6 +18,25 @@ const router = createRouter({
         title: '登录'
       },
       component: () => import('../views/user/Login')
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      meta: {
+        title: '首页'
+      },
+      component: () => import('../views/admin/Admin.vue'),
+      alias: '/admin/dashboard',
+      children: [
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          meta: {
+            title: '首页'
+          },
+          component: () => import('../views/admin/Admin.vue')
+        }
+      ]
     }
   ]
 });

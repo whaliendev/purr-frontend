@@ -21,6 +21,7 @@
                   ref="installationForm"
                   :model="form.model"
                   :rules="form.rules"
+                  @submit.prevent="submitForm"
                 >
                   <el-divider content-position="left">
                     博客作者信息
@@ -95,7 +96,6 @@
                     icon="el-icon-check"
                     :errored="form.installErrored"
                     :loading="form.installing"
-                    block
                     errored-text="安装失败"
                     loaded-text="安装成功"
                     size="large"
@@ -115,18 +115,19 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onBeforeMount, inject } from 'vue';
+import { defineComponent, ref, reactive, onBeforeMount } from 'vue';
 import ReactiveButton from '../../components/Button/ReactiveButton';
 import { useRouter } from 'vue-router';
 import metaApi from '../../api/meta';
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus';
 import { setDocumentTitle } from '../../utils/domUtil';
+import { useLogger } from 'vue-logger-plugin';
 
 export default defineComponent({
   components: { ReactiveButton },
-  setup() {
-    const logger = inject('vuejs3-logger');
+  setup: function () {
+    const logger = useLogger();
 
     const router = useRouter();
     const store = useStore();
@@ -139,11 +140,9 @@ export default defineComponent({
     const passwordStrengthChecker = (rule, value, callback) => {
       if (value.length < 8) {
         callback(new Error('* 密码长度最低不小于8'));
-        return;
       }
       if (value.length > 30) {
         callback(new Error('* 密码长度最长不超过30'));
-        return;
       }
 
       const strengthValue = {
@@ -196,15 +195,18 @@ export default defineComponent({
       } else if (value.length >= 8 && strengthIndicator === 4) {
         strengthChecker.value.innerText = 'Strong';
         strengthChecker.value.style.color = strongColor;
+        callback();
       } else {
         strengthChecker.value.innerText = 'Medium';
         strengthChecker.value.style.color = mediumColor;
+        callback();
       }
     };
     const passwordConfirmChecker = (rule, value, callback) => {
       if (value !== form.model.password) {
         callback(new Error('* 两次输入密码不一致'));
       }
+      callback();
     };
     // form data
     const form = reactive({
@@ -310,10 +312,15 @@ export default defineComponent({
         ElMessage.success({
           center: true,
           message: '安装成功！',
-          duration: 1500
+          duration: 1000
         });
         router.replace({ name: 'login' });
       }
+    };
+
+    const submitForm = async () => {
+      await handleInstall();
+      setTimeout(handleInstallCallback, 400);
     };
 
     // lifecycle hooks
@@ -330,7 +337,8 @@ export default defineComponent({
       form,
       installationForm,
       handleInstallCallback,
-      handleInstall
+      handleInstall,
+      submitForm
     };
   }
 });

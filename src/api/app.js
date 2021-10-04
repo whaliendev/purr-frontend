@@ -12,4 +12,12 @@ appApi.install = (data) => {
   });
 };
 
+appApi.updateApiUrl = (data) => {
+  return service({
+    url: `${baseUrl}/meta/apiUrl`,
+    method: 'put',
+    data: data
+  });
+};
+
 export default appApi;

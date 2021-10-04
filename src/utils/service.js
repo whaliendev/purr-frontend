@@ -1,10 +1,8 @@
 import axios from 'axios';
 import store from '../store';
-// import { inject } from 'vue';
 import { ElMessage, ElNotification } from 'element-plus';
+import logger from '../plugins/logger';
 
-// const logger = inject('vuejs3-logger');
-// console.log(logger);
 const notificationTitle = '糟糕，异常他出现了';
 
 const service = axios.create({
@@ -14,7 +12,7 @@ const service = axios.create({
 
 function setTokenToHeader(config) {
   const token = store.getters.user.token;
-  // logger.debug('current token is', token);
+  logger.debug('current token is', token);
   if (token) {
     config.headers['Access-Token'] = token;
   }
@@ -24,6 +22,7 @@ service.interceptors.request.use(
   (config) => {
     config.baseURL = store.getters['app/apiUrl'];
     setTokenToHeader(config);
+    logger.debug(`request config: ${config}`);
     return config;
   },
   (error) => {
@@ -35,22 +34,20 @@ service.interceptors.response.use(
   (response) => {
     const data = response.data;
     if (data.success === false) {
-      // logger.error(
-      //   `Business error: errorCode: ${data.errorCode}, errorMessage: ${data.errorMsg}`
-      // );
+      logger.error(
+        `Business error: errorCode: ${data.errorCode}, errorMessage: ${data.errorMsg}`
+      );
       ElMessage.error({
         center: true,
         message: data.tip
       });
     }
-    console.log(response);
     return response;
   },
   (error) => {
-    // logger.debug(error);
-    console.log(error.response);
+    logger.debug(error);
     if (axios.isCancel(error)) {
-      // logger.debug('Cancelled uploading by user. ');
+      logger.debug('Cancelled uploading by user. ');
       return Promise.reject(error);
     }
 
@@ -59,10 +56,7 @@ service.interceptors.response.use(
       const status = error.response.status;
       const data = error.response.data;
       if (status) {
-        console.log(error.response);
-        console.log(error.response.request);
-        // logger.error(`Request failed, http status code: ${status}`);
-        console.log(status);
+        logger.error(`Request failed, http status code: ${status}`);
         if (status === 400) {
           handled = true;
           ElNotification.error({
