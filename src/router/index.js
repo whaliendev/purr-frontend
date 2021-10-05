@@ -34,7 +34,7 @@ const router = createRouter({
           meta: {
             title: '首页'
           },
-          component: () => import('../views/admin/components/AdminDashboard'),
+          component: () => import('../views/admin/components/AdminDashboard')
         },
         {
           path: 'article/manage',
@@ -42,7 +42,7 @@ const router = createRouter({
           meta: {
             title: '管理'
           },
-          component: () => import('../views/admin/components/ArticleManagement'),
+          component: () => import('../views/admin/components/ArticleManagement')
         },
         {
           path: 'article/compose',

@@ -6,12 +6,12 @@
         <div class="container animated fadeInUp">
           <!--  login card  -->
           <el-card v-if="isLoginMode" id="#login-card" shadow="always">
-            <section class="purr-logo">
+            <div class="purr-logo">
               <span>Purr</span>
               <el-icon :color="purrColorDanger" :size="16" @click="toggleMode">
                 <setting />
               </el-icon>
-            </section>
+            </div>
             <el-form
               ref="domLoginForm"
               :model="loginForm.model"
@@ -65,12 +65,12 @@
           <!--  end of login card-->
           <!--  start of settings card-->
           <el-card v-if="!isLoginMode" id="#settings-card" shadow="always">
-            <section class="purr-logo">
+            <div class="purr-logo">
               <span>Purr<small>API设置</small></span>
               <el-icon :color="purrColorDanger" :size="16" @click="toggleMode">
                 <back />
               </el-icon>
-            </section>
+            </div>
             <el-form
               ref="domSettingsForm"
               :model="settingsFrom.model"
