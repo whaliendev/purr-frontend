@@ -92,12 +92,11 @@
             </router-link>
           </li>
           <li class="menu-item">
-            <router-link :to="{ name: 'settings-app' }">
-              系统设置
-            </router-link>
+            <router-link :to="{ name: 'settings-app' }"> 系统设置 </router-link>
           </li>
         </ul>
       </li>
+      <!-- end of settings -->
     </ul>
   </nav>
 </template>
