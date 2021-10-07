@@ -5,18 +5,18 @@
         <div class="container animated fadeIn">
           <el-card :shadow="'always'">
             <div>
-              <section id="purr-logo">
+              <div id="purr-logo">
                 <span>Purr<small>安装向导</small></span>
-              </section>
-              <section id="welcome-message">
+              </div>
+              <div id="welcome-message">
                 <el-alert type="success" :closable="false">
                   <i class="el-icon-position"></i>
                   欢迎使用&nbsp;Purr&nbsp;{{
                     VERSION
                   }},&nbsp;简单配置之后开始使用吧！
                 </el-alert>
-              </section>
-              <section>
+              </div>
+              <div>
                 <el-form
                   ref="installationForm"
                   :model="form.model"
@@ -105,7 +105,7 @@
                   >
                   </reactive-button>
                 </el-form>
-              </section>
+              </div>
             </div>
           </el-card>
         </div>

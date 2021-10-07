@@ -1,14 +1,31 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+
 import {
-  faUser,
-  faEnvelope,
-  faPaperPlane
-} from '@fortawesome/free-regular-svg-icons';
+  faPlane,
+  faThLarge,
+  faPen,
+  faCommentDots,
+  faPaperPlane,
+  faFileAlt,
+  faMusic,
+  faLink,
+  faWrench,
+  faChevronDown
+} from '@fortawesome/free-solid-svg-icons';
 
-import { faPlane } from '@fortawesome/free-solid-svg-icons';
-
+// regular svg
 library.add(faUser);
 library.add(faEnvelope);
-library.add(faPaperPlane);
 
+// solid svg
 library.add(faPlane);
+library.add(faPaperPlane);
+library.add(faThLarge);
+library.add(faPen);
+library.add(faCommentDots);
+library.add(faFileAlt);
+library.add(faMusic);
+library.add(faLink);
+library.add(faWrench);
+library.add(faChevronDown);
