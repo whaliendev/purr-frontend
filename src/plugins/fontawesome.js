@@ -11,7 +11,9 @@ import {
   faMusic,
   faLink,
   faWrench,
-  faChevronDown
+  faChevronDown,
+  faChevronRight,
+  faChevronLeft
 } from '@fortawesome/free-solid-svg-icons';
 
 // regular svg
@@ -29,3 +31,5 @@ library.add(faMusic);
 library.add(faLink);
 library.add(faWrench);
 library.add(faChevronDown);
+library.add(faChevronLeft);
+library.add(faChevronRight);
