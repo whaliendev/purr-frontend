@@ -29,30 +29,39 @@
       </li>
       <!--  submenu of articles  -->
       <li class="menu-item sub-menu close">
-        <div class="sub-menu__title">
-          <router-link :to="{ name: 'article' }">
-            <font-awesome-icon :icon="['fas', 'pen']" />
-            <span>文章</span>
-          </router-link>
-          <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
-        </div>
-        <ul class="menu">
-          <li class="menu-item">
-            <router-link :to="{ name: 'article-manage' }">
-              <span>管理文章</span>
-            </router-link>
-          </li>
-          <li class="menu-item">
-            <router-link :to="{ name: 'article-compose' }">
-              <span>写作文章</span>
-            </router-link>
-          </li>
-          <li class="menu-item">
-            <router-link :to="{ name: 'article-tag' }">
-              <span>标签</span>
-            </router-link>
-          </li>
-        </ul>
+        <el-popover
+          placement="right"
+          trigger="hover"
+          :show-arrow="false"
+          :disabled="!isCollapsed"
+        >
+          <template #reference>
+            <div class="sub-menu__title">
+              <router-link :to="{ name: 'article' }">
+                <font-awesome-icon :icon="['fas', 'pen']" />
+                <span>文章</span>
+              </router-link>
+              <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
+            </div>
+          </template>
+          <ul class="menu">
+            <li class="menu-item">
+              <router-link :to="{ name: 'article-manage' }">
+                <span>管理文章</span>
+              </router-link>
+            </li>
+            <li class="menu-item">
+              <router-link :to="{ name: 'article-compose' }">
+                <span>写作文章</span>
+              </router-link>
+            </li>
+            <li class="menu-item">
+              <router-link :to="{ name: 'article-tag' }">
+                <span>标签</span>
+              </router-link>
+            </li>
+          </ul>
+        </el-popover>
       </li>
       <!-- end of sub menu of articles -->
       <li class="menu-item">
@@ -83,25 +92,34 @@
       </li>
       <!-- pages -->
       <li class="menu-item sub-menu close">
-        <div class="sub-menu__title">
-          <router-link :to="{ name: 'page' }">
-            <font-awesome-icon :icon="['fas', 'file-alt']" />
-            <span>页面</span>
-          </router-link>
-          <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
-        </div>
-        <ul class="menu">
-          <li class="menu-item">
-            <router-link :to="{ name: 'page-manage' }">
-              <span>管理页面</span>
-            </router-link>
-          </li>
-          <li class="menu-item">
-            <router-link :to="{ name: 'page-design' }">
-              <span>设计页面</span>
-            </router-link>
-          </li>
-        </ul>
+        <el-popover
+          placement="right"
+          trigger="hover"
+          :show-arrow="false"
+          :disabled="!isCollapsed"
+        >
+          <template #reference>
+            <div class="sub-menu__title">
+              <router-link :to="{ name: 'page' }">
+                <font-awesome-icon :icon="['fas', 'file-alt']" />
+                <span>页面</span>
+              </router-link>
+              <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
+            </div>
+          </template>
+          <ul class="menu">
+            <li class="menu-item">
+              <router-link :to="{ name: 'page-manage' }">
+                <span>管理页面</span>
+              </router-link>
+            </li>
+            <li class="menu-item">
+              <router-link :to="{ name: 'page-design' }">
+                <span>设计页面</span>
+              </router-link>
+            </li>
+          </ul>
+        </el-popover>
       </li>
       <!-- end of pages -->
       <li class="menu-item">
@@ -132,30 +150,39 @@
       </li>
       <!-- settings -->
       <li class="menu-item sub-menu close">
-        <div class="sub-menu__title">
-          <router-link :to="{ name: 'settings' }">
-            <font-awesome-icon :icon="['fas', 'wrench']" />
-            <span>设置</span>
-          </router-link>
-          <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
-        </div>
-        <ul class="menu">
-          <li class="menu-item">
-            <router-link :to="{ name: 'settings-menu' }">
-              <span>菜单设置</span>
-            </router-link>
-          </li>
-          <li class="menu-item">
-            <router-link :to="{ name: 'settings-user' }">
-              <span>用户设置</span>
-            </router-link>
-          </li>
-          <li class="menu-item">
-            <router-link :to="{ name: 'settings-app' }">
-              <span>系统设置</span>
-            </router-link>
-          </li>
-        </ul>
+        <el-popover
+          placement="right"
+          trigger="hover"
+          :show-arrow="false"
+          :disabled="!isCollapsed"
+        >
+          <template #reference>
+            <div class="sub-menu__title">
+              <router-link :to="{ name: 'settings' }">
+                <font-awesome-icon :icon="['fas', 'wrench']" />
+                <span>设置</span>
+              </router-link>
+              <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
+            </div>
+          </template>
+          <ul class="menu">
+            <li class="menu-item">
+              <router-link :to="{ name: 'settings-menu' }">
+                <span>菜单设置</span>
+              </router-link>
+            </li>
+            <li class="menu-item">
+              <router-link :to="{ name: 'settings-user' }">
+                <span>用户设置</span>
+              </router-link>
+            </li>
+            <li class="menu-item">
+              <router-link :to="{ name: 'settings-app' }">
+                <span>系统设置</span>
+              </router-link>
+            </li>
+          </ul>
+        </el-popover>
       </li>
       <!-- end of settings -->
     </ul>
@@ -175,7 +202,7 @@ export default defineComponent({
     // expand or collapse of navigation menu
     const menuItems = document.querySelectorAll('.main-nav > li');
     menuItems.forEach((menuItem) => {
-      menuItem.addEventListener('click', function () {
+      menuItem.addEventListener('click', function() {
         const that = this;
         menuItems.forEach((menuItem) => {
           menuItem.classList.remove('is-active');
@@ -252,10 +279,15 @@ li {
     align-items: center;
     border-radius: 50%;
     box-shadow: var(--el-box-shadow-base);
+    cursor: pointer;
 
     svg {
       width: 16px;
       height: 16px;
+    }
+
+    &:hover {
+      color: var(--el-color-primary-light-3);
     }
   }
 }
@@ -263,6 +295,7 @@ li {
 nav {
   width: 240px;
   overflow: visible;
+  transition: width ease-out 0.5s;
 
   .main-nav {
     margin: -4px 0;
@@ -272,7 +305,6 @@ nav {
       overflow: hidden;
       margin: 10px 0;
       cursor: pointer;
-      transition: all ease-out 0.5s;
 
       li:hover {
         background-color: var(--light-admin-nav-hover-color);
@@ -298,6 +330,8 @@ nav {
       height: 100%;
       padding: 8px 0;
       color: var(--light-admin-text-color);
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     svg {
@@ -307,12 +341,14 @@ nav {
     }
 
     span {
+      font-size: 14px;
       user-select: none;
       display: inline-block;
     }
 
     svg + span {
       margin-left: 18px;
+      vertical-align: text-bottom;
     }
 
     > li {
@@ -354,19 +390,18 @@ nav {
 
 nav.is-collapsed {
   width: 76px;
-  transition: all ease-out 0.5s;
+  transition: width ease-out 0.5s;
 
   .purr-logo {
     font-size: 20px;
+    transition: all ease-out 0.5s;
   }
 
   .main-nav > li {
-    transition: width ease-out 0.5s;
     margin: 10px 20px;
 
     a {
       transition: width ease-out 0.5s;
-      width: 36px;
       height: 36px;
       padding: 10px;
     }
@@ -378,6 +413,7 @@ nav.is-collapsed {
 
   svg {
     margin: 0;
+    transition: all ease-out 0.5s;
   }
 
   svg + span {
