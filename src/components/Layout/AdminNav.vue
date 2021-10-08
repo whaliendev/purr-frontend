@@ -1,7 +1,7 @@
 <template>
   <nav>
     <div class="purr-logo">
-      <router-link :to="{ name: 'dashboard' }"><span>Purr</span></router-link>
+      <router-link :to="{ name: 'dashboard' }"><span>PURR</span></router-link>
       <div class="collapse-button">
         <font-awesome-icon
           :icon="['fas', 'chevron-right']"
@@ -18,8 +18,10 @@
         <el-tooltip
           placement="right"
           content="首页"
-          effect="light"
           :disabled="!isCollapsed"
+          :offset="25"
+          :show-after="150"
+          :visible-arrow="false"
         >
           <router-link :to="{ name: 'dashboard' }">
             <font-awesome-icon :icon="['fas', 'th-large']" />
@@ -29,39 +31,32 @@
       </li>
       <!--  submenu of articles  -->
       <li class="menu-item sub-menu close">
-        <el-popover
-          placement="right"
-          trigger="hover"
-          :show-arrow="false"
-          :disabled="!isCollapsed"
-        >
-          <template #reference>
-            <div class="sub-menu__title">
-              <router-link :to="{ name: 'article' }">
-                <font-awesome-icon :icon="['fas', 'pen']" />
-                <span>文章</span>
-              </router-link>
-              <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
-            </div>
-          </template>
-          <ul class="menu">
-            <li class="menu-item">
-              <router-link :to="{ name: 'article-manage' }">
-                <span>管理文章</span>
-              </router-link>
-            </li>
-            <li class="menu-item">
-              <router-link :to="{ name: 'article-compose' }">
-                <span>写作文章</span>
-              </router-link>
-            </li>
-            <li class="menu-item">
-              <router-link :to="{ name: 'article-tag' }">
-                <span>标签</span>
-              </router-link>
-            </li>
-          </ul>
-        </el-popover>
+        <div class="popover-ref-wrapper">
+          <div class="sub-menu__title" data-popover-template="article-menu">
+            <router-link :to="{ name: 'article' }">
+              <font-awesome-icon :icon="['fas', 'pen']" />
+              <span>文章</span>
+            </router-link>
+            <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
+          </div>
+        </div>
+        <ul class="menu" id="article-menu">
+          <li class="menu-item">
+            <router-link :to="{ name: 'article-manage' }">
+              <span>管理文章</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'article-compose' }">
+              <span>写作文章</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'article-tag' }">
+              <span>标签</span>
+            </router-link>
+          </li>
+        </ul>
       </li>
       <!-- end of sub menu of articles -->
       <li class="menu-item">
@@ -69,7 +64,9 @@
           placement="right"
           content="评论"
           :disabled="!isCollapsed"
-          effect="light"
+          :offset="25"
+          :show-after="150"
+          :visible-arrow="false"
         >
           <router-link :to="{ name: 'comment' }">
             <font-awesome-icon :icon="['fas', 'comment-dots']" />
@@ -82,7 +79,9 @@
           placement="right"
           content="动态"
           :disabled="!isCollapsed"
-          effect="light"
+          :offset="25"
+          :show-after="150"
+          :visible-arrow="false"
         >
           <router-link :to="{ name: 'moment' }">
             <font-awesome-icon :icon="['fas', 'paper-plane']" />
@@ -92,34 +91,27 @@
       </li>
       <!-- pages -->
       <li class="menu-item sub-menu close">
-        <el-popover
-          placement="right"
-          trigger="hover"
-          :show-arrow="false"
-          :disabled="!isCollapsed"
-        >
-          <template #reference>
-            <div class="sub-menu__title">
-              <router-link :to="{ name: 'page' }">
-                <font-awesome-icon :icon="['fas', 'file-alt']" />
-                <span>页面</span>
-              </router-link>
-              <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
-            </div>
-          </template>
-          <ul class="menu">
-            <li class="menu-item">
-              <router-link :to="{ name: 'page-manage' }">
-                <span>管理页面</span>
-              </router-link>
-            </li>
-            <li class="menu-item">
-              <router-link :to="{ name: 'page-design' }">
-                <span>设计页面</span>
-              </router-link>
-            </li>
-          </ul>
-        </el-popover>
+        <div class="popover-ref-wrapper">
+          <div class="sub-menu__title" data-popover-template="page-menu">
+            <router-link :to="{ name: 'page' }">
+              <font-awesome-icon :icon="['fas', 'file-alt']" />
+              <span>页面</span>
+            </router-link>
+            <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
+          </div>
+        </div>
+        <ul class="menu" id="page-menu">
+          <li class="menu-item">
+            <router-link :to="{ name: 'page-manage' }">
+              <span>管理页面</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'page-design' }">
+              <span>设计页面</span>
+            </router-link>
+          </li>
+        </ul>
       </li>
       <!-- end of pages -->
       <li class="menu-item">
@@ -127,7 +119,9 @@
           placement="right"
           content="多媒体库"
           :disabled="!isCollapsed"
-          effect="light"
+          :offset="25"
+          :show-after="150"
+          :visible-arrow="false"
         >
           <router-link :to="{ name: 'media' }">
             <font-awesome-icon :icon="['fas', 'music']" />
@@ -140,7 +134,9 @@
           placement="right"
           content="链接"
           :disabled="!isCollapsed"
-          effect="light"
+          :offset="25"
+          :show-after="150"
+          :visible-arrow="false"
         >
           <router-link :to="{ name: 'link' }">
             <font-awesome-icon :icon="['fas', 'link']" />
@@ -150,39 +146,32 @@
       </li>
       <!-- settings -->
       <li class="menu-item sub-menu close">
-        <el-popover
-          placement="right"
-          trigger="hover"
-          :show-arrow="false"
-          :disabled="!isCollapsed"
-        >
-          <template #reference>
-            <div class="sub-menu__title">
-              <router-link :to="{ name: 'settings' }">
-                <font-awesome-icon :icon="['fas', 'wrench']" />
-                <span>设置</span>
-              </router-link>
-              <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
-            </div>
-          </template>
-          <ul class="menu">
-            <li class="menu-item">
-              <router-link :to="{ name: 'settings-menu' }">
-                <span>菜单设置</span>
-              </router-link>
-            </li>
-            <li class="menu-item">
-              <router-link :to="{ name: 'settings-user' }">
-                <span>用户设置</span>
-              </router-link>
-            </li>
-            <li class="menu-item">
-              <router-link :to="{ name: 'settings-app' }">
-                <span>系统设置</span>
-              </router-link>
-            </li>
-          </ul>
-        </el-popover>
+        <div class="popover-ref-wrapper">
+          <div class="sub-menu__title" data-popover-template="settings-menu">
+            <router-link :to="{ name: 'settings' }">
+              <font-awesome-icon :icon="['fas', 'wrench']" />
+              <span>设置</span>
+            </router-link>
+            <!--          <font-awesome-icon :icon="['fas', 'chevron-down']" />-->
+          </div>
+        </div>
+        <ul class="menu" id="settings-menu">
+          <li class="menu-item">
+            <router-link :to="{ name: 'settings-menu' }">
+              <span>菜单设置</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'settings-user' }">
+              <span>用户设置</span>
+            </router-link>
+          </li>
+          <li class="menu-item">
+            <router-link :to="{ name: 'settings-app' }">
+              <span>系统设置</span>
+            </router-link>
+          </li>
+        </ul>
       </li>
       <!-- end of settings -->
     </ul>
@@ -191,6 +180,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import tippy from 'tippy.js';
 
 export default defineComponent({
   data() {
@@ -199,7 +189,8 @@ export default defineComponent({
     };
   },
   mounted() {
-    // expand or collapse of navigation menu
+    const that = this;
+    // add click event listener of list nav item
     const menuItems = document.querySelectorAll('.main-nav > li');
     menuItems.forEach((menuItem) => {
       menuItem.addEventListener('click', function() {
@@ -212,20 +203,49 @@ export default defineComponent({
         menuItem.classList.toggle('close');
       });
     });
-    const submenuItems = document.querySelectorAll('.sub-menu li');
-    submenuItems.forEach((submenuItem) => {
-      submenuItem.addEventListener('click', (e) => {
+    // disable default propagation to prevent close the dropdown menu
+    const submenus = document.querySelectorAll('.sub-menu ul');
+    submenus.forEach((submenu) => {
+      submenu.addEventListener('click', (e) => {
         e.stopPropagation();
       });
     });
 
-    // add event listener of nav
+    // add popover for submenu
+    tippy('.sub-menu__title', {
+      content(reference) {
+        const id = reference.getAttribute('data-popover-template');
+        const template = document.getElementById(id);
+        return template.innerHTML;
+      },
+      allowHTML: true,
+      placement: 'right-start',
+      interactive: true,
+      offset: [-10, 25],
+      onShow(instance) {
+        const navs = instance.popper.querySelectorAll('a');
+        navs.forEach((nav) => {
+          nav.addEventListener('click', (e) => {
+            navs.forEach((nav) => nav.classList.remove('highlight'));
+            nav.classList.add('highlight');
+            e.preventDefault(); // prevent reloading whole page
+            that.$router.push(nav.pathname);
+          });
+        });
+      }
+    });
+
+    // add event listener for collapse button
     const aside = document.querySelector('nav');
     const collapseBtn = document.querySelector('.collapse-button');
     collapseBtn.addEventListener('click', () => {
       this.isCollapsed = !this.isCollapsed;
       aside.classList.toggle('is-collapsed');
     });
+
+    // activate dashboard nav item initially
+    const dashboard = document.querySelector('.main-nav > li:nth-of-type(1)');
+    dashboard.classList.add('is-active');
   }
 });
 </script>
@@ -244,13 +264,11 @@ li {
 .purr-logo {
   display: flex;
   justify-content: center;
-  font-size: 32px;
+  font-size: 20px;
   font-weight: 900;
-  //margin-bottom: 10px;
-  padding: 16px;
   position: relative;
   overflow: visible;
-  height: 70px;
+  height: 64px;
 
   a {
     display: flex;
@@ -292,98 +310,128 @@ li {
   }
 }
 
+:deep(div[data-tippy-root]) {
+  background-color: var(--el-color-white);
+  box-shadow: var(--el-box-shadow-base);
+  border-radius: var(--el-border-radius-base);
+  padding: 0 8px;
+
+  // add specificity
+  .menu-item a {
+    padding: 10px 70px 10px 14px;
+  }
+
+  .highlight {
+    background-color: var(--el-color-primary-light-9);
+    color: var(--el-color-primary);
+  }
+}
+
 nav {
   width: 240px;
   overflow: visible;
   transition: width ease-out 0.5s;
 
-  .main-nav {
-    margin: -4px 0;
+  :deep(div[data-tippy-root]) {
+    display: none;
+  }
+}
 
-    li {
-      border-radius: var(--el-border-radius-base);
-      overflow: hidden;
-      margin: 10px 0;
-      cursor: pointer;
+.main-nav {
+  margin: -4px 0;
 
-      li:hover {
-        background-color: var(--light-admin-nav-hover-color);
-      }
-    }
+  li {
+    border-radius: var(--el-border-radius-base);
+    overflow: hidden;
+    margin: 10px 0;
+    cursor: pointer;
 
-    li:hover .sub-menu__title {
+    // menu item nested in nav item
+    li:hover {
       background-color: var(--light-admin-nav-hover-color);
     }
+  }
 
-    li:not(.sub-menu):hover {
-      background-color: var(--light-admin-nav-hover-color);
-    }
+  // it's a must, as the background of ul nested in nav item is white
+  li:hover .sub-menu__title {
+    background-color: var(--light-admin-nav-hover-color);
+  }
 
-    .sub-menu__title {
-      border-radius: var(--el-border-radius-base);
-      overflow: hidden;
-    }
+  li:not(.sub-menu):hover {
+    background-color: var(--light-admin-nav-hover-color);
+  }
 
-    a {
-      display: block;
-      width: 100%;
-      height: 100%;
-      padding: 8px 0;
-      color: var(--light-admin-text-color);
-      overflow: hidden;
-      white-space: nowrap;
-    }
+  .sub-menu__title {
+    border-radius: var(--el-border-radius-base);
+    overflow: hidden;
+  }
 
-    svg {
-      margin-left: 20px;
-      width: 16px;
-      height: 16px;
-    }
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 8px 0;
+    color: var(--light-admin-text-color);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  svg {
+    margin-left: 24px;
+    width: 16px;
+    height: 16px;
+  }
+
+  span {
+    font-size: 14px;
+    user-select: none;
+    display: inline-block;
+  }
+
+  svg + span {
+    margin-left: 24px;
+    vertical-align: text-bottom;
+  }
+
+  > li {
+    margin-left: 28px;
+    margin-right: 28px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  // nav items nested in outer nav item
+  ul.menu > li {
+    margin-left: 32px;
 
     span {
-      font-size: 14px;
-      user-select: none;
-      display: inline-block;
+      margin-left: 32px;
+    }
+  }
+
+  > li.is-active {
+    > .router-link-exact-active {
+      background-color: var(--el-color-primary);
+      color: var(--el-color-white);
     }
 
-    svg + span {
-      margin-left: 18px;
-      vertical-align: text-bottom;
+    .sub-menu__title a {
+      background-color: var(--el-color-primary);
+      color: var(--el-color-white);
     }
 
-    > li {
-      margin-left: 20px;
-      margin-right: 20px;
-
-      .menu > li {
-        margin-left: 32px;
-
-        span {
-          margin-left: 20px;
-        }
-      }
+    .menu .router-link-exact-active {
+      background-color: var(--el-color-primary);
+      color: var(--el-color-white);
     }
 
-    > li.is-active {
-      .sub-menu__title a {
-        background-color: var(--el-color-primary);
-        color: var(--el-color-white);
-      }
-
-      .router-link-exact-active {
-        background-color: var(--el-color-primary);
-        color: var(--el-color-white);
-      }
-
-      .menu {
-        display: block;
-      }
+    .menu {
+      display: block;
     }
+  }
 
-    > li.sub-menu.close {
-      .menu {
-        display: none;
-      }
+  > li.sub-menu.close {
+    .menu {
+      display: none;
     }
   }
 }
@@ -393,18 +441,22 @@ nav.is-collapsed {
   transition: width ease-out 0.5s;
 
   .purr-logo {
-    font-size: 20px;
+    font-size: 16px;
     transition: all ease-out 0.5s;
+  }
+
+  :deep(div[data-tippy-root]) {
+    display: block;
+  }
+
+  a {
+    transition: width ease-out 0.5s;
+    height: 36px;
+    padding: 10px;
   }
 
   .main-nav > li {
     margin: 10px 20px;
-
-    a {
-      transition: width ease-out 0.5s;
-      height: 36px;
-      padding: 10px;
-    }
 
     .menu {
       display: none;
