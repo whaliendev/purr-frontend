@@ -1,4 +1,4 @@
-*{
+body *, body *:before, body *:after {
   box-sizing: border-box;
 }
 
@@ -7,6 +7,21 @@ body{
   padding: 0;
 }
 
+ul, ol{
+  list-style: none;
+  outline: none;
+}
+
 .el-notification.right {
   right: 24px;
+}
+
+.el-popper {
+  color: var(--light-admin-text-color);
+}
+
+:root{
+  --light-admin-background-color: #f8f8f8;
+  --light-admin-text-color: #878FA7;
+  --light-admin-nav-hover-color: #efefef;
 }

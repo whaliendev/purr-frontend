@@ -37,6 +37,11 @@ const router = createRouter({
           component: () => import('../views/admin/components/AdminDashboard')
         },
         {
+          path: 'article',
+          name: 'article',
+          redirect: { name: 'article-manage' }
+        },
+        {
           path: 'article/manage',
           name: 'article-manage',
           meta: {
@@ -77,6 +82,11 @@ const router = createRouter({
           component: () => import('../views/admin/components/AdminMoment')
         },
         {
+          path: 'page',
+          name: 'page',
+          redirect: { name: 'page-manage' }
+        },
+        {
           path: 'page/design',
           name: 'page-design',
           meta: {
@@ -107,6 +117,11 @@ const router = createRouter({
             title: '链接'
           },
           component: () => import('../views/admin/components/AdminLink')
+        },
+        {
+          path: 'settings',
+          name: 'settings',
+          redirect: { name: 'settings-app' }
         },
         {
           path: 'settings/menu',
