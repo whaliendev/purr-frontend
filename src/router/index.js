@@ -23,11 +23,8 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: () => import('../views/admin/AdminPage'),
+      redirect: '/admin/dashboard',
       children: [
-        {
-          path: '',
-          redirect: { name: 'dashboard' }
-        },
         {
           path: 'dashboard',
           name: 'dashboard',

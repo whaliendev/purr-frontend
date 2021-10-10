@@ -33,7 +33,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="article-menu">
-            <router-link :to="{ name: 'article' }">
+            <router-link :to="{ name: 'article-manage' }">
               <font-awesome-icon :icon="['fas', 'pen']" />
               <span>文章</span>
             </router-link>
@@ -246,8 +246,13 @@ export default defineComponent({
     });
 
     // activate dashboard nav item initially
-    const dashboard = document.querySelector('.main-nav > li:nth-of-type(1)');
-    dashboard.classList.add('is-active');
+    const pathname = window.location.pathname;
+    const firstClassNav = /\/\w+\/\w+/;
+    const matches = pathname.match(firstClassNav);
+    console.log(matches[0]);
+    const curNav = document.querySelector(`a[href="${matches[0]}"]`);
+    curNav.parentElement.parentElement.parentElement.classList.add('is-active');
+    // curNav.classList.add('is-active');
   }
 });
 </script>

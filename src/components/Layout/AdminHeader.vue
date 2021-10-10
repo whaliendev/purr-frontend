@@ -11,14 +11,16 @@
     <span class="round-icon-button"
       ><font-awesome-icon :icon="['fas', 'plus-circle']"
     /></span>
-    <span class="round-icon-button"
-      ><font-awesome-icon :icon="['fas', 'comment-dots']"
-    /></span>
+    <el-badge :value="22" :max="99" type="danger">
+      <span class="round-icon-button"
+        ><font-awesome-icon :icon="['fas', 'comment-dots']"
+      /></span>
+    </el-badge>
     <el-divider direction="vertical" />
     <span class="welcome-message hidden-xs-only"> 🌞 早上好呀，Whalien！</span>
     <el-avatar
       :size="40"
-      src="https://www.gravatar.com/avatar/d228a2e7267ca35e7c754583ae9b6f36"
+      src="https://sdn.geekzu.org/avatar/d228a2e7267ca35e7c754583ae9b6f36"
       fit="cover"
     ></el-avatar>
   </div>
@@ -91,6 +93,17 @@ export default defineComponent({
 .user-profile-wrapper {
   .round-icon-button:nth-of-type(1) {
     margin-left: 12px;
+  }
+
+  :deep(.el-badge__content) {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    right: 20px;
+    top: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .el-divider--vertical {
