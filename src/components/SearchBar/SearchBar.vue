@@ -18,7 +18,7 @@
 import { defineComponent, ref } from 'vue';
 import Search from '../Icon/Search';
 export default defineComponent({
-  components: {Search},
+  components: { Search },
   setup() {
     const queryString = ref('');
 

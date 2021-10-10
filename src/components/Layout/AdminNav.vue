@@ -14,7 +14,7 @@
       </div>
     </div>
     <ul class="menu main-nav">
-      <li class="menu-item is-active">
+      <li class="menu-item is-active nav-item">
         <el-tooltip
           placement="right"
           content="首页"
@@ -41,17 +41,17 @@
           </div>
         </div>
         <ul class="menu" id="article-menu">
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'article-manage' }">
               <span>管理文章</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'article-compose' }">
               <span>写作文章</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'article-tag' }">
               <span>标签</span>
             </router-link>
@@ -59,7 +59,7 @@
         </ul>
       </li>
       <!-- end of sub menu of articles -->
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="评论"
@@ -74,7 +74,7 @@
           </router-link>
         </el-tooltip>
       </li>
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="动态"
@@ -101,12 +101,12 @@
           </div>
         </div>
         <ul class="menu" id="page-menu">
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'page-manage' }">
               <span>管理页面</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'page-design' }">
               <span>设计页面</span>
             </router-link>
@@ -114,7 +114,7 @@
         </ul>
       </li>
       <!-- end of pages -->
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="多媒体库"
@@ -129,7 +129,7 @@
           </router-link>
         </el-tooltip>
       </li>
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="链接"
@@ -156,17 +156,17 @@
           </div>
         </div>
         <ul class="menu" id="settings-menu">
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'settings-menu' }">
               <span>菜单设置</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'settings-user' }">
               <span>用户设置</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'settings-app' }">
               <span>系统设置</span>
             </router-link>
@@ -190,10 +190,20 @@ export default defineComponent({
   },
   mounted() {
     const that = this;
+
+    // add event listener for collapse button
+    const aside = document.querySelector('nav');
+    const collapseBtn = document.querySelector('.collapse-button');
+    if (this.isCollapsed) aside.classList.add('is-collapsed');
+    collapseBtn.addEventListener('click', () => {
+      this.isCollapsed = !this.isCollapsed;
+      aside.classList.toggle('is-collapsed');
+    });
+
     // add click event listener of list nav item
     const menuItems = document.querySelectorAll('.main-nav > li');
     menuItems.forEach((menuItem) => {
-      menuItem.addEventListener('click', function() {
+      menuItem.addEventListener('click', function () {
         const that = this;
         menuItems.forEach((menuItem) => {
           menuItem.classList.remove('is-active');
@@ -235,14 +245,6 @@ export default defineComponent({
       }
     });
 
-    // add event listener for collapse button
-    const aside = document.querySelector('nav');
-    const collapseBtn = document.querySelector('.collapse-button');
-    collapseBtn.addEventListener('click', () => {
-      this.isCollapsed = !this.isCollapsed;
-      aside.classList.toggle('is-collapsed');
-    });
-
     // activate dashboard nav item initially
     const dashboard = document.querySelector('.main-nav > li:nth-of-type(1)');
     dashboard.classList.add('is-active');
@@ -264,6 +266,7 @@ li {
 .purr-logo {
   display: flex;
   justify-content: center;
+  align-items: center;
   font-size: 20px;
   font-weight: 900;
   position: relative;
@@ -394,8 +397,8 @@ nav {
   }
 
   > li {
-    margin-left: 28px;
-    margin-right: 28px;
+    margin-left: 24px;
+    margin-right: 24px;
     -webkit-tap-highlight-color: transparent;
   }
 
