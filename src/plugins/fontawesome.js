@@ -13,23 +13,28 @@ import {
   faWrench,
   faChevronDown,
   faChevronRight,
-  faChevronLeft
+  faChevronLeft,
+  faPlusCircle,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 
 // regular svg
-library.add(faUser);
-library.add(faEnvelope);
+library.add([faUser, faEnvelope]);
 
 // solid svg
-library.add(faPlane);
-library.add(faPaperPlane);
-library.add(faThLarge);
-library.add(faPen);
-library.add(faCommentDots);
-library.add(faFileAlt);
-library.add(faMusic);
-library.add(faLink);
-library.add(faWrench);
-library.add(faChevronDown);
-library.add(faChevronLeft);
-library.add(faChevronRight);
+library.add([
+  faPlane,
+  faPaperPlane,
+  faThLarge,
+  faPen,
+  faCommentDots,
+  faFileAlt,
+  faMusic,
+  faLink,
+  faWrench,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faPlusCircle,
+  faBars
+]);
