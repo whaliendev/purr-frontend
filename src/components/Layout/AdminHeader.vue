@@ -11,35 +11,91 @@
     <span class="round-icon-button"
       ><font-awesome-icon :icon="['fas', 'plus-circle']"
     /></span>
-    <el-badge :value="22" :max="99" type="danger">
+    <el-badge
+      :value="unapprovedCount"
+      :max="99"
+      type="danger"
+      :hidden="isHidden"
+    >
       <span class="round-icon-button"
         ><font-awesome-icon :icon="['fas', 'comment-dots']"
       /></span>
     </el-badge>
     <el-divider direction="vertical" />
     <span class="welcome-message hidden-xs-only"> 🌞 早上好呀，Whalien！</span>
-    <el-avatar
-      :size="40"
-      src="https://sdn.geekzu.org/avatar/d228a2e7267ca35e7c754583ae9b6f36"
-      fit="cover"
-    ></el-avatar>
+    <el-avatar :size="40" :src="avatarUrl" fit="cover">{{
+      username
+    }}</el-avatar>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import SearchBar from '../SearchBar/SearchBar';
+import logger from '../../plugins/logger';
+import commentApi from '../../api/comment';
+import appConfig from '../../config/config';
+import metaApi from '../../api/meta';
 export default defineComponent({
   name: 'AdminHeader',
   emits: ['showNav'],
   components: { SearchBar },
   setup(props, { emit }) {
+    const unapprovedCount = ref(0);
+    const isHidden = computed(() => {
+      return unapprovedCount.value === -1 || unapprovedCount.value === 0;
+    });
+    const fetchUnapprovedCount = () => {
+      commentApi
+        .getUnapprovedCommentCount()
+        .then((response) => {
+          logger.info(response);
+          const success = response.data.success;
+          if (success) {
+            unapprovedCount.value = response.data.data;
+          } else {
+            unapprovedCount.value = -1;
+          }
+        })
+        .catch((error) => {
+          logger.error(error);
+          unapprovedCount.value = -1;
+        });
+    };
+    setTimeout(fetchUnapprovedCount, appConfig.unapprovedRefetchDuration);
+
+    const username = ref('站长');
+    const avatarUrl = ref('');
+    const fetchUserProfile = () => {
+      metaApi.getUserProfile().then((response) => {
+        logger.info(response);
+        const success = response.data.success;
+        if (success) {
+          const data = response.data.data;
+          username.value = data.username;
+          avatarUrl.value = data.qq || data.avatar;
+        } else {
+          username.value = '站长';
+          avatarUrl.value = '';
+        }
+      });
+    };
+
+    onMounted(() => {
+      fetchUnapprovedCount();
+      fetchUserProfile();
+    });
+
     const expandNav = () => {
       emit('showNav');
     };
 
     return {
-      expandNav
+      expandNav,
+      unapprovedCount,
+      isHidden,
+      username,
+      avatarUrl
     };
   }
 });

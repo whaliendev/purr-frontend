@@ -249,7 +249,6 @@ export default defineComponent({
     const pathname = window.location.pathname;
     const firstClassNav = /\/\w+\/\w+/;
     const matches = pathname.match(firstClassNav);
-    console.log(matches[0]);
     const curNav = document.querySelector(`a[href="${matches[0]}"]`);
     curNav.parentElement.parentElement.parentElement.classList.add('is-active');
     // curNav.classList.add('is-active');

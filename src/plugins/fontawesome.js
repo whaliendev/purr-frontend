@@ -15,7 +15,9 @@ import {
   faChevronRight,
   faChevronLeft,
   faPlusCircle,
-  faBars
+  faBars,
+  faHeart,
+  faEye
 } from '@fortawesome/free-solid-svg-icons';
 
 // regular svg
@@ -36,5 +38,7 @@ library.add([
   faChevronLeft,
   faChevronRight,
   faPlusCircle,
-  faBars
+  faBars,
+  faHeart,
+  faEye
 ]);
