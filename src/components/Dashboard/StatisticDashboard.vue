@@ -34,7 +34,11 @@
         </statistic-widget>
       </div>
     </div>
-    <div class="view-trending-plot"></div>
+    <div class="view-trending-plot">
+      <base-card>
+        <view-trending-plot :data="statistics.latestViewCount" />
+      </base-card>
+    </div>
   </div>
 </template>
 
@@ -45,10 +49,12 @@ import logger from '../../plugins/logger';
 import appConfig from '../../config/config';
 import StatisticWidget from '../Widget/StatisticWidget';
 import { normalizeNum } from '../../utils/util';
+import ViewTrendingPlot from '../Plot/ViewTrending';
+import BaseCard from '../UI/BaseCard';
 
 export default defineComponent({
   name: 'StatisticDashboard',
-  components: { StatisticWidget },
+  components: { BaseCard, ViewTrendingPlot, StatisticWidget },
   setup() {
     const statistics = reactive({
       commentCount: '',
@@ -67,7 +73,7 @@ export default defineComponent({
           statistics.articleCount = normalizeNum(data.articleCount);
           statistics.viewCount = normalizeNum(data.viewCount);
           statistics.thumbCount = normalizeNum(data.thumbCount);
-          statistics.latestViewCount = normalizeNum(data.latestViewCount);
+          statistics.latestViewCount = data.latestViewCount;
         } else {
           statistics.commentCount = '---';
           statistics.articleCount = '---';
@@ -119,5 +125,15 @@ export default defineComponent({
 :deep(.base-card:nth-of-type(4) .icon) {
   color: var(--el-color-primary);
   background-color: var(--el-color-primary-light-5);
+}
+
+.view-trending-plot {
+  margin-top: 24px;
+
+  .base-card {
+    width: max-content;
+    height: 400px;
+    padding: 20px;
+  }
 }
 </style>

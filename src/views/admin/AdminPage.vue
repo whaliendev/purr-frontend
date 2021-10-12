@@ -112,4 +112,8 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+.el-main {
+  padding-top: 4px;
+}
 </style>

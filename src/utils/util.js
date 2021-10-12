@@ -17,7 +17,7 @@ export function deepClone(source) {
   return targetObj;
 }
 
-export function normalizeNum(num, digits = 1) {
+export function normalizeNum(num, trunc = true, digits = 1) {
   if (num > 1e20) return '999.9E ↑';
   if (num === 0) return '0';
   const si = [
@@ -38,7 +38,7 @@ export function normalizeNum(num, digits = 1) {
     else right = mid;
   }
   left = si[left].value > num ? left - 1 : left;
-  return (
-    (num / si[left].value).toFixed(digits).replace(rx, '$1') + si[left].symbol
-  );
+  return trunc
+    ? (num / si[left].value).toFixed(digits).replace(rx, '$1') + si[left].symbol
+    : (num / si[left].value).toFixed(digits) + si[left].symbol;
 }
