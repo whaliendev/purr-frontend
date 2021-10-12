@@ -1,61 +1,90 @@
+<!--suppress JSValidateTypes -->
 <template>
   <div id="statistic-dashboard">
     <div class="widgets-container-wrapper">
       <div class="widgets-container">
-        <base-card>
-          <div class="icon">
+        <statistic-widget :item-count="statistics.viewCount" item-name="浏览量">
+          <template #icon>
             <font-awesome-icon :icon="['fas', 'eye']" />
-          </div>
-          <div>
-            <div class="count">11.1k</div>
-            <small>浏览量</small>
-          </div>
-        </base-card>
-        <base-card>
-          <div class="icon">
+          </template>
+        </statistic-widget>
+        <statistic-widget
+          :item-count="statistics.articleCount"
+          item-name="文章数"
+        >
+          <template #icon>
             <font-awesome-icon :icon="['fas', 'file-alt']" />
-          </div>
-          <div>
-            <div class="count">28</div>
-            <small>文章数</small>
-          </div>
-        </base-card>
-        <base-card>
-          <div class="icon">
+          </template>
+        </statistic-widget>
+        <statistic-widget
+          :item-count="statistics.thumbCount"
+          item-name="点赞数"
+        >
+          <template #icon>
             <font-awesome-icon :icon="['fas', 'heart']" />
-          </div>
-          <div>
-            <div class="count">700</div>
-            <small>点赞数</small>
-          </div>
-        </base-card>
-        <base-card>
-          <div class="icon">
+          </template>
+        </statistic-widget>
+        <statistic-widget
+          :item-count="statistics.commentCount"
+          item-name="评论数"
+        >
+          <template #icon>
             <font-awesome-icon :icon="['fas', 'comment-dots']" />
-          </div>
-          <div>
-            <div class="count">132</div>
-            <small>评论数</small>
-          </div>
-        </base-card>
+          </template>
+        </statistic-widget>
       </div>
     </div>
-    <div class="view-trending-plot">
-
-    </div>
+    <div class="view-trending-plot"></div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import BaseCard from '../UI/BaseCard';
+import { defineComponent, reactive } from 'vue';
+import statisticApi from '../../api/statistic';
+import logger from '../../plugins/logger';
+import appConfig from '../../config/config';
+import StatisticWidget from '../Widget/StatisticWidget';
+import { normalizeNum } from '../../utils/util';
+
 export default defineComponent({
-  components: { BaseCard },
+  name: 'StatisticDashboard',
+  components: { StatisticWidget },
   setup() {
-    // const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--el-color-primary');
-    // const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--el-color-primary');
-    // const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--el-color-primary');
-    // const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--el-color-primary');
+    const statistics = reactive({
+      commentCount: '',
+      articleCount: '',
+      viewCount: '',
+      thumbCount: '',
+      latestViewCount: []
+    });
+    const fetchStatisticData = () => {
+      statisticApi.getSummary().then((response) => {
+        logger.info(response);
+        const success = response.data.success;
+        if (success) {
+          const data = response.data.data;
+          statistics.commentCount = normalizeNum(data.commentCount);
+          statistics.articleCount = normalizeNum(data.articleCount);
+          statistics.viewCount = normalizeNum(data.viewCount);
+          statistics.thumbCount = normalizeNum(data.thumbCount);
+          statistics.latestViewCount = normalizeNum(data.latestViewCount);
+        } else {
+          statistics.commentCount = '---';
+          statistics.articleCount = '---';
+          statistics.viewCount = '---';
+          statistics.thumbCount = '---';
+          statistics.latestViewCount = null;
+        }
+      });
+    };
+
+    // lifecycle hooks
+    fetchStatisticData();
+    setTimeout(fetchStatisticData, appConfig.statisticRefetchDuration);
+
+    return {
+      statistics
+    };
   }
 });
 </script>
@@ -72,63 +101,22 @@ export default defineComponent({
   flex-wrap: wrap;
 }
 
-.base-card {
-  width: max-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 40px 12px 16px;
-  margin: 12px;
-
-  .icon {
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: var(--el-border-radius-base);
-  }
-
-  .icon + div {
-    display: inline-block;
-    margin-left: 16px;
-
-    small {
-      display: inline-block;
-      font-size: 0.8em;
-      margin-top: 5px;
-      color: var(--light-admin-text-color);
-    }
-  }
-
-  .count {
-    color: var(--light-admin-text-accent-color);
-    font-weight: 700;
-    font-size: 18px;
-  }
-
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-.base-card:nth-of-type(1) .icon {
+:deep(.base-card:nth-of-type(1) .icon) {
   color: var(--el-color-success);
   background-color: var(--el-color-success-light);
 }
 
-.base-card:nth-of-type(2) .icon {
+:deep(.base-card:nth-of-type(2) .icon) {
   color: var(--el-color-warning);
   background-color: var(--el-color-warning-light);
 }
 
-.base-card:nth-of-type(3) .icon {
+:deep(.base-card:nth-of-type(3) .icon) {
   color: var(--el-color-danger);
   background-color: var(--el-color-danger-light);
 }
 
-.base-card:nth-of-type(4) .icon {
+:deep(.base-card:nth-of-type(4) .icon) {
   color: var(--el-color-primary);
   background-color: var(--el-color-primary-light-5);
 }
