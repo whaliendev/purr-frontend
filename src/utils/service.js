@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import { ElMessage, ElNotification } from 'element-plus';
 import logger from '../plugins/logger';
+import { useRouter } from 'vue-router';
 
 const notificationTitle = '糟糕，异常他出现了';
 
@@ -11,18 +12,54 @@ const service = axios.create({
 });
 
 function setTokenToHeader(config) {
-  const token = store.getters.user.token;
-  logger.debug('current token is', token);
+  const token = store.getters.user.accessToken;
   if (token) {
     config.headers['Access-Token'] = token;
   }
+}
+
+let refreshTask = null;
+async function refreshToken(error) {
+  const refreshToken = store.getters.user.refreshToken;
+  try {
+    if (refreshTask === null) {
+      refreshTask = store.dispatch('refreshToken', refreshToken);
+      await refreshTask;
+    }
+  } catch (err) {
+    if (
+      err.response &&
+      err.response.data &&
+      err.response.data.data &&
+      err.response.data.errorCode === 'A1103'
+    ) {
+      await reAuth();
+    }
+  } finally {
+    refreshTask = null;
+  }
+  return reRequest(error);
+}
+
+async function reAuth() {
+  ElMessage.warning({
+    message: '当前登录状态已失效，请重新登录'
+  });
+  const router = useRouter();
+  await router.replace({ name: 'login' });
+}
+
+async function reRequest(error) {
+  const config = error.response.config;
+  setTokenToHeader(config);
+  return await axios.request(config);
 }
 
 service.interceptors.request.use(
   (config) => {
     config.baseURL = store.getters['app/apiUrl'];
     setTokenToHeader(config);
-    logger.debug(`request config: ${config}`);
+    logger.info(`request config: ${config}`);
     return config;
   },
   (error) => {
@@ -44,8 +81,8 @@ service.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
-    logger.debug(error);
+  async (error) => {
+    logger.info(error);
     if (axios.isCancel(error)) {
       logger.debug('Cancelled uploading by user. ');
       return Promise.reject(error);
@@ -79,6 +116,19 @@ service.interceptors.response.use(
             message: '貌似你的服务器出了点小问题，请检查一下服务器后重试'
           });
           handled = true;
+        }
+
+        if (status === 401) {
+          if (data.errorCode === 'A1102') {
+            const res = refreshToken(error);
+            if (res !== error) {
+              return res;
+            }
+          }
+
+          if (data.errorCode === 'A1103') {
+            await reAuth();
+          }
         }
 
         if (status === 500) {

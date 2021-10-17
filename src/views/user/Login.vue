@@ -188,6 +188,7 @@ export default defineComponent({
       }
     });
     const handleLogin = () => {
+      store.dispatch('refreshToken');
       domLoginForm.value.validate((valid) => {
         if (valid) {
           loginForm.loading = true;
@@ -199,6 +200,8 @@ export default defineComponent({
           store
             .dispatch('login', loginData)
             .then((response) => {
+              logger.debug(response);
+              logger.debug('successful');
               if (response.data.success) {
                 loginForm.loading = false;
               } else {
@@ -207,6 +210,7 @@ export default defineComponent({
               }
             })
             .catch(() => {
+              logger.debug('error');
               loginForm.errored = true;
               loginForm.loading = false;
             });
