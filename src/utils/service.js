@@ -59,7 +59,7 @@ service.interceptors.request.use(
   (config) => {
     config.baseURL = store.getters['app/apiUrl'];
     setTokenToHeader(config);
-    logger.info(`request config: ${config}`);
+    logger.info(config.url);
     return config;
   },
   (error) => {
@@ -103,22 +103,6 @@ service.interceptors.response.use(
         }
 
         if (status === 401) {
-          ElMessage.error({
-            title: notificationTitle,
-            message: '你的登录状态是无效的，需要重新登录'
-          });
-          handled = true;
-        }
-
-        if (status === 404) {
-          ElMessage.error({
-            title: notificationTitle,
-            message: '貌似你的服务器出了点小问题，请检查一下服务器后重试'
-          });
-          handled = true;
-        }
-
-        if (status === 401) {
           if (data.errorCode === 'A1102') {
             const res = refreshToken(error);
             if (res !== error) {
@@ -129,6 +113,14 @@ service.interceptors.response.use(
           if (data.errorCode === 'A1103') {
             await reAuth();
           }
+        }
+
+        if (status === 404) {
+          ElMessage.error({
+            title: notificationTitle,
+            message: '貌似你的服务器出了点小问题，请检查一下服务器后重试'
+          });
+          handled = true;
         }
 
         if (status === 500) {

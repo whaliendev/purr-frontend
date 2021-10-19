@@ -48,7 +48,7 @@ export default defineComponent({
     // const purrColorDanger = getComputedStyle(
     //   document.documentElement
     // ).getPropertyValue('--el-color-danger');
-    const purrlightAdminTextColor = getComputedStyle(
+    const purrLightAdminTextColor = getComputedStyle(
       document.documentElement
     ).getPropertyValue('--light-admin-text-color');
     const data = computed(() => {
@@ -103,7 +103,7 @@ export default defineComponent({
           data: data,
           label: {
             show: true,
-            color: purrlightAdminTextColor
+            color: purrLightAdminTextColor
           }
         },
         {

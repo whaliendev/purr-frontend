@@ -201,7 +201,6 @@ export default defineComponent({
             .dispatch('login', loginData)
             .then((response) => {
               logger.debug(response);
-              logger.debug('successful');
               if (response.data.success) {
                 loginForm.loading = false;
               } else {
@@ -210,7 +209,6 @@ export default defineComponent({
               }
             })
             .catch(() => {
-              logger.debug('error');
               loginForm.errored = true;
               loginForm.loading = false;
             });
