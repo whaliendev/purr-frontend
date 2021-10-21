@@ -1,5 +1,4 @@
 import userApi from '../api/user';
-import logger from '../plugins/logger';
 
 const actions = {
   login(context, loginData) {
@@ -17,7 +16,6 @@ const actions = {
           resolve(response);
         })
         .catch((error) => {
-          logger.debug(error);
           reject(error);
         });
     });
@@ -34,7 +32,6 @@ const actions = {
           resolve(response);
         })
         .catch((error) => {
-          logger.info(error);
           reject(error);
         });
     });

@@ -45,9 +45,6 @@ export default defineComponent({
     const purrColorPrimary = getComputedStyle(
       document.documentElement
     ).getPropertyValue('--el-color-primary');
-    // const purrColorDanger = getComputedStyle(
-    //   document.documentElement
-    // ).getPropertyValue('--el-color-danger');
     const purrLightAdminTextColor = getComputedStyle(
       document.documentElement
     ).getPropertyValue('--light-admin-text-color');

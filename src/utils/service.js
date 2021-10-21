@@ -2,7 +2,6 @@ import axios from 'axios';
 import store from '../store';
 import { ElMessage, ElNotification } from 'element-plus';
 import logger from '../plugins/logger';
-import { useRouter } from 'vue-router';
 
 const notificationTitle = '糟糕，异常他出现了';
 
@@ -21,6 +20,7 @@ function setTokenToHeader(config) {
 let refreshTask = null;
 async function refreshToken(error) {
   const refreshToken = store.getters.user.refreshToken;
+  logger.info('refreshToken: ' + refreshToken);
   try {
     if (refreshTask === null) {
       refreshTask = store.dispatch('refreshToken', refreshToken);
@@ -45,8 +45,7 @@ async function reAuth() {
   ElMessage.warning({
     message: '当前登录状态已失效，请重新登录'
   });
-  const router = useRouter();
-  await router.replace({ name: 'login' });
+  console.log('We will need to navigate to login view in the prod mode');
 }
 
 async function reRequest(error) {
@@ -78,11 +77,13 @@ service.interceptors.response.use(
         center: true,
         message: data.tip
       });
+    } else {
+      logger.info(response.data);
     }
     return response;
   },
   async (error) => {
-    logger.info(error);
+    logger.warn(error);
     if (axios.isCancel(error)) {
       logger.debug('Cancelled uploading by user. ');
       return Promise.reject(error);

@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="view-trending-plot">
-      <base-card>
+      <base-card style="padding: 20px">
         <view-trending-plot :data="statistics.latestViewCount" />
       </base-card>
     </div>
@@ -43,12 +43,11 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, onUnmounted, reactive } from 'vue';
 import statisticApi from '../../api/statistic';
-import logger from '../../plugins/logger';
 import appConfig from '../../config/config';
 import StatisticWidget from '../Widget/StatisticWidget';
-import { normalizeNum } from '../../utils/util';
+import { normalizeNum } from '@/utils/util';
 import ViewTrendingPlot from '../Plot/ViewTrending';
 import BaseCard from '../UI/BaseCard';
 
@@ -65,7 +64,6 @@ export default defineComponent({
     });
     const fetchStatisticData = () => {
       statisticApi.getSummary().then((response) => {
-        logger.info(response);
         const success = response.data.success;
         if (success) {
           const data = response.data.data;
@@ -86,7 +84,13 @@ export default defineComponent({
 
     // lifecycle hooks
     fetchStatisticData();
-    setTimeout(fetchStatisticData, appConfig.statisticRefetchDuration);
+    let taskId = setInterval(
+      fetchStatisticData,
+      appConfig.statisticRefetchDuration
+    );
+    onUnmounted(() => {
+      clearInterval(taskId);
+    });
 
     return {
       statistics
@@ -133,7 +137,6 @@ export default defineComponent({
   .base-card {
     width: max-content;
     height: 400px;
-    padding: 20px;
   }
 }
 </style>

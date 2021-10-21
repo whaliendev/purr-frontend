@@ -13,4 +13,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#comment-dashboard {
+  width: 360px;
+}
+</style>

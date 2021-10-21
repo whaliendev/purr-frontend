@@ -4,7 +4,7 @@
       <slot name="icon"></slot>
     </div>
     <div>
-      <div class="count">{{ itemCount }}</div>
+      <div class="count">{{ itemCount || '-' }}</div>
       <small>{{ itemName }}</small>
     </div>
   </base-card>

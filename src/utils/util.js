@@ -18,8 +18,9 @@ export function deepClone(source) {
 }
 
 export function normalizeNum(num, trunc = true, digits = 1) {
+  if (isNaN(parseFloat(num)) || isNaN(num - 0)) return '-';
   if (num > 1e20) return '999.9E ↑';
-  if (num === 0) return '0';
+  if (num < 1) return num.toString();
   const si = [
     { value: 1, symbol: '' },
     { value: 1e3, symbol: 'K' },
