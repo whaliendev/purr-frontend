@@ -2,6 +2,10 @@ export function isObject(value) {
   return typeof value === 'object' && value instanceof Object;
 }
 
+export function isString(value) {
+  return typeof value === 'string' && value instanceof String;
+}
+
 export function deepClone(source) {
   if (!source && typeof source !== 'object') {
     throw new Error('deep clone error');
@@ -42,4 +46,11 @@ export function normalizeNum(num, trunc = true, digits = 1) {
   return trunc
     ? (num / si[left].value).toFixed(digits).replace(rx, '$1') + si[left].symbol
     : (num / si[left].value).toFixed(digits) + si[left].symbol;
+}
+
+export function ellipsisFormat(content, length = 10) {
+  if (!isString(content))
+    throw new Error('Make sure the first arg is a String');
+  if (content.length <= length - 3) return content;
+  return content.substr(0, length - 3) + '...';
 }

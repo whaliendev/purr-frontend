@@ -132,6 +132,7 @@ service.interceptors.response.use(
         if (!handled) {
           ElNotification.error({
             title: notificationTitle,
+            dangerouslyUseHTMLString: true,
             message:
               data.tip ||
               `当前请求失败，响应状态码为${status}，可能有用的错误信息: ${
