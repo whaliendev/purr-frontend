@@ -11,4 +11,14 @@ userApi.login = (data) => {
   });
 };
 
+userApi.refreshToken = (refreshToken) => {
+  return service({
+    method: 'get',
+    url: `${baseUrl}/token/refresh`,
+    headers: {
+      'Access-Token': refreshToken
+    }
+  });
+};
+
 export default userApi;

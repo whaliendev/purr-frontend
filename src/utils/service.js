@@ -11,18 +11,54 @@ const service = axios.create({
 });
 
 function setTokenToHeader(config) {
-  const token = store.getters.user.token;
-  logger.debug('current token is', token);
+  const token = store.getters.user.accessToken;
   if (token) {
     config.headers['Access-Token'] = token;
   }
+}
+
+let refreshTask = null;
+async function refreshToken(error) {
+  const refreshToken = store.getters.user.refreshToken;
+  logger.info('refreshToken: ' + refreshToken);
+  try {
+    if (refreshTask === null) {
+      refreshTask = store.dispatch('refreshToken', refreshToken);
+      await refreshTask;
+    }
+  } catch (err) {
+    if (
+      err.response &&
+      err.response.data &&
+      err.response.data.data &&
+      err.response.data.errorCode === 'A1103'
+    ) {
+      await reAuth();
+    }
+  } finally {
+    refreshTask = null;
+  }
+  return reRequest(error);
+}
+
+async function reAuth() {
+  ElMessage.warning({
+    message: '当前登录状态已失效，请重新登录'
+  });
+  console.log('We will need to navigate to login view in the prod mode');
+}
+
+async function reRequest(error) {
+  const config = error.response.config;
+  setTokenToHeader(config);
+  return await axios.request(config);
 }
 
 service.interceptors.request.use(
   (config) => {
     config.baseURL = store.getters['app/apiUrl'];
     setTokenToHeader(config);
-    logger.debug(`request config: ${config}`);
+    logger.info(config.url);
     return config;
   },
   (error) => {
@@ -41,11 +77,13 @@ service.interceptors.response.use(
         center: true,
         message: data.tip
       });
+    } else {
+      logger.info(response.data);
     }
     return response;
   },
-  (error) => {
-    logger.debug(error);
+  async (error) => {
+    logger.warn(error);
     if (axios.isCancel(error)) {
       logger.debug('Cancelled uploading by user. ');
       return Promise.reject(error);
@@ -66,11 +104,16 @@ service.interceptors.response.use(
         }
 
         if (status === 401) {
-          ElMessage.error({
-            title: notificationTitle,
-            message: '你的登录状态是无效的，需要重新登录'
-          });
-          handled = true;
+          if (data.errorCode === 'A1102') {
+            const res = refreshToken(error);
+            if (res !== error) {
+              return res;
+            }
+          }
+
+          if (data.errorCode === 'A1103') {
+            await reAuth();
+          }
         }
 
         if (status === 404) {
@@ -89,6 +132,7 @@ service.interceptors.response.use(
         if (!handled) {
           ElNotification.error({
             title: notificationTitle,
+            dangerouslyUseHTMLString: true,
             message:
               data.tip ||
               `当前请求失败，响应状态码为${status}，可能有用的错误信息: ${

@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="base-card"
-    :class="[radius, shadow ? 'shadow' : '']"
-    :style="style"
-  >
+  <div class="base-card" :class="[radius, shadow ? 'shadow' : '']">
     <slot></slot>
   </div>
 </template>
@@ -25,11 +21,6 @@ export default defineComponent({
       validator: (val) => {
         return ['base', 'small', 'round'].includes(val);
       }
-    },
-    style: {
-      type: String,
-      required: false,
-      default: ''
     }
   },
   setup() {}

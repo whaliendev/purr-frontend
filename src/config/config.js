@@ -1,6 +1,6 @@
 const appConfig = {
-  unapprovedRefetchDuration: 20000,
-  statisticRefetchDuration: 15000
+  unapprovedRefetchDuration: 30000,
+  statisticRefetchDuration: 25000
 };
 
 export default appConfig;

@@ -12,6 +12,10 @@ ul, ol{
   outline: none;
 }
 
+a {
+  text-decoration: none;
+}
+
 .el-notification.right {
   right: 24px;
 }
@@ -22,6 +26,7 @@ ul, ol{
 
 :root{
   --light-admin-background-color: #f8f8f8;
+  --light-admin-background-accent-color: #f0f0f0;
   --light-admin-text-color: #878FA7;
   --light-admin-nav-hover-color: #efefef;
   --light-admin-text-accent-color: #002f47;

@@ -1,5 +1,9 @@
 export function isObject(value) {
-  return typeof value === 'object' && value instanceof Object;
+  return typeof value === 'object' || value instanceof Object;
+}
+
+export function isString(value) {
+  return typeof value === 'string' || value instanceof String;
 }
 
 export function deepClone(source) {
@@ -18,8 +22,9 @@ export function deepClone(source) {
 }
 
 export function normalizeNum(num, trunc = true, digits = 1) {
+  if (isNaN(parseFloat(num)) || isNaN(num - 0)) return '-';
   if (num > 1e20) return '999.9E ↑';
-  if (num === 0) return '0';
+  if (num < 1) return num.toString();
   const si = [
     { value: 1, symbol: '' },
     { value: 1e3, symbol: 'K' },
@@ -41,4 +46,11 @@ export function normalizeNum(num, trunc = true, digits = 1) {
   return trunc
     ? (num / si[left].value).toFixed(digits).replace(rx, '$1') + si[left].symbol
     : (num / si[left].value).toFixed(digits) + si[left].symbol;
+}
+
+export function ellipsisFormat(content, length = 10) {
+  if (!isString(content))
+    throw new Error('Make sure the first arg is a String');
+  if (content.length <= length - 3) return content;
+  return content.substr(0, length - 3) + '···';
 }

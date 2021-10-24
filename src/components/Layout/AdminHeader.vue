@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 import SearchBar from '../SearchBar/SearchBar';
 import logger from '../../plugins/logger';
 import commentApi from '../../api/comment';
@@ -49,7 +49,6 @@ export default defineComponent({
       commentApi
         .getUnapprovedCommentCount()
         .then((response) => {
-          logger.info(response);
           const success = response.data.success;
           if (success) {
             unapprovedCount.value = response.data.data;
@@ -62,13 +61,15 @@ export default defineComponent({
           unapprovedCount.value = -1;
         });
     };
-    setTimeout(fetchUnapprovedCount, appConfig.unapprovedRefetchDuration);
+    let taskId = setInterval(fetchUnapprovedCount, appConfig.unapprovedRefetchDuration);
+    onUnmounted(() => {
+      clearInterval(taskId);
+    });
 
     const username = ref('站长');
     const avatarUrl = ref('');
     const fetchUserProfile = () => {
       metaApi.getUserProfile().then((response) => {
-        logger.info(response);
         const success = response.data.success;
         if (success) {
           const data = response.data.data;

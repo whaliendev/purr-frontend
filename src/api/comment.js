@@ -10,4 +10,11 @@ commentApi.getUnapprovedCommentCount = () => {
   });
 };
 
+commentApi.getLatestComments = (curPage, fetchNum) => {
+  return service({
+    url: `${baseUrl}/recent?num=${fetchNum}&page=${curPage}`,
+    method: 'get'
+  });
+};
+
 export default commentApi;

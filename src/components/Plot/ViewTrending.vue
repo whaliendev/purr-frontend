@@ -45,10 +45,7 @@ export default defineComponent({
     const purrColorPrimary = getComputedStyle(
       document.documentElement
     ).getPropertyValue('--el-color-primary');
-    // const purrColorDanger = getComputedStyle(
-    //   document.documentElement
-    // ).getPropertyValue('--el-color-danger');
-    const purrlightAdminTextColor = getComputedStyle(
+    const purrLightAdminTextColor = getComputedStyle(
       document.documentElement
     ).getPropertyValue('--light-admin-text-color');
     const data = computed(() => {
@@ -103,7 +100,7 @@ export default defineComponent({
           data: data,
           label: {
             show: true,
-            color: purrlightAdminTextColor
+            color: purrLightAdminTextColor
           }
         },
         {
@@ -129,6 +126,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .view-trending {
-  width: 840px;
+  width: 854px;
 }
 </style>

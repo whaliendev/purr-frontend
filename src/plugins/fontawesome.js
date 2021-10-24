@@ -17,7 +17,9 @@ import {
   faPlusCircle,
   faBars,
   faHeart,
-  faEye
+  faEye,
+  faAngleLeft,
+  faAngleRight
 } from '@fortawesome/free-solid-svg-icons';
 
 // regular svg
@@ -40,5 +42,7 @@ library.add([
   faPlusCircle,
   faBars,
   faHeart,
-  faEye
+  faEye,
+  faAngleRight,
+  faAngleLeft
 ]);

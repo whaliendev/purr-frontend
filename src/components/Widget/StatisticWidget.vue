@@ -4,7 +4,7 @@
       <slot name="icon"></slot>
     </div>
     <div>
-      <div class="count">{{ itemCount }}</div>
+      <div class="count">{{ itemCount || '-' }}</div>
       <small>{{ itemName }}</small>
     </div>
   </base-card>
@@ -54,7 +54,7 @@ export default defineComponent({
 
   .icon + div {
     display: inline-block;
-    margin-left: 16px;
+    margin-left: 20px;
 
     small {
       display: inline-block;
