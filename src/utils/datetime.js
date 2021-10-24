@@ -9,7 +9,7 @@ export function datetimeFormat(
   return dayjs(datetime).format(pattern);
 }
 
-export function timeAgo(datetime) {
+export function timeAgo(datetime, time = false) {
   const currentTime = new Date().getTime();
   const between = currentTime - datetime;
   const days = Math.floor(between / (24 * 3600 * 1000));
@@ -32,6 +32,7 @@ export function timeAgo(datetime) {
   if (days < 5) {
     return days + ' 天前';
   } else {
-    return dayjs(datetime).format('YYYY-MM-DD HH:mm');
+    if (time) return dayjs(datetime).format('YYYY-MM-DD HH:mm');
+    else return dayjs(datetime).format('YYYY/MM/DD');
   }
 }

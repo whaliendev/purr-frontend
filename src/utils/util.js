@@ -1,9 +1,9 @@
 export function isObject(value) {
-  return typeof value === 'object' && value instanceof Object;
+  return typeof value === 'object' || value instanceof Object;
 }
 
 export function isString(value) {
-  return typeof value === 'string' && value instanceof String;
+  return typeof value === 'string' || value instanceof String;
 }
 
 export function deepClone(source) {
@@ -52,5 +52,5 @@ export function ellipsisFormat(content, length = 10) {
   if (!isString(content))
     throw new Error('Make sure the first arg is a String');
   if (content.length <= length - 3) return content;
-  return content.substr(0, length - 3) + '...';
+  return content.substr(0, length - 3) + '···';
 }

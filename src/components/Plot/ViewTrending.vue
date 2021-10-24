@@ -126,6 +126,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .view-trending {
-  width: 840px;
+  width: 854px;
 }
 </style>
