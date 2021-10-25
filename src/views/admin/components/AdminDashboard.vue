@@ -1,8 +1,14 @@
 <template>
   <div class="admin-dashboard-wrapper">
     <div id="admin-dashboard">
-      <statistic-dashboard />
-      <comment-dashboard />
+      <div class="row first-row">
+        <div class="col first-col"><statistic-dashboard /></div>
+        <div class="col second-col"><comment-dashboard /></div>
+      </div>
+      <div class="row second-row">
+        <div class="col first-col"><article-dashboard /></div>
+        <div class="col second-col"><commit-dashboard /></div>
+      </div>
     </div>
   </div>
 </template>
@@ -10,26 +16,35 @@
 <script>
 import StatisticDashboard from '../../../components/Dashboard/StatisticDashboard';
 import CommentDashboard from '../../../components/Dashboard/CommentDashboard';
+import ArticleDashboard from '@/components/Dashboard/ArticleDashboard';
+import CommitDashboard from '../../../components/Dashboard/CommitDashboard';
 export default {
-  components: { StatisticDashboard, CommentDashboard }
+  components: {
+    ArticleDashboard,
+    StatisticDashboard,
+    CommentDashboard,
+    CommitDashboard
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.admin-dashboard-wrapper {
-  margin: -12px;
-}
-
-#admin-dashboard {
+.row {
   display: flex;
 }
 
-#admin-dashboard div {
-  margin: 12px;
+.first-col {
+  width: max-content;
+  flex-grow: 1;
+  padding-right: 12px;
 }
 
-#comment-dashboard {
-  width: 360px;
-  height: 492px;
+.second-col {
+  width: 348px;
+  padding-left: 12px;
+}
+
+.second-row {
+  margin-top: 24px;
 }
 </style>

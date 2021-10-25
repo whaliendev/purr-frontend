@@ -2,7 +2,9 @@
   <li class="dashboard-comment-item">
     <el-image alt="guest avatar" fit="cover" :src="guestAvatar">
       <template #placeholder>
-        <div class="image-slot loading-text">Loading<span class="dot">...</span></div>
+        <div class="image-slot loading-text">
+          Loading<span class="dot">...</span>
+        </div>
       </template>
       <template #error>
         <div class="image-slot">
@@ -31,7 +33,7 @@ import { defineComponent } from 'vue';
 import { ellipsisFormat, isObject } from '@/utils/util';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
 export default defineComponent({
-  name: 'CommentItem',
+  name: 'DashboardCommentItem',
   props: {
     commentItem: {
       required: true,
@@ -83,7 +85,7 @@ export default defineComponent({
 
 :deep(.comment-content) {
   display: inline-block;
-  width: 264px;
+  width: 240px;
   margin: 0;
   font-size: 14px;
   vertical-align: top;
@@ -110,14 +112,11 @@ export default defineComponent({
   }
 
   .comment-time {
-    //color: var(--light-admin-text-accent-color);
-    //color: var(--el-color-black);
     font-weight: bold;
   }
 
   .comment-content-span {
     color: var(--el-color-warning);
-    //font-weight: bold;
   }
 
   .comment-approved.approved {
@@ -126,7 +125,6 @@ export default defineComponent({
 
   .comment-approved {
     color: var(--el-color-danger);
-    //font-weight: bold;
   }
 }
 </style>

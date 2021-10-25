@@ -6,12 +6,10 @@ export default {
   namespaced: true,
   state() {
     return {
-      app: {
-        apiUrl: ''
-      }
+      articlesList: []
     };
   },
   getters,
-  actions: actions,
-  mutations: mutations
+  actions,
+  mutations
 };

@@ -3,7 +3,8 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 import app from './modules/app';
-import comments from './modules/comments';
+import comments from './modules/comment';
+import articles from './modules/article';
 import createPersistedState from 'vuex-persistedstate';
 
 const dataState = createPersistedState({
@@ -14,7 +15,8 @@ const dataState = createPersistedState({
 const store = createStore({
   modules: {
     app,
-    comments
+    comments,
+    articles
   },
   plugins: [dataState],
   state() {

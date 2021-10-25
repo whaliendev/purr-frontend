@@ -79,7 +79,7 @@ export default defineComponent({
   align-items: center;
 }
 
-.page-button:disabled {
+.page-button.disabled {
   color: var(--el-disabled-color-base);
 }
 

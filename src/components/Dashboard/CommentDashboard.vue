@@ -9,12 +9,12 @@
           @change-page="handleChangePage"
         />
       </div>
-      <ul class="comment-container">
-        <comment-item
+      <ul class="comment-container" :class="{ collapsed: isCollapsed }">
+        <dashboard-comment-item
           v-for="commentItem in commentsList"
           :comment-item="commentItem"
           :key="commentItem.id"
-        ></comment-item>
+        ></dashboard-comment-item>
       </ul>
     </base-card>
   </div>
@@ -29,13 +29,16 @@ export default defineComponent({
   name: 'CommentDashboard',
   components: {
     PlainPagination,
-    'comment-item': DashboardCommentItem
+    DashboardCommentItem
   },
   setup() {
+    // 可以对分页做性能优化
     const store = useStore();
     const curPage = ref(1);
     const fetchNum = ref(5);
     const commentsList = ref([]);
+    const isCollapsed = ref(false);
+
     const fetchCommentsByPagination = () => {
       store
         .dispatch('comments/getLatestComments', {
@@ -45,6 +48,7 @@ export default defineComponent({
         .then((response) => {
           const data = response.data;
           if (data && data.success) {
+            isCollapsed.value = data.data.length < fetchNum.value;
             commentsList.value = data.data;
           }
         })
@@ -67,13 +71,20 @@ export default defineComponent({
     return {
       commentsList,
       curPage,
-      handleChangePage
+      handleChangePage,
+      isCollapsed
     };
   }
 });
 </script>
 
 <style lang="scss" scoped>
+#comment-dashboard {
+  overflow: visible;
+  width: 100%;
+  height: 100%;
+}
+
 .comment-dashboard-wrapper {
   width: 100%;
   height: 100%;
@@ -99,5 +110,13 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.comment-container.collapsed {
+  justify-content: start;
+
+  li {
+    margin: 16px 0 16px 0;
+  }
 }
 </style>
