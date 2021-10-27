@@ -1,122 +1,79 @@
 <template>
-  <input type="checkbox" id="toggle" />
-  <label for="toggle" class="toggleWrapper">
-    <span class="toggle"></span>
-  </label>
+  <div class="toggle-body">
+    <div class="toggle-btn"></div>
+  </div>
 </template>
 
+<script>
+import { defineComponent, onMounted } from 'vue';
+
+export default defineComponent({
+  props: {
+    on: {
+      type: Boolean,
+      required: true
+    }
+  },
+  setup() {
+    onMounted(() => {
+      const toggleBody = document.querySelector('.toggle-body');
+      const toggleBtns = document.querySelectorAll('.toggle-btn');
+      toggleBtns.forEach((toggleBtn) => {
+        toggleBtn.addEventListener('click', () => {
+          toggleBody.classList.toggle('toggle-body--on');
+          toggleBtn.classList.toggle('toggle-btn--on');
+          toggleBtn.classList.toggle('toggle-btn--scale');
+        });
+      });
+    });
+  }
+});
+</script>
+
 <style lang="scss" scoped>
-input {
-  display: none;
+$green: var(--el-color-success);
+$red: var(--el-color-danger);
+
+$animateTime: 1.5s;
+$easing: cubic-bezier(0.68, -0.15, 0.265, 1.35);
+$iteration: 1;
+
+.toggle-body {
+  width: 48px;
+  height: 30px;
+  position: absolute;
+  top: calc(50% - 30px / 2);
+  left: calc(50% - 48px / 2);
+  background: var(--light-admin-background-color);
+  border: var(--el-border-base);
+  border-radius: 20px;
+  transform: rotate(0deg);
+  transition: $animateTime $easing;
 }
 
-.toggleWrapper {
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100px;
-  height: 100px;
+.toggle-body--on {
+  transform: rotate(180deg);
+  transition: $animateTime $easing;
+}
+
+.toggle-btn {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: calc(50% - 20px / 2);
+  left: calc(27% - 20px / 2);
+  background: white;
   border-radius: 50%;
-  background-color: #fe4551;
-  box-shadow: 0 20px 20px 0 rgba(#fe4551, 0.3);
-
-  &:active {
-    width: 95px;
-    height: 95px;
-    box-shadow: 0 15px 15px 0 rgba(#fe4551, 0.5);
-
-    .toggle {
-      height: 17px;
-      width: 17px;
-    }
-  }
-
-  .toggle {
-    transition: all 0.2s ease-in-out;
-    height: 20px;
-    width: 20px;
-    background-color: transparent;
-    border: 10px solid #fff;
-    border-radius: 50%;
-    cursor: pointer;
-
-    animation: red 0.7s linear forwards;
-  }
+  background: $red;
+  cursor: pointer;
+  transform: rotate(0deg);
+  transform-origin: 130% 115%;
+  transition: $animateTime $easing;
 }
-
-input:checked {
-  & + .toggleWrapper {
-    background-color: #48e98a;
-    box-shadow: 0 20px 20px 0 rgba(#48e98a, 0.3);
-
-    &:active {
-      box-shadow: 0 15px 15px 0 rgba(#48e98a, 0.5);
-    }
-
-    .toggle {
-      width: 0;
-      background-color: #fff;
-      border-color: transparent;
-      border-radius: 30px;
-      animation: green 0.7s linear forwards !important;
-    }
-  }
-}
-
-@keyframes red {
-  0% {
-    height: 30px;
-    width: 0;
-    border-width: 5px;
-  }
-  55% {
-    height: 13px;
-    width: 27px;
-    border-width: 10px;
-  }
-
-  70% {
-    height: 20px;
-    width: 20px;
-    border-width: 10px;
-  }
-
-  85% {
-    height: 15px;
-    width: 25px;
-    border-width: 10px;
-  }
-
-  100% {
-    height: 20px;
-    width: 20px;
-    border-width: 10px;
-  }
-}
-
-@keyframes green {
-  0% {
-    height: 20px;
-    width: 20px;
-    border-width: 10px;
-  }
-  25%,
-  55%,
-  85% {
-    height: 30px;
-    width: 5px;
-    border-width: 5px;
-  }
-
-  40%,
-  70%,
-  100% {
-    height: 30px;
-    width: 0;
-    border-width: 5px;
-  }
+.toggle-btn--on {
+  transition: $animateTime $easing;
+  transform: rotate(-357deg);
+  background: $green;
+  transform-origin: 130% 150%;
 }
 </style>

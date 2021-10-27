@@ -136,6 +136,10 @@ export default defineComponent({
     color: var(--el-color-primary);
     font-size: 20px;
   }
+
+  &:hover svg{
+    color: var(--el-color-primary-light-1);
+  }
 }
 
 .collapse-button-wrapper {

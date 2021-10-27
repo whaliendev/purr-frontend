@@ -58,7 +58,6 @@ service.interceptors.request.use(
   (config) => {
     config.baseURL = store.getters['app/apiUrl'];
     setTokenToHeader(config);
-    logger.info(config.url);
     return config;
   },
   (error) => {
@@ -78,7 +77,8 @@ service.interceptors.response.use(
         message: data.tip
       });
     } else {
-      logger.info(response.data);
+      logger.info(`url: ${response.config.url}`);
+      logger.info('data', response.data);
     }
     return response;
   },

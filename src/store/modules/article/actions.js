@@ -1,13 +1,13 @@
-import articleApi from "@/api/article";
+import articleApi from '@/api/article';
 
 const actions = {
   getLatestArticles(context, payload) {
     return new Promise((resolve, reject) => {
       articleApi
-       .getLatestArticles(payload.curPage, payload.fetchNum)
+        .getLatestArticles(payload.curPage, payload.fetchNum)
         .then((response) => {
-          if(response.data && response.data.success) {
-            context.commit('comments/storeLatestComments', {
+          if (response.data && response.data.success) {
+            context.commit('storeLatestArticles', {
               articlesList: response.data.data
             });
           }
@@ -15,8 +15,8 @@ const actions = {
         })
         .catch((error) => {
           reject(error);
-        })
-    })
+        });
+    });
   }
 };
 
