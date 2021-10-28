@@ -9,6 +9,16 @@
           @change-page="handlePageChange"
         />
       </div>
+      <commit-heatmap
+        :end-date="'2021-10-28'"
+        :max="6"
+        :values="[
+          { date: '2021-09-22', count: 6 },
+          { date: '2021-09-30', count: 10 },
+          { date: '2021-10-12', count: 10 }
+        ]"
+        :vertical="true"
+      />
     </base-card>
   </div>
 </template>
@@ -17,9 +27,10 @@
 import BaseCard from '@/components/UI/BaseCard';
 import PlainPagination from '@/components/Pagination/PlainPagination';
 import { defineComponent, ref } from 'vue';
+import CommitHeatmap from '@/components/Plot/CommitHeatmap';
 // import { useStore } from 'vuex';
 export default defineComponent({
-  components: { PlainPagination, BaseCard },
+  components: { CommitHeatmap, PlainPagination, BaseCard },
   setup() {
     // const store = useStore();
     const curPage = ref(1);
@@ -29,9 +40,12 @@ export default defineComponent({
     const fetchContributionsByPagination = () => {};
     fetchContributionsByPagination();
 
+    const handlePageChange = () => {};
+
     return {
       curPage,
-      contributionsList
+      contributionsList,
+      handlePageChange
     };
   }
 });
@@ -41,6 +55,26 @@ export default defineComponent({
 #comment-dashboard {
   width: 100%;
   height: 100%;
+  min-width: 493px;
   overflow: visible;
 }
+
+.dashboard-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .article-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+}
+
+.commit-dashboard-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 </style>

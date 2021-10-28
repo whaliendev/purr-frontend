@@ -29,18 +29,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#admin-dashboard{
+  width: 100%;
+}
+
 .row {
   display: flex;
+  width: 100%;
 }
 
 .first-col {
   width: max-content;
   flex-grow: 1;
+  flex-shrink: 1;
   padding-right: 12px;
 }
 
 .second-col {
   width: 348px;
+  flex-shrink: 0;
   padding-left: 12px;
 }
 
