@@ -10,8 +10,7 @@ import './plugins/fontawesome';
 import ElementPlus from 'element-plus';
 import logger from './plugins/logger';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { VTooltip } from 'v-tooltip';
-import 'v-tooltip/dist/v-tooltip.css';
+import 'tippy.js/dist/tippy.css';
 
 const app = createApp(App);
 
@@ -23,7 +22,6 @@ app.use(store);
 // core library
 app.use(ElementPlus);
 app.use(logger);
-app.directive('tooltip', VTooltip);
 
 app.component('base-card', BaseCard);
 app.component('font-awesome-icon', FontAwesomeIcon);

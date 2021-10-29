@@ -10,13 +10,9 @@
         />
       </div>
       <commit-heatmap
-        :end-date="'2021-10-28'"
-        :max="6"
-        :values="[
-          { date: '2021-09-22', count: 6 },
-          { date: '2021-09-30', count: 10 },
-          { date: '2021-10-12', count: 10 }
-        ]"
+        :end-date="endDate"
+        :max="contributionsMax"
+        :values="contributionsList"
         :vertical="true"
       />
     </base-card>
@@ -28,23 +24,66 @@ import BaseCard from '@/components/UI/BaseCard';
 import PlainPagination from '@/components/Pagination/PlainPagination';
 import { defineComponent, ref } from 'vue';
 import CommitHeatmap from '@/components/Plot/CommitHeatmap';
-// import { useStore } from 'vuex';
+import { useStore } from 'vuex';
 export default defineComponent({
   components: { CommitHeatmap, PlainPagination, BaseCard },
   setup() {
-    // const store = useStore();
+    const store = useStore();
     const curPage = ref(1);
-    // const fetchNum = ref(30);
+    const fetchNum = 100;
+    const dateDelta = 90;
     const contributionsList = ref([]);
+    const contributionsMax = 10;
+    const endDate = ref(new Date());
+    const beginDate = ref(new Date());
 
-    const fetchContributionsByPagination = () => {};
+    const formatDate = (date) => {
+      if (!(date instanceof Date))
+        throw new Error('date must be an instance of Date');
+      return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    };
+
+    const fetchContributionsByPagination = () => {
+      if (
+        !(beginDate.value instanceof Date) ||
+        !(endDate.value instanceof Date)
+      ) {
+        throw new Error('beginDate or endDate must be an instance of Date');
+      }
+
+      if (curPage.value > 1) return;
+      endDate.value.setDate(
+        new Date().getDate() - dateDelta * (1 - curPage.value)
+      );
+      beginDate.value.setDate(endDate.value.getDate() - fetchNum);
+      store
+        .dispatch('statistics/getArticleCommits', {
+          beginDate: formatDate(beginDate.value),
+          endDate: formatDate(endDate.value)
+        })
+        .then(() => {
+          contributionsList.value =
+            store.getters['statistics/commitStatistics'];
+        })
+        .catch(() => {
+          // TODO
+        });
+    };
+
     fetchContributionsByPagination();
 
-    const handlePageChange = () => {};
+    const handlePageChange = (offset) => {
+      if ((curPage.value === 1 && offset < 0) || curPage.value !== 1) {
+        curPage.value = curPage.value + offset;
+        fetchContributionsByPagination();
+      }
+    };
 
     return {
       curPage,
+      contributionsMax,
       contributionsList,
+      endDate,
       handlePageChange
     };
   }
@@ -52,10 +91,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#comment-dashboard {
+.commit-dashboard {
   width: 100%;
   height: 100%;
-  min-width: 493px;
+  max-height: 457px;
   overflow: visible;
 }
 
@@ -76,5 +115,4 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
 }
-
 </style>

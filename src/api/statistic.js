@@ -11,4 +11,11 @@ statisticApi.getSummary = () => {
   });
 };
 
+statisticApi.getArticleCommits = (beginDate, endDate) => {
+  return service({
+    url: `${baseUrl}/article/commit?beginDate=${beginDate}&endDate=${endDate}`,
+    method: 'get'
+  });
+};
+
 export default statisticApi;

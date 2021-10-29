@@ -29,26 +29,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#admin-dashboard{
-  width: 100%;
-}
-
 .row {
   display: flex;
-  width: 100%;
 }
 
 .first-col {
-  width: max-content;
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 1 1 auto;
   padding-right: 12px;
+  margin-right: auto;
 }
 
 .second-col {
-  width: 348px;
-  flex-shrink: 0;
+  flex: 0 0 348px;
   padding-left: 12px;
+  margin-left: auto;
 }
 
 .second-row {

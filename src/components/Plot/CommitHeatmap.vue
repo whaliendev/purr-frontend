@@ -47,14 +47,11 @@
       class="vch__legend__wrapper"
       :transform="legendWrapperTransform[position]"
     >
-      <text
-        :x="24"
-        :y="vertical ? 8 : SQUARE_SIZE + 1"
-      >
-        {{ lo.less }}
+      <text :x="24" :y="vertical ? 8 : SQUARE_SIZE + 1">
+        {{ lo.more }}
       </text>
       <rect
-        v-for="(color, index) in rangeColor"
+        v-for="(color, index) in rangeColor.slice().reverse()"
         :key="index"
         :style="{ fill: color }"
         :width="SQUARE_SIZE - SQUARE_BORDER_SIZE"
@@ -72,7 +69,7 @@
             : SQUARE_SIZE + 1
         "
       >
-        {{ lo.more }}
+        {{ lo.less }}
       </text>
     </g>
     <!-- day contribution -->
@@ -95,6 +92,7 @@
             @click="$emit('day-click', day)"
             :rx="borderRadius"
             :ry="borderRadius"
+            :data-popover-template="tooltipOptions(day)"
           />
         </template>
       </g>
@@ -109,14 +107,14 @@ import {
   DEFAULT_LOCALE,
   DEFAULT_RANGE_COLOR,
   DEFAULT_TOOLTIP_UNIT,
-  SQUARE_SIZE,
-  SQUARE_BORDER_RADIUS
+  SQUARE_BORDER_RADIUS,
+  SQUARE_SIZE
 } from '@/config/consts';
+import tippy from 'tippy.js';
 
 export default {
   created() {
-    console.log(this.heatmap);
-    console.log(this.heatmap.getDaysCount());
+    console.log(this.endDate, this.max, this.values, this.vertical);
   },
   props: {
     endDate: {
@@ -152,6 +150,18 @@ export default {
       type: String,
       default: null
     }
+  },
+
+  mounted() {
+    tippy('.vch__day__square', {
+      content(reference) {
+        return reference.getAttribute('data-popover-template');
+      },
+      allowHTML: true,
+      delay: [150, 50],
+      placement: 'top',
+      arrow: true
+    });
   },
 
   data() {
@@ -221,15 +231,15 @@ export default {
           30
         }, ${this.heigth[this.position] - this.BOTTOM_SECTION_HEIGTH})`,
         vertical: `translate(${
-          this.LEFT_SECTION_WIDTH + this.SQUARE_SIZE * DAYS_IN_WEEK
-        }, ${this.TOP_SECTION_HEIGTH})`
+          this.LEFT_SECTION_WIDTH + (SQUARE_SIZE + 1) * DAYS_IN_WEEK
+        }, ${this.TOP_SECTION_HEIGTH + 10})`
       };
     },
     yearWrapperTransform() {
       return `translate(${this.LEFT_SECTION_WIDTH}, ${this.TOP_SECTION_HEIGTH})`;
     },
 
-    SQUARE_BORDER_SIZE: () => SQUARE_SIZE / 5,
+    SQUARE_BORDER_SIZE: () => SQUARE_SIZE / 6,
     SQUARE_SIZE() {
       return SQUARE_SIZE + this.SQUARE_BORDER_SIZE;
     },
@@ -243,7 +253,7 @@ export default {
       return SQUARE_SIZE + SQUARE_SIZE / 2;
     },
     LEFT_SECTION_WIDTH() {
-      return Math.ceil(SQUARE_SIZE * 2);
+      return Math.ceil(SQUARE_SIZE * 1.8);
     },
 
     lo() {
@@ -264,17 +274,13 @@ export default {
     tooltipOptions(day) {
       if (this.tooltip) {
         if (day.count != null) {
-          return {
-            content: `<b>${day.count} ${this.tooltipUnit}</b> ${this.lo.on} ${
-              this.lo.months[day.date.getMonth()]
-            } ${day.date.getDate()}, ${day.date.getFullYear()}`,
-            delay: { show: 150, hide: 50 }
-          };
-        } else if (this.noDataText) {
-          return {
-            content: `${this.noDataText}`,
-            delay: { show: 150, hide: 50 }
-          };
+          return `<b>${day.count} ${this.tooltipUnit}</b> ${this.lo.on} ${
+            this.lo.months[day.date.getMonth()]
+          } ${day.date.getDate()}, ${day.date.getFullYear()}`;
+        } else {
+          return `<b>No ${this.tooltipUnit}</b> ${this.lo.on} ${
+            this.lo.months[day.date.getMonth()]
+          } ${day.date.getDate()}, ${day.date.getFullYear()}`;
         }
       }
       return false;
@@ -343,105 +349,15 @@ svg.vch__wrapper rect.vch__day__square:focus {
 </style>
 
 <style>
-.vue-tooltip-theme.tooltip {
-  display: block !important;
-  z-index: 10000;
-}
-
-.vue-tooltip-theme.tooltip .tooltip-inner {
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 3px;
-  color: #ebedf0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: 12px;
-  line-height: 16px;
-  padding: 14px 10px;
-}
-
-.vue-tooltip-theme.tooltip .tooltip-inner b {
+.tippy-box {
+  background: #24292f;
   color: white;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
 }
 
-.vue-tooltip-theme.tooltip .tooltip-arrow {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  position: absolute;
-  margin: 5px;
-  border-color: black;
-  z-index: 1;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='top'] {
-  margin-bottom: 5px;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='top'] .tooltip-arrow {
-  border-width: 5px 5px 0 5px;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='bottom'] {
-  margin-top: 5px;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='bottom'] .tooltip-arrow {
-  border-width: 0 5px 5px 5px;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  border-top-color: transparent !important;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='right'] {
-  margin-left: 5px;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='right'] .tooltip-arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent !important;
-  border-top-color: transparent !important;
-  border-bottom-color: transparent !important;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='left'] {
-  margin-right: 5px;
-}
-
-.vue-tooltip-theme.tooltip[x-placement^='left'] .tooltip-arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.vue-tooltip-theme.tooltip[aria-hidden='true'] {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.15s, visibility 0.15s;
-}
-
-.vue-tooltip-theme.tooltip[aria-hidden='false'] {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.15s;
+.tippy-arrow {
+  background-color: #24292f;
 }
 </style>

@@ -1,6 +1,6 @@
 export const DEFAULT_RANGE_COLOR = [
   '#ebedf0',
-  '#ebedf0',
+  '#ebedef',
   '#9be9a8',
   '#40c463',
   '#30a14e',

@@ -155,7 +155,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #article-dashboard {
-  max-width: 100%;
+  //max-width: 100%;
+  width: 100%;
   overflow: visible;
 }
 
