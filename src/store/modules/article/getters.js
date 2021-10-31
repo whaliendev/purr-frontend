@@ -1,4 +1,3 @@
-
 const getters = {
   articlesList: (state) => state.articlesList
 };
