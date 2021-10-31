@@ -33,7 +33,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="article-menu">
-            <router-link :to="{ name: 'article-manage' }">
+            <router-link :to="{ name: 'article' }">
               <font-awesome-icon :icon="['fas', 'pen']" />
               <span>文章</span>
             </router-link>
@@ -250,7 +250,9 @@ export default defineComponent({
     const firstClassNav = /\/\w+\/\w+/;
     const matches = pathname.match(firstClassNav);
     const curNav = document.querySelector(`a[href="${matches[0]}"]`);
-    curNav.parentElement.parentElement.parentElement.classList.add('is-active');
+    const navItem = curNav.parentElement.parentElement.parentElement;
+    navItem.classList.add('is-active');
+    navItem.classList.remove('close');
     // curNav.classList.add('is-active');
   }
 });

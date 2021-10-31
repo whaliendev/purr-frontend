@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
+import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue';
 import SearchBar from '../SearchBar/SearchBar';
 import logger from '../../plugins/logger';
 import commentApi from '../../api/comment';
@@ -61,7 +61,10 @@ export default defineComponent({
           unapprovedCount.value = -1;
         });
     };
-    let taskId = setInterval(fetchUnapprovedCount, appConfig.unapprovedRefetchDuration);
+    let taskId = setInterval(
+      fetchUnapprovedCount,
+      appConfig.unapprovedRefetchDuration
+    );
     onUnmounted(() => {
       clearInterval(taskId);
     });
@@ -137,7 +140,7 @@ export default defineComponent({
     font-size: 20px;
   }
 
-  &:hover svg{
+  &:hover svg {
     color: var(--el-color-primary-light-1);
   }
 }
