@@ -16,7 +16,11 @@
       >{{ name }}</a
     >
     <span class="tag-name" :class="{ black: black }" v-else>{{ name }}</span>
-    <el-icon :size="16" @click="handleDeleteTag" class="delete-tag" v-if="deletable"
+    <el-icon
+      :size="16"
+      @click="handleDeleteTag"
+      class="delete-tag"
+      v-if="deletable"
       ><close-bold
     /></el-icon>
   </span>
