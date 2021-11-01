@@ -16,7 +16,7 @@
       >{{ name }}</a
     >
     <span class="tag-name" :class="{ black: black }" v-else>{{ name }}</span>
-    <el-icon :size="16" @click="handleDeleteTag" class="delete-tag"
+    <el-icon :size="16" @click="handleDeleteTag" class="delete-tag" v-if="deletable"
       ><close-bold
     /></el-icon>
   </span>
@@ -35,10 +35,10 @@ export default defineComponent({
       },
       required: true
     },
-    link: {
+    deletable: {
       type: Boolean,
       required: false,
-      default: true
+      default: false
     },
     linkName: {
       validator(val) {
@@ -84,6 +84,9 @@ export default defineComponent({
   computed: {
     edgeColor() {
       return this.color + 'aa';
+    },
+    link() {
+      return this.linkName.length !== 0;
     }
   },
   methods: {
