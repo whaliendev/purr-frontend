@@ -24,6 +24,16 @@ a {
   color: var(--light-admin-text-color);
 }
 
+.el-drawer__header {
+  position: relative;
+  padding-top: 12px;
+}
+
+.el-drawer__body {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 :root{
   --light-admin-background-color: #f8f8f8;
   --light-admin-background-accent-color: #f0f0f0;
