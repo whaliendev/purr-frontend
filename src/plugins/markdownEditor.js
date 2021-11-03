@@ -10,8 +10,8 @@ import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index
 VueMarkdownEditor.use(githubTheme, {
   Hljs: hljs,
   extend(md) {
+    // TODO: extend plugins for markdown it instance
     console.log(md);
-    // TODO
   }
 });
 VueMarkdownEditor.use(createEmojiPlugin());

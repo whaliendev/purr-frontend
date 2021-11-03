@@ -27,11 +27,14 @@ a {
 .el-drawer__header {
   position: relative;
   padding-top: 12px;
+  margin-bottom: 16px;
 }
 
 .el-drawer__body {
   padding-top: 0;
   padding-bottom: 0;
+  overflow: auto;
+  max-height: calc(100% - 108px);
 }
 
 :root{

@@ -49,7 +49,7 @@ export default defineComponent({
         return typeof val === 'string' || val instanceof String;
       },
       required: false,
-      default: '#'
+      default: ''
     },
     target: {
       validator(val) {
@@ -79,6 +79,9 @@ export default defineComponent({
     },
     style: {
       validator(val) {
+        console.log(val);
+        console.log(typeof val);
+        console.log(val instanceof String);
         return typeof val === 'string' || val instanceof String;
       },
       required: false,
