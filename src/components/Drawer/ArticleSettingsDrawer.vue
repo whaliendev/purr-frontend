@@ -1,10 +1,11 @@
 <template>
   <el-drawer
     custom-class="article-settings-drawer"
-    size="24%"
+    :size="articleSettingsDrawerWidth"
     :before-close="handleClose"
     :lock-scroll="false"
     :destroy-on-close="true"
+    :append-to-body="true"
   >
     <template #title>
       <div class="article-settings-title">文章设置</div>
@@ -377,6 +378,9 @@
         ></el-input>
       </div>
     </div>
+
+    <new-tag-drawer :append-to-body="true" v-model="newTagDrawerVisible" />
+
     <!--    end of body-->
     <div class="bottom-controls-container">
       <el-button type="danger" size="medium"> 高级设置 </el-button>
@@ -390,20 +394,29 @@
   </el-drawer>
 </template>
 <script>
-import { defineComponent, nextTick, reactive, ref, watchEffect } from 'vue';
-import { ElMessageBox } from 'element-plus';
+import {
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  watchEffect
+} from 'vue';
 import logger from '@/plugins/logger';
 import ReactiveButton from '@/components/Button/ReactiveButton';
 import Tag from '@/components/Badge/Tag';
 import UploadFilled from '@/components/Icon/UploadFilled';
 import { useStore } from 'vuex';
+import NewTagDrawer from '@/components/Drawer/NewTagDrawer';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 export default defineComponent({
   name: 'ArticleSettingsDrawer',
-  components: { UploadFilled, ReactiveButton, Tag },
+  components: { NewTagDrawer, UploadFilled, ReactiveButton, Tag },
   setup: function () {
     const store = useStore();
 
+    const articleSettingsDrawerWidth = ref('24%');
     const handleClose = (done) => {
       ElMessageBox.confirm('你确定退出当前设置页吗？', '小提示', {
         confirmButtonText: '确认并保存',
@@ -414,9 +427,14 @@ export default defineComponent({
           done();
         })
         .catch(() => {
-          logger.info('user cancelled close article-settings-drawer');
+          logger.info('user closed article-settings-drawer');
         });
     };
+
+    onMounted(() => {
+      hideNewTagDrawer();
+      showNewTagDrawer();
+    });
 
     const articleSettings = reactive({
       // 是否开启评论
@@ -451,20 +469,41 @@ export default defineComponent({
 
     // 存放完整tag对象
     const tagsList = ref([]);
+    const newTagDrawerVisible = ref(false);
     const getAllTags = () => {};
-    const showNewTagDrawer = () => {};
+    const showNewTagDrawer = () => {
+      newTagDrawerVisible.value = true;
+      articleSettingsDrawerWidth.value = '30%';
+    };
+    const hideNewTagDrawer = () => {
+      newTagDrawerVisible.value = false;
+      articleSettingsDrawerWidth.value = '24%';
+    };
 
     // cover相关的API
-    const coverVisible = ref(false);
+    const coverVisible = ref(() => articleSettings.backgroundUrl === '');
     const uploadHeaders = reactive({
       'Access-Key': store.getters.accessToken
     });
     const showCoverPreview = () => {
       coverVisible.value = true;
     };
-    const removeCover = () => {};
+    const closeCoverPreview = () => {
+      coverVisible.value = false;
+    };
+    const removeCover = () => {
+      articleSettings.backgroundUrl = '';
+      closeCoverPreview();
+    };
     const openGalleryDrawer = () => {};
-    const onUploadSuccessfully = () => {};
+    const onUploadSuccessfully = () => {
+      ElMessage.success({
+        center: true,
+        message: '上传成功',
+        duration: 1000
+      });
+      showCoverPreview();
+    };
 
     return {
       handleClose,
@@ -478,7 +517,9 @@ export default defineComponent({
       openGalleryDrawer,
       showNewTagDrawer,
       uploadHeaders,
-      onUploadSuccessfully
+      onUploadSuccessfully,
+      newTagDrawerVisible,
+      articleSettingsDrawerWidth
     };
   }
 });
@@ -597,6 +638,7 @@ export default defineComponent({
   :deep(.el-image) {
     width: 100%;
     overflow: visible;
+    box-shadow: var(--el-box-shadow-base);
 
     img {
       width: 100%;
