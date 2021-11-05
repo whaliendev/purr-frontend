@@ -24,6 +24,10 @@ a {
   color: var(--light-admin-text-color);
 }
 
+.el-drawer.article-settings-drawer.outer {
+  transform: translateX(-6%);
+}
+
 .el-drawer__header {
   position: relative;
   padding-top: 12px;
