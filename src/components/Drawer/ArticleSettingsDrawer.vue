@@ -379,7 +379,10 @@
       </div>
     </div>
 
-    <new-tag-drawer :append-to-body="true" v-model="newTagDrawerVisible" />
+    <new-tag-drawer
+      v-model="newTagDrawerVisible"
+      @ready-to-close="hideNewTagDrawer"
+    />
 
     <!--    end of body-->
     <div class="bottom-controls-container">
@@ -433,7 +436,6 @@ export default defineComponent({
 
     onMounted(() => {
       hideNewTagDrawer();
-      showNewTagDrawer();
     });
 
     const articleSettings = reactive({
@@ -481,7 +483,7 @@ export default defineComponent({
     };
 
     // cover相关的API
-    const coverVisible = ref(() => articleSettings.backgroundUrl === '');
+    const coverVisible = ref(articleSettings.backgroundUrl !== '');
     const uploadHeaders = reactive({
       'Access-Key': store.getters.accessToken
     });
@@ -519,7 +521,8 @@ export default defineComponent({
       uploadHeaders,
       onUploadSuccessfully,
       newTagDrawerVisible,
-      articleSettingsDrawerWidth
+      articleSettingsDrawerWidth,
+      hideNewTagDrawer
     };
   }
 });

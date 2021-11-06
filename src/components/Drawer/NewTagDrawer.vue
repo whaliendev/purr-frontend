@@ -5,6 +5,7 @@
     :before-close="handleClose"
     :lock-scroll="false"
     :destroy-on-close="true"
+    :append-to-body="true"
   >
     <template #title>
       <div class="new-tag-title">新建标签</div>
@@ -139,7 +140,8 @@ import { useStore } from 'vuex';
 export default defineComponent({
   name: 'NewTagDrawer',
   components: { UploadFilled },
-  setup() {
+  emits: ['readyToClose'],
+  setup(props, context) {
     const store = useStore();
 
     const handleClose = (done) => {
@@ -149,6 +151,7 @@ export default defineComponent({
       })
         .then(() => {
           // TODO save current settings to localStorage
+          context.emit('readyToClose');
           done();
         })
         .catch(() => {
