@@ -145,7 +145,7 @@ export default defineComponent({
       // TODO check the validity of settings and post article
     };
 
-    const mediaRepoVisible = ref(true);
+    const mediaRepoVisible = ref(false);
     const openMediaRepoDrawer = () => {
       mediaRepoVisible.value = true;
     };
