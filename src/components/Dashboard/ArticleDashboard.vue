@@ -109,14 +109,14 @@ export default defineComponent({
 
     const fetchArticlesByPagination = () => {
       store
-        .dispatch('articles/getLatestArticles', {
+        .dispatch('articles/getLatestAdminArticles', {
           curPage: curPage.value,
           fetchNum: fetchNum.value
         })
         .then((response) => {
           const data = response.data;
           if (data && data.success) {
-            articlesList.value = data.data;
+            articlesList.value = data.data.data;
           }
         })
         .catch(() => {

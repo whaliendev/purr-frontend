@@ -40,7 +40,7 @@ export default defineComponent({
     const formatDate = (date) => {
       if (!(date instanceof Date))
         throw new Error('date must be an instance of Date');
-      return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     };
 
     const fetchContributionsByPagination = () => {
@@ -48,7 +48,7 @@ export default defineComponent({
         !(beginDate.value instanceof Date) ||
         !(endDate.value instanceof Date)
       ) {
-        throw new Error('beginDate or endDate must be an instance of Date');
+        throw new Error('beginDate and endDate must be an instance of Date');
       }
 
       if (curPage.value > 1) return;

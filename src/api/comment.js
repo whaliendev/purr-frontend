@@ -10,7 +10,7 @@ commentApi.getUnapprovedCommentCount = () => {
   });
 };
 
-commentApi.getLatestComments = (curPage, fetchNum) => {
+commentApi.getLatestAdminComments = (curPage, fetchNum) => {
   return service({
     url: `${baseUrl}/admin/recent?pageSize=${fetchNum}&curPage=${curPage}`,
     method: 'get'

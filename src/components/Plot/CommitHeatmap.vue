@@ -113,9 +113,6 @@ import {
 import tippy from 'tippy.js';
 
 export default {
-  created() {
-    console.log(this.endDate, this.max, this.values, this.vertical);
-  },
   props: {
     endDate: {
       required: true
@@ -150,18 +147,6 @@ export default {
       type: String,
       default: null
     }
-  },
-
-  mounted() {
-    tippy('.vch__day__square', {
-      content(reference) {
-        return reference.getAttribute('data-popover-template');
-      },
-      allowHTML: true,
-      delay: [150, 50],
-      placement: 'top',
-      arrow: true
-    });
   },
 
   data() {
@@ -273,6 +258,7 @@ export default {
   methods: {
     tooltipOptions(day) {
       if (this.tooltip) {
+        console.log(day.date, day.count);
         if (day.count != null) {
           return `<b>${day.count} ${this.tooltipUnit}</b> ${this.lo.on} ${
             this.lo.months[day.date.getMonth()]
@@ -310,6 +296,20 @@ export default {
         : this.SQUARE_SIZE - this.SQUARE_BORDER_SIZE;
       return position;
     }
+  },
+  updated() {
+    this.$nextTick(function() {
+      tippy('.vch__day__square', {
+        content(reference) {
+          console.log(reference.getAttribute('data-popover-template'));
+          return reference.getAttribute('data-popover-template');
+        },
+        allowHTML: true,
+        delay: [150, 50],
+        placement: 'top',
+        arrow: true
+      });
+    });
   }
 };
 </script>

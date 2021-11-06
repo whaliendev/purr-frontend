@@ -1,11 +1,10 @@
 const mutations = {
   transformCommitStatistics(state, payload) {
     const commitStatistics = [];
-    const entries = Object.entries(payload.commitStatistics);
-    for (const entry of entries) {
+    for (const record of payload.articleCommits) {
       commitStatistics.push({
-        date: entry[0],
-        count: entry[1]
+        date: record.date,
+        count: record.commitCount
       });
     }
     state.commitStatistics = commitStatistics;

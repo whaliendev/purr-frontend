@@ -1,10 +1,10 @@
 import commentApi from '@/api/comment';
 
 const actions = {
-  getLatestComments(context, payload) {
+  getLatestAdminComments(context, payload) {
     return new Promise((resolve, reject) => {
       commentApi
-        .getLatestComments(payload.curPage, payload.fetchNum)
+        .getLatestAdminComments(payload.curPage, payload.fetchNum)
         .then((response) => {
           if (response.data && response.data.success) {
             context.commit('storeLatestComments', {
