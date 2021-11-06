@@ -5,7 +5,7 @@ const articleApi = {};
 
 articleApi.getLatestArticles = (curPage, fetchNum) => {
   return service({
-    url: `${baseUrl}/recent?pageSize=${fetchNum}&curPage=${curPage}`,
+    url: `${baseUrl}/admin/recent?pageSize=${fetchNum}&curPage=${curPage}`,
     method: 'get'
   });
 };
