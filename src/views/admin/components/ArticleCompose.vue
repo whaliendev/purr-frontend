@@ -64,9 +64,11 @@
             size="small"
           ></reactive-button>
           <el-button size="small">预览</el-button>
-          <el-button size="small">发布</el-button>
-          <el-button size="small">媒体库</el-button>
-          <el-button size="small">新标签</el-button>
+          <el-button size="small" @click="handlePostArticle">发布</el-button>
+          <el-button size="small" @click="openMediaRepoDrawer"
+            >媒体库</el-button
+          >
+          <el-button size="small" @click="handleCreateNewTag">新标签</el-button>
         </div>
       </base-card>
       <base-card style="padding: 12px" class="article-meta-info">
@@ -95,7 +97,10 @@
     <div class="purr-editor">
       <markdown-editor :content="articleToPost.content" />
     </div>
+
     <article-settings-drawer v-model="showSettingsDrawer" />
+    <new-tag-drawer v-model="newTagDrawerVisible" />
+    <media-repo-drawer v-model="mediaRepoVisible" />
   </div>
 </template>
 <script>
@@ -105,13 +110,17 @@ import MarkdownEditor from '@/components/Editor/MarkdownEditor';
 import BaseCard from '@/components/UI/BaseCard';
 import Tag from '@/components/Badge/Tag';
 import ArticleSettingsDrawer from '@/components/Drawer/ArticleSettingsDrawer';
+import NewTagDrawer from '@/components/Drawer/NewTagDrawer';
+import MediaRepoDrawer from '@/components/Drawer/MediaRepoDrawer';
 export default defineComponent({
   components: {
+    MediaRepoDrawer,
     ArticleSettingsDrawer,
     Tag,
     MarkdownEditor,
     ReactiveButton,
-    BaseCard
+    BaseCard,
+    NewTagDrawer
   },
   setup() {
     const draftSavedErrored = ref(false);
@@ -124,12 +133,26 @@ export default defineComponent({
       tags: []
     });
 
-    // 与发布文章相关的设置
-    const showSettingsDrawer = ref(true);
-
+    // 右上角的控件相关功能
     const handleSaveDraft = (draftOnly = false) => {
       console.log('draftOnly', draftOnly);
       //TODO
+    };
+
+    const showSettingsDrawer = ref(false);
+    const handlePostArticle = () => {
+      showSettingsDrawer.value = true;
+      // TODO check the validity of settings and post article
+    };
+
+    const mediaRepoVisible = ref(true);
+    const openMediaRepoDrawer = () => {
+      mediaRepoVisible.value = true;
+    };
+
+    const newTagDrawerVisible = ref(false);
+    const handleCreateNewTag = () => {
+      newTagDrawerVisible.value = true;
     };
 
     // 添加tag的待选tag集合
@@ -165,7 +188,12 @@ export default defineComponent({
       addTagSelect,
       showSelect,
       handleSelectBlur,
-      showSettingsDrawer
+      showSettingsDrawer,
+      handlePostArticle,
+      newTagDrawerVisible,
+      handleCreateNewTag,
+      openMediaRepoDrawer,
+      mediaRepoVisible
     };
   }
 });
