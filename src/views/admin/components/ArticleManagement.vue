@@ -80,7 +80,11 @@
       <el-divider class="structure-divider" />
 
       <div class="article-management-body">
-        <el-table :data="articlesList" class="article-management-table">
+        <el-table
+          :data="articlesList"
+          class="article-management-table"
+          v-loading="loadingData"
+        >
           <el-table-column
             label="序号"
             type="index"
@@ -222,9 +226,8 @@
           v-model:page-size="fetchNum"
           :default-page-size="10"
           :default-current-page="1"
-          :page-sizes="[10, 20, 50]"
           :pager-count="5"
-          :total="fetchNum * pageNum"
+          :page-count="pageNum"
         ></el-pagination>
       </div>
     </base-card>
@@ -280,7 +283,9 @@ export default {
           const data = response.data;
           if (data && data.success) {
             articlesList.value = store.getters['articles/articlesList'];
-            pageNum.value = store.getters['articles/pageNum'];
+            // Notice that we cannot use vuex `getters` to store pageNum, as it will cause pageNum.value has the type of Proxy,
+            // which will led to el-pagination props check failed
+            pageNum.value = data.data.pageNum;
           }
         })
         .catch(() => {

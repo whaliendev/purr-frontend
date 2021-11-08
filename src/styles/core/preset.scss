@@ -45,6 +45,10 @@ a {
   max-height: calc(100% - 108px);
 }
 
+.el-pagination__jump::after {
+  content: '页';
+}
+
 :root{
   --light-admin-background-color: #f8f8f8;
   --light-admin-background-accent-color: #f0f0f0;
