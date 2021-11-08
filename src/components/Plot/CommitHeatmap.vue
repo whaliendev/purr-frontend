@@ -258,7 +258,6 @@ export default {
   methods: {
     tooltipOptions(day) {
       if (this.tooltip) {
-        console.log(day.date, day.count);
         if (day.count != null) {
           return `<b>${day.count} ${this.tooltipUnit}</b> ${this.lo.on} ${
             this.lo.months[day.date.getMonth()]
@@ -298,10 +297,9 @@ export default {
     }
   },
   updated() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       tippy('.vch__day__square', {
         content(reference) {
-          console.log(reference.getAttribute('data-popover-template'));
           return reference.getAttribute('data-popover-template');
         },
         allowHTML: true,
