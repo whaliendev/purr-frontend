@@ -8,7 +8,10 @@ const actions = {
         .then((response) => {
           if (response.data && response.data.success) {
             context.commit('storeLatestArticles', {
-              articlesList: response.data.data
+              articlesList: response.data.data.data
+            });
+            context.commit('storePageNum', {
+              articlesList: response.data.data.pageNum
             });
           }
           resolve(response);

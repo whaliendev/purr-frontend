@@ -48,8 +48,9 @@ export default defineComponent({
         .then((response) => {
           const data = response.data;
           if (data && data.success) {
-            isCollapsed.value = data.data.data.length < fetchNum.value;
-            commentsList.value = data.data.data;
+            const storeCommentsList = store.getters['comments/commentsList'];
+            isCollapsed.value = storeCommentsList.length < fetchNum.value;
+            commentsList.value = storeCommentsList;
           }
         })
         .catch(() => {

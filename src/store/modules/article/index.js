@@ -6,7 +6,8 @@ export default {
   namespaced: true,
   state() {
     return {
-      articlesList: []
+      articlesList: [],
+      pageNum: -1
     };
   },
   getters,

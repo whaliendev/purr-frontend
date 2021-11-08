@@ -8,7 +8,7 @@ const actions = {
         .then((response) => {
           if (response.data && response.data.success) {
             context.commit('storeLatestComments', {
-              commentsList: response.data.data
+              commentsList: response.data.data.data
             });
           }
           resolve(response);

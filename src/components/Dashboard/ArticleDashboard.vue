@@ -106,8 +106,10 @@ export default defineComponent({
     const curPage = ref(1);
     const fetchNum = ref(5);
     const articlesList = ref([]);
+    const loadingData = ref(false);
 
     const fetchArticlesByPagination = () => {
+      loadingData.value = true;
       store
         .dispatch('articles/getLatestAdminArticles', {
           curPage: curPage.value,
@@ -116,12 +118,13 @@ export default defineComponent({
         .then((response) => {
           const data = response.data;
           if (data && data.success) {
-            articlesList.value = data.data.data;
+            articlesList.value = store.getters['articles/articlesList'];
           }
         })
         .catch(() => {
           // TODO
-        });
+        })
+        .finally(() => (loadingData.value = false));
     };
 
     // lifecycle hook: created
@@ -147,7 +150,8 @@ export default defineComponent({
       handlePageChange,
       ellipsisTitleFormat,
       dateFormat,
-      numFormat
+      numFormat,
+      loadingData
     };
   }
 });
