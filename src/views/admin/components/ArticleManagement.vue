@@ -80,11 +80,7 @@
       <el-divider class="structure-divider" />
 
       <div class="article-management-body">
-        <el-table
-          :data="articlesList"
-          class="article-management-table"
-          v-loading="loadingData"
-        >
+        <el-table :data="articlesList" class="article-management-table">
           <el-table-column
             label="序号"
             type="index"
@@ -221,13 +217,15 @@
       <div class="article-management-footer">
         <el-pagination
           background
-          :page-count="pageNum"
-          :pager-count="5"
-          v-model:pageSize="fetchNum"
-          v-model:currentPage="curPage"
           layout="->, sizes, prev, pager, next, jumper"
+          v-model:current-page="curPage"
+          v-model:page-size="fetchNum"
+          :default-page-size="10"
+          :default-current-page="1"
           :page-sizes="[10, 20, 50]"
-        />
+          :pager-count="5"
+          :total="fetchNum * pageNum"
+        ></el-pagination>
       </div>
     </base-card>
   </div>
@@ -267,7 +265,7 @@ export default {
 
     const curPage = ref(1);
     const fetchNum = ref(10);
-    const pageNum = ref(-1);
+    const pageNum = ref(1);
     const articlesList = ref([]);
     const loadingData = ref(false);
 
@@ -528,6 +526,10 @@ export default {
       margin: 0 8px;
     }
   }
+}
+
+.article-management-footer {
+  margin-top: 12px;
 }
 </style>
 
