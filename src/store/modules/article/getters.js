@@ -1,6 +1,6 @@
 const getters = {
   articlesList: (state) => state.articlesList,
-  pageNum: (state) => state.pageNum
+  pageParams: (state) => state.pageParams
 };
 
 export default getters;

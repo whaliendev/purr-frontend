@@ -10,8 +10,12 @@ const actions = {
             context.commit('storeLatestArticles', {
               articlesList: response.data.data.data
             });
-            context.commit('storePageNum', {
-              articlesList: response.data.data.pageNum
+            context.commit('storePageParams', {
+              pageParams: {
+                pageSize: response.data.data.pageSize,
+                pageNum: response.data.data.pageNum,
+                curPage: response.data.data.curPage
+              }
             });
           }
           resolve(response);

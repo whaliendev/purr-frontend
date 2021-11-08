@@ -7,7 +7,11 @@ export default {
   state() {
     return {
       articlesList: [],
-      pageNum: -1
+      pageParams: {
+        curPage: 1,
+        pageSize: 10,
+        pageNum: 1
+      }
     };
   },
   getters,

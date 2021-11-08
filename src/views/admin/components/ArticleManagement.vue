@@ -283,9 +283,7 @@ export default {
           const data = response.data;
           if (data && data.success) {
             articlesList.value = store.getters['articles/articlesList'];
-            // Notice that we cannot use vuex `getters` to store pageNum, as it will cause pageNum.value has the type of Proxy,
-            // which will led to el-pagination props check failed
-            pageNum.value = data.data.pageNum;
+            pageNum.value = store.getters['articles/pageParams'].pageNum;
           }
         })
         .catch(() => {
