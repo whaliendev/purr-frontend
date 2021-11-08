@@ -19,7 +19,13 @@ import {
   faHeart,
   faEye,
   faAngleLeft,
-  faAngleRight
+  faAngleRight,
+  faSearch,
+  faUndoAlt,
+  faPlus,
+  faEdit,
+  faTrashAlt,
+  faCog
 } from '@fortawesome/free-solid-svg-icons';
 
 // regular svg
@@ -44,5 +50,11 @@ library.add([
   faHeart,
   faEye,
   faAngleRight,
-  faAngleLeft
+  faAngleLeft,
+  faSearch,
+  faUndoAlt,
+  faPlus,
+  faEdit,
+  faTrashAlt,
+  faCog
 ]);

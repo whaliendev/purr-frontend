@@ -24,6 +24,10 @@ a {
   color: var(--light-admin-text-color);
 }
 
+.el-popper__arrow {
+  display: none;
+}
+
 .el-drawer.article-settings-drawer.outer {
   transform: translateX(-6%);
 }
