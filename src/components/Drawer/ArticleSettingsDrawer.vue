@@ -295,6 +295,7 @@
             :value="tag.id"
           >
             <tag
+              :id="tag.id"
               :name="tag.name"
               :color="tag.color"
               :target="tag.target"

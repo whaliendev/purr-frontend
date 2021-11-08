@@ -32,7 +32,12 @@ import CloseBold from '@/components/Icon/CloseBold';
 
 export default defineComponent({
   components: { CloseBold },
+  emits: ['deleteTag'],
   props: {
+    id: {
+      type: Number,
+      required: true
+    },
     name: {
       validator(val) {
         return typeof val === 'string' || val instanceof String;
@@ -79,9 +84,6 @@ export default defineComponent({
     },
     style: {
       validator(val) {
-        console.log(val);
-        console.log(typeof val);
-        console.log(val instanceof String);
         return typeof val === 'string' || val instanceof String;
       },
       required: false,
@@ -97,7 +99,9 @@ export default defineComponent({
     }
   },
   methods: {
-    handleDeleteTag() {}
+    handleDeleteTag() {
+      this.$emit('deleteTag', this.id);
+    }
   }
 });
 </script>
@@ -105,7 +109,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .tag-wrapper {
   display: inline-flex;
-  padding: 2px 4px;
+  padding: 2px 6px;
   justify-content: center;
   align-items: center;
 
@@ -133,6 +137,8 @@ export default defineComponent({
 .tag-name {
   color: var(--el-color-white);
   font-size: 12px;
+  margin-top: 2px;
+  vertical-align: middle;
 
   &.black {
     color: var(--el-color-black);
@@ -149,7 +155,7 @@ export default defineComponent({
 
 .delete-tag {
   color: var(--el-color-white);
-  vertical-align: center;
+  vertical-align: middle;
   margin-left: 4px;
 
   &:hover {

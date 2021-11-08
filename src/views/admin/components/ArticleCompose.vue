@@ -30,6 +30,8 @@
             :loading="searchingTags"
             @blur="handleSelectBlur"
             size="mini"
+            :popper-append-to-body="true"
+            popper-class="add-tag-select-popper"
           >
             <el-option
               v-for="tagOption in tagOptions"
@@ -38,6 +40,7 @@
               :value="tagOption"
             >
               <tag
+                :id="tagOption.id"
                 :name="tagOption.name"
                 :link="false"
                 :color="tagOption.color"
@@ -228,5 +231,11 @@ export default defineComponent({
   .article-author {
     margin-top: 8px;
   }
+}
+</style>
+
+<style>
+.add-tag-select-popper {
+  top: 118px !important;
 }
 </style>
