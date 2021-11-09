@@ -145,6 +145,22 @@ const router = createRouter({
           component: () => import('../views/admin/components/SettingsApp')
         }
       ]
+    },
+    {
+      path: '',
+      name: 'home',
+      component: () => import('../views/home/PurrPage'),
+      redirect: '/',
+      children: [
+        {
+          path: '',
+          name: 'homepage',
+          meta: {
+            title: '首页'
+          },
+          component: () => import('../views/home/components/HomePage')
+        }
+      ]
     }
   ]
 });

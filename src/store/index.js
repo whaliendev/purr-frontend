@@ -6,6 +6,7 @@ import app from './modules/app';
 import comments from './modules/comment';
 import articles from './modules/article';
 import statistics from './modules/statistic';
+import menus from './modules/menu';
 import createPersistedState from 'vuex-persistedstate';
 
 const dataState = createPersistedState({
@@ -18,7 +19,8 @@ const store = createStore({
     app,
     comments,
     articles,
-    statistics
+    statistics,
+    menus
   },
   plugins: [dataState],
   state() {
