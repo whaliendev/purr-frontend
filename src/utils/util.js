@@ -1,5 +1,7 @@
 export function isObject(value) {
-  return typeof value === 'object' || value instanceof Object;
+  return (
+    (typeof value === 'object' && value !== null) || value instanceof Object
+  );
 }
 
 export function isString(value) {

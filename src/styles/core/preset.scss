@@ -2,12 +2,12 @@ body *, body *:before, body *:after {
   box-sizing: border-box;
 }
 
-body{
+body {
   margin: 0;
   padding: 0;
 }
 
-ul, ol{
+ul, ol {
   list-style: none;
   outline: none;
 }
@@ -22,10 +22,6 @@ a {
 
 .el-popper {
   color: var(--light-admin-text-color);
-}
-
-.el-popper__arrow {
-  display: none;
 }
 
 .el-drawer.article-settings-drawer.outer {
@@ -45,14 +41,33 @@ a {
   max-height: calc(100% - 108px);
 }
 
-.el-pagination__jump::after {
-  content: '页';
+.el-popper {
+  min-width: 80px !important;
 }
 
-:root{
+a {
+  color: rgba(94, 53, 177, 0.5);
+
+  &:visited {
+    color: rgb(94, 53, 177);
+  }
+
+  &:focus {
+    color: var(--el-color-warning);
+  }
+
+  &:hover {
+    color: rgba(94, 53, 177, 0.8);
+  }
+}
+
+:root {
   --light-admin-background-color: #f8f8f8;
   --light-admin-background-accent-color: #f0f0f0;
   --light-admin-text-color: #878FA7;
   --light-admin-nav-hover-color: #efefef;
   --light-admin-text-accent-color: #002f47;
+  --site-font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+  --article-font-family: "Noto Serif SC", Georgia, "Nimbus Roman No9 L", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "Source Han Serif CN", STSong, "AR PL New Sung", "AR PL SungtiL GB", NSimSun, SimSun, "TW\-Sung", "WenQuanYi Bitmap Song", "AR PL UMing CN", "AR PL UMing HK", "AR PL UMing TW", "AR PL UMing TW MBE", PMingLiU, MingLiU, serif;
+  --code-font-family: Menlo, Monaco, Consolas, "Andale Mono", "lucida console", "Courier New", monospace;
 }

@@ -9,7 +9,11 @@
           @change-page="handlePageChange"
         />
       </div>
-      <el-table :data="articlesList" class="article-table">
+      <el-table
+        :data="articlesList"
+        class="article-table"
+        v-loading="loadingData"
+      >
         <el-table-column label="序号" type="index" class-name="index-column" />
         <el-table-column
           label="文章"
