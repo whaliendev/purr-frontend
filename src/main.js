@@ -18,7 +18,6 @@ import 'dayjs/locale/zh-cn';
 import locale from 'element-plus/lib/locale/lang/zh-cn';
 
 // external styles
-import 'tippy.js/dist/tippy.css';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
 import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';

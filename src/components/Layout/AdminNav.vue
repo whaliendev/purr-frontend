@@ -1,7 +1,9 @@
 <template>
   <nav>
     <div class="purr-logo">
-      <router-link :to="{ name: 'dashboard' }"><span>PURR</span></router-link>
+      <router-link :to="{ name: 'admin-dashboard' }"
+        ><span>PURR</span></router-link
+      >
       <div class="collapse-button">
         <font-awesome-icon
           :icon="['fas', 'chevron-right']"
@@ -23,7 +25,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'dashboard' }">
+          <router-link :to="{ name: 'admin-dashboard' }">
             <font-awesome-icon :icon="['fas', 'th-large']" />
             <span>首页</span>
           </router-link>
@@ -33,7 +35,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="article-menu">
-            <router-link :to="{ name: 'article' }">
+            <router-link :to="{ name: 'admin-article' }">
               <font-awesome-icon :icon="['fas', 'pen']" />
               <span>文章</span>
             </router-link>
@@ -68,7 +70,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'comment' }">
+          <router-link :to="{ name: 'admin-comment' }">
             <font-awesome-icon :icon="['fas', 'comment-dots']" />
             <span>评论</span>
           </router-link>
@@ -83,7 +85,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'moment' }">
+          <router-link :to="{ name: 'admin-moment' }">
             <font-awesome-icon :icon="['fas', 'paper-plane']" />
             <span>动态</span>
           </router-link>
@@ -93,7 +95,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="page-menu">
-            <router-link :to="{ name: 'page' }">
+            <router-link :to="{ name: 'admin-page' }">
               <font-awesome-icon :icon="['fas', 'file-alt']" />
               <span>页面</span>
             </router-link>
@@ -123,7 +125,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'media' }">
+          <router-link :to="{ name: 'admin-media' }">
             <font-awesome-icon :icon="['fas', 'music']" />
             <span>多媒体库</span>
           </router-link>
@@ -138,7 +140,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'link' }">
+          <router-link :to="{ name: 'admin-link' }">
             <font-awesome-icon :icon="['fas', 'link']" />
             <span>链接</span>
           </router-link>
@@ -148,7 +150,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="settings-menu">
-            <router-link :to="{ name: 'settings' }">
+            <router-link :to="{ name: 'admin-settings' }">
               <font-awesome-icon :icon="['fas', 'wrench']" />
               <span>设置</span>
             </router-link>

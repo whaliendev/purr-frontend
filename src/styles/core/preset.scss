@@ -24,10 +24,6 @@ a {
   color: var(--light-admin-text-color);
 }
 
-.el-popper__arrow {
-  display: none;
-}
-
 .el-drawer.article-settings-drawer.outer {
   transform: translateX(-6%);
 }
@@ -43,6 +39,26 @@ a {
   padding-bottom: 0;
   overflow: auto;
   max-height: calc(100% - 108px);
+}
+
+.el-popper {
+  min-width: 80px !important;
+}
+
+a {
+  color: rgba(94, 53, 177, 0.5);
+
+  &:visited {
+    color: rgb(94, 53, 177);
+  }
+
+  &:focus {
+    color: var(--el-color-warning);
+  }
+
+  &:hover {
+    color: rgba(94, 53, 177, 0.8);
+  }
 }
 
 :root {
