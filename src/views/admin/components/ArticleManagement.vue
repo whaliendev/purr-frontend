@@ -236,7 +236,7 @@
 <script>
 import BaseCard from '@/components/UI/BaseCard';
 import Tag from '@/components/Badge/Tag';
-import { ref } from "vue";
+import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { ellipsisFormat, normalizeNum } from '@/utils/util';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
