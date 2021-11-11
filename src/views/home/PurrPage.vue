@@ -6,7 +6,7 @@
     <el-container class="purr-main-container">
       <el-header><purr-header /></el-header>
       <el-main><router-view></router-view></el-main>
-      <el-footer><purr-footer /></el-footer>
+      <el-footer id="purr-footer"><purr-footer /></el-footer>
     </el-container>
   </el-container>
 </template>
@@ -34,6 +34,10 @@ export default {
     .el-header,
     .el-footer {
       padding: 0;
+    }
+
+    .el-footer {
+      background-color: #efefef;
     }
   }
 }
