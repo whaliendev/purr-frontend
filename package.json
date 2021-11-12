@@ -18,6 +18,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-4",
     "@kangc/v-md-editor": "^2.3.12",
     "axios": "^0.23.0",
+    "colorthief": "2.2.0",
     "core-js": "^3.19.1",
     "dayjs": "^1.10.7",
     "echarts": "^5.2.1",

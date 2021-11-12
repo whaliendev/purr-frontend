@@ -83,7 +83,7 @@
         >
           <template #reference>
             <font-awesome-icon
-              :icon="['far', 'user']"
+              :icon="['fas', 'user']"
               aria-hidden="false"
               class="login-nav"
             ></font-awesome-icon>
@@ -146,8 +146,6 @@ export default defineComponent({
     watch(
       () => route.path,
       (newVal) => {
-        console.log(menuItemNavs);
-        console.log(newVal);
         if (menuItemNavs.indexOf(newVal) !== -1) {
           tabIndicator.style.visibility = 'visible';
           tabIndicator.style.left = `${
@@ -207,7 +205,6 @@ export default defineComponent({
   background-color: hsla(0, 0%, 100%, 0.95);
   z-index: 600;
   min-height: 56px;
-  -webkit-box-shadow: 0 0 2px rgba(57, 70, 78, 0.2);
   box-shadow: 0 0 2px rgba(57, 70, 78, 0.2);
   opacity: 1;
   transition: background-color 0.3s ease-out, opacity 0.3s ease-out,
@@ -291,7 +288,7 @@ export default defineComponent({
     display: inline-block;
 
     a {
-      color: #666;
+      color: #888;
       position: relative;
       text-decoration: none;
       display: inline-block;
@@ -339,7 +336,7 @@ export default defineComponent({
 }
 
 .nav-controls-container {
-  color: #666;
+  color: #888;
   position: absolute;
   right: 24px;
   top: 50%;
@@ -366,16 +363,6 @@ export default defineComponent({
     &:hover {
       color: var(--el-color-primary-light-2);
     }
-  }
-}
-
-@media (min-width: 1200px) {
-  .container,
-  .container-lg,
-  .container-md,
-  .container-sm,
-  .container-xl {
-    max-width: 1140px;
   }
 }
 </style>

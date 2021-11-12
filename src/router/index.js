@@ -223,6 +223,11 @@ const router = createRouter({
             title: 'RSS'
           },
           component: () => import('../views/home/components/PageSheet')
+        },
+        {
+          path: 'articles/:articleName',
+          name: 'article-reading',
+          component: () => import('../views/home/components/ArticleReading')
         }
       ]
     }

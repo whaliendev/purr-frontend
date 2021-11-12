@@ -32,13 +32,30 @@ export default {
     height: 100%;
 
     .el-header,
+    .el-main,
     .el-footer {
       padding: 0;
+    }
+
+    .el-header {
+      position: absolute;
     }
 
     .el-footer {
       background-color: #efefef;
     }
+  }
+}
+</style>
+
+<style>
+@media (min-width: 1200px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1140px;
   }
 }
 </style>
