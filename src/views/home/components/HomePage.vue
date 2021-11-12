@@ -36,7 +36,9 @@
                   <span class="article-tags">{{ article.tags[0].name }}</span>
                 </span>
               </p>
-              <button class="reading-btn">阅读文章</button>
+              <button class="reading-btn">
+                <a :href="`${article.linkName}`" target="_self">阅读文章</a>
+              </button>
             </div>
           </el-carousel-item>
         </el-carousel>
@@ -213,8 +215,11 @@ export default defineComponent({
   .article-meta-info {
     position: absolute;
     left: 50%;
-    top: 44%;
+    top: 48%;
     transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     h1 {
       font-size: 1.6em;
@@ -228,6 +233,29 @@ export default defineComponent({
       align-items: center;
       font-size: 1.1em;
       letter-spacing: 1px;
+    }
+
+    .reading-btn {
+      margin-top: 4px;
+      padding: 4px 8px;
+      background-color: transparent;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: var(--el-border-radius-small);
+      outline: 0;
+
+      a {
+        color: white;
+      }
+
+      &:hover {
+        background-color: #fff;
+        color: #333;
+
+        a {
+          color: #333;
+        }
+      }
     }
   }
 }
