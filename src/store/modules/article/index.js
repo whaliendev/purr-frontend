@@ -11,6 +11,10 @@ export default {
         curPage: 1,
         pageSize: 10,
         pageNum: 1
+      },
+      recommendedArticlesList: {
+        data: [],
+        timestamp: -1
       }
     };
   },

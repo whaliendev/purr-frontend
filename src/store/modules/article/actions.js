@@ -24,6 +24,23 @@ const actions = {
           reject(error);
         });
     });
+  },
+  getRecommendedArticles(context) {
+    return new Promise((resolve, reject) => {
+      articleApi
+        .getRecommendedArticles()
+        .then((response) => {
+          if (response.data && response.data.success) {
+            context.commit('storeRecommendedArticles', {
+              articlesList: response.data.data
+            });
+          }
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 };
 

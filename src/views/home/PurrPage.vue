@@ -6,7 +6,7 @@
     <el-container class="purr-main-container">
       <el-header><purr-header /></el-header>
       <el-main><router-view></router-view></el-main>
-      <el-footer><purr-footer /></el-footer>
+      <el-footer id="purr-footer"><purr-footer /></el-footer>
     </el-container>
   </el-container>
 </template>
@@ -32,9 +32,30 @@ export default {
     height: 100%;
 
     .el-header,
+    .el-main,
     .el-footer {
       padding: 0;
     }
+
+    .el-header {
+      position: absolute;
+    }
+
+    .el-footer {
+      background-color: #efefef;
+    }
+  }
+}
+</style>
+
+<style>
+@media (min-width: 1200px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1140px;
   }
 }
 </style>

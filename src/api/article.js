@@ -10,4 +10,11 @@ articleApi.getLatestAdminArticles = (curPage, fetchNum) => {
   });
 };
 
+articleApi.getRecommendedArticles = () => {
+  return service({
+    url: `${baseUrl}/recommend`,
+    method: 'get'
+  });
+};
+
 export default articleApi;

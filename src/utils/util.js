@@ -56,3 +56,17 @@ export function ellipsisFormat(content, length = 10) {
   if (content.length <= length - 3) return content;
   return content.substr(0, length - 3) + '···';
 }
+
+/**
+ * @see: @link{https://stackoverflow.com/questions/946544/good-text-foreground-color-for-a-given-background-color/946734#946734}
+ * @param rgb number[] an array of r, g, b value in decimal
+ * @returns {string} 'light' or 'dark'
+ */
+export default function isLightOrDark(rgb = [0, 128, 255]) {
+  const [r, g, b] = rgb;
+  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) {
+    return 'light';
+  } else {
+    return 'dark';
+  }
+}
