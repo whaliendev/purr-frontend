@@ -20,6 +20,14 @@
               :src="article.backgroundUrl"
               @load="initialChangeHeaderBG(index)"
             >
+              <template #placeholder>
+                <img
+                  src="https://gallery-1259614029.cos.ap-chengdu.myqcloud.com/img/final.gif"
+                  crossorigin="anonymous"
+                  alt="loading gif"
+                  aria-hidden="true"
+                />
+              </template>
             </el-image>
             <div
               class="article-meta-info shadow-text"
@@ -56,29 +64,53 @@
     </header>
 
     <main>
-      <div class="focus-wrapper"></div>
+      <div class="focus-wrapper content-block">
+        <div class="container">
+          <div class="row title-block">
+            <h1>
+              <font-awesome-icon :icon="['fas', 'torii-gate']" />&nbsp;聚焦 !!
+            </h1>
+          </div>
+          <div class="focus-container content-container only-row">
+            <focus-card
+              v-for="(focusLink, index) in focusList"
+              :key="index"
+              :background-url="focusLink.imageUrl"
+              :link-name="focusLink.name"
+              :link="focusLink.linkName || focusLink.url"
+              :link-desc="focusLink.description"
+              :target="focusLink.target"
+            />
+          </div>
+        </div>
+      </div>
 
-      <div class="moment-wrapper"></div>
+      <div class="moment-wrapper content-block"></div>
 
-      <div class="article-wrapper"></div>
+      <div class="article-wrapper content-block"></div>
     </main>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, onUpdated, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import ColorThief from 'colorthief';
 import isLightOrDark from '@/utils/util';
+import FocusCard from '@/components/Card/FocusCard';
 export default defineComponent({
   name: 'HomePage',
+  components: { FocusCard },
   setup() {
     const store = useStore();
+
+    // 获取推荐文章
     const recommendedArticles = ref([]);
     const getRecommendedArticles = () => {
       if (
-        Date.now() -
-          store.getters['articles/recommendedArticlesList'].timestamp / 1000 >
+        (Date.now() -
+          store.getters['articles/recommendedArticlesList'].timestamp) /
+          1000 >
         30
       ) {
         store
@@ -100,9 +132,33 @@ export default defineComponent({
       }
     };
 
+    // 获取focus List
+    const focusList = ref([]);
+    const getFocusList = () => {
+      if (
+        (Date.now() - store.getters['links/focusList'].timestamp) / 1000 >
+        30
+      ) {
+        store
+          .dispatch('links/getFocusList')
+          .then((response) => {
+            const data = response.data;
+            if (data && data.success) {
+              focusList.value = store.getters['links/focusList'].data;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        focusList.value = store.getters['links/focusList'].data;
+      }
+    };
+
     // lifecycle created
     (() => {
       getRecommendedArticles();
+      getFocusList();
     })();
 
     // 展示相关API
@@ -115,7 +171,7 @@ export default defineComponent({
       header = document.querySelector('#homepage-header');
       colorThief = new ColorThief();
     });
-    onUpdated(() => {
+    watch(recommendedArticles, () => {
       // Actually, this is a bug of element-plus
       carousel.value.setActiveItem(0);
     });
@@ -155,7 +211,8 @@ export default defineComponent({
       changeHeaderBGColor,
       carousel,
       initialChangeHeaderBG,
-      isDarkColor
+      isDarkColor,
+      focusList
     };
   }
 });
@@ -164,6 +221,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 #home-page {
   font-family: var(--site-font-family);
+  background-color: #f5f5f5;
 }
 
 .homepage-header {
@@ -210,6 +268,17 @@ export default defineComponent({
   .el-image {
     width: 100%;
     height: 100%;
+
+    &__placeholder img {
+      object-fit: cover;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      height: 40px;
+    }
   }
 
   .article-meta-info {
@@ -286,5 +355,69 @@ export default defineComponent({
   background-image: linear-gradient(135deg, #fdfcfb, #e2d1c3);
   opacity: 0.7;
   z-index: 2;
+}
+
+.container {
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content-block {
+  position: relative;
+  width: 100%;
+  padding: 50px 0;
+}
+
+.title-block {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: center;
+  padding: 0 15px;
+  font-family: 'Ubuntu', sans-serif;
+  color: #666;
+  border-bottom: 1px dashed #ececec;
+  margin-bottom: 30px;
+
+  h1 {
+    margin-bottom: 8px;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.only-row {
+  justify-content: space-between;
+  align-items: center;
+
+  > div {
+    margin: 12px 0;
+  }
 }
 </style>
