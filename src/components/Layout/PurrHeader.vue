@@ -1,5 +1,5 @@
 <template>
-  <nav id="purr-header" class="navbar-full ontop">
+  <nav id="purr-header" class="navbar-full ontop" ref="navbar">
     <svg class="nav-shade"></svg>
     <div class="nav-container">
       <div role="navigation" class="container nav-content content-item">
@@ -174,8 +174,29 @@ export default defineComponent({
       });
     });
 
+    // when navbar is not at top, add a mask to navbar
+    const navbar = ref(null);
+    let lastKnownScrollPosition = 0;
+    let ticking = false;
+    document.addEventListener('scroll', () => {
+      lastKnownScrollPosition = window.scrollY;
+      if (!ticking) {
+        setTimeout(() => {
+          if (lastKnownScrollPosition === 0) {
+            navbar.value.classList.add('ontop');
+          } else {
+            navbar.value.classList.remove('ontop');
+          }
+          ticking = false;
+        }, 120);
+
+        ticking = true;
+      }
+    });
+
     return {
-      menuList
+      menuList,
+      navbar
     };
   }
 });
@@ -191,6 +212,10 @@ export default defineComponent({
   padding-top: 8px;
   background-color: rgba(0, 0, 0, 0);
   backdrop-filter: saturate(100%) blur(0);
+
+  .nav-content .tab-indicator {
+    background-color: #777;
+  }
 }
 
 .navbar-full,
@@ -209,6 +234,10 @@ export default defineComponent({
   opacity: 1;
   transition: background-color 0.3s ease-out, opacity 0.3s ease-out,
     padding 0.3s ease-out, backdrop-filter 0s ease-out, box-shadow 0.3s ease-out;
+
+  .nav-content .tab-indicator {
+    background-color: var(--el-color-primary-light-2);
+  }
 }
 
 .nav-shade {
@@ -322,7 +351,6 @@ export default defineComponent({
     bottom: 0;
     height: 2px;
     width: 60px;
-    background-color: #777;
     border-radius: 2px;
     transition: left 0.3s ease, width 0.3s ease, background-color 0.3s ease;
   }
