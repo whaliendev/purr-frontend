@@ -6,15 +6,25 @@ export default {
   namespaced: true,
   state() {
     return {
-      articlesList: [],
-      pageParams: {
-        curPage: 1,
-        pageSize: 10,
-        pageNum: 1
+      articlesList: {
+        data: [],
+        pageParams: {
+          curPage: 1,
+          pageSize: 10,
+          pageNum: 1
+        }
       },
       recommendedArticlesList: {
         data: [],
         timestamp: -1
+      },
+      fgArticlesList: {
+        data: [],
+        pageParams: {
+          curPage: -1,
+          pageSize: -1,
+          pageNum: -1
+        }
       }
     };
   },

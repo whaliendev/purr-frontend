@@ -1,5 +1,5 @@
 <template>
-  <nav id="purr-header" class="navbar-full ontop" ref="navbar">
+  <nav id="purr-header" class="navbar-full ontop">
     <svg class="nav-shade"></svg>
     <div class="nav-container">
       <div role="navigation" class="container nav-content content-item">
@@ -175,28 +175,31 @@ export default defineComponent({
     });
 
     // when navbar is not at top, add a mask to navbar
-    const navbar = ref(null);
+    let navbar;
     let lastKnownScrollPosition = 0;
     let ticking = false;
+    onMounted(() => {
+      if (!navbar) navbar = document.querySelector('#purr-header');
+    });
     document.addEventListener('scroll', () => {
       lastKnownScrollPosition = window.scrollY;
       if (!ticking) {
-        setTimeout(() => {
+        window.requestAnimationFrame(() => {
+          console.log('1');
           if (lastKnownScrollPosition === 0) {
-            navbar.value.classList.add('ontop');
+            navbar.classList.add('ontop');
           } else {
-            navbar.value.classList.remove('ontop');
+            navbar.classList.remove('ontop');
           }
           ticking = false;
-        }, 120);
+        });
 
         ticking = true;
       }
     });
 
     return {
-      menuList,
-      navbar
+      menuList
     };
   }
 });

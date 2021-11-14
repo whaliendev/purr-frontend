@@ -117,7 +117,20 @@
               <font-awesome-icon :icon="['fas', 'quidditch']" />&nbsp;到处转转
             </h1>
           </div>
-          <div class="article-container"></div>
+          <div class="article-container">
+            <el-row>
+              <el-col
+                v-for="article in articlesList"
+                :key="article.id"
+                :lg="24"
+                :md="24"
+                :sm="24"
+                class="article-item"
+              >
+                <article-card :article="article" />
+              </el-col>
+            </el-row>
+          </div>
         </div>
       </section>
     </main>
@@ -132,9 +145,10 @@ import isLightOrDark from '@/utils/util';
 import FocusCard from '@/components/Card/FocusCard';
 import { useRouter } from 'vue-router';
 import MomentCard from '@/components/Card/MomentCard';
+import ArticleCard from '@/components/Card/ArticleCard';
 export default defineComponent({
   name: 'HomePage',
-  components: { MomentCard, FocusCard },
+  components: { ArticleCard, MomentCard, FocusCard },
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -210,11 +224,51 @@ export default defineComponent({
         });
     };
 
+    const articleCurPage = ref(1);
+    const articleFetchNum = ref(5);
+    const articlesList = ref([]);
+    const loadingArticles = ref(false);
+    const noMoreArticles = ref(false);
+    const getArticlesByPagination = () => {
+      loadingArticles.value = true;
+      store
+        .dispatch('articles/getArticlesByPagination', {
+          curPage: articleCurPage.value,
+          fetchNum: articleFetchNum.value
+        })
+        .then((response) => {
+          const data = response.data;
+          if (data && data.success) {
+            articlesList.value.push(
+              ...store.getters['articles/fgArticlesList']
+            );
+            const pageParams = store.getters['articles/fgPageParams'];
+            if (pageParams.curPage >= pageParams.pageNum) {
+              noMoreArticles.value = true;
+            } else if (pageParams.curPage < pageParams.pageNum) {
+              noMoreArticles.value = false;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          loadingArticles.value = false;
+        });
+    };
+
+    const loadMoreArticles = () => {
+      articleCurPage.value = articleCurPage.value + 1;
+      getArticlesByPagination();
+    };
+
     // lifecycle created
     (() => {
       getRecommendedArticles();
       getFocusList();
       getMomentsListByPagination();
+      getArticlesByPagination();
     })();
 
     // 展示相关API
@@ -273,7 +327,11 @@ export default defineComponent({
       isDarkColor,
       focusList,
       router,
-      momentsList
+      momentsList,
+      articlesList,
+      loadingArticles,
+      noMoreArticles,
+      loadMoreArticles
     };
   }
 });
