@@ -35,6 +35,21 @@ const actions = {
           reject(error);
         });
     });
+  },
+  checkTokenValidity(context) {
+    return new Promise((resolve, reject) => {
+      userApi
+        .checkTokenValidity(context.getters.accessToken)
+        .then((response) => {
+          const data = response.data;
+          if (data && data.success) {
+            resolve(data.data);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 };
 

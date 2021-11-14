@@ -224,7 +224,7 @@ export default defineComponent({
           message: '登录成功！',
           duration: 1000
         });
-        router.replace({ name: 'dashboard' });
+        router.replace({ name: 'admin-dashboard' });
       }
     };
     const submitLoginForm = async () => {

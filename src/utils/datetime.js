@@ -1,12 +1,17 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
-dayjs.locale('en-us');
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
+dayjs.locale('zh-cn');
+dayjs.extend(utc);
+dayjs.extend(tz);
+const timeZone = dayjs.tz.guess();
 
 export function datetimeFormat(
   datetime = new Date(),
   pattern = 'YYYY-MM-DD HH:mm'
 ) {
-  return dayjs(datetime).format(pattern);
+  return dayjs.utc(datetime).tz(timeZone).format(pattern);
 }
 
 export function timeAgo(datetime, formatString = 'YYYY/MM/DD') {
