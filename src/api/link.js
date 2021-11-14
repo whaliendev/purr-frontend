@@ -1,4 +1,4 @@
-import service from "@/utils/service";
+import service from '@/utils/service';
 
 const baseUrl = '/api/link';
 
@@ -7,7 +7,7 @@ const linkApi = {};
 linkApi.getFocus = () => {
   return service({
     url: `${baseUrl}/focus`,
-    method: 'get',
+    method: 'get'
   });
 };
 

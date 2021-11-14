@@ -6,7 +6,6 @@
           class="fadeIn"
           height="360px"
           @change="changeHeaderBGColor"
-          :interval="4500"
           ref="carousel"
         >
           <el-carousel-item
@@ -21,12 +20,7 @@
               @load="initialChangeHeaderBG(index)"
             >
               <template #placeholder>
-                <img
-                  src="https://gallery-1259614029.cos.ap-chengdu.myqcloud.com/img/final.gif"
-                  crossorigin="anonymous"
-                  alt="loading gif"
-                  aria-hidden="true"
-                />
+                <div class="placeholder loading" />
               </template>
             </el-image>
             <div
@@ -44,8 +38,11 @@
                   <span class="article-tags">{{ article.tags[0].name }}</span>
                 </span>
               </p>
-              <button class="reading-btn">
-                <a :href="`${article.linkName}`" target="_self">阅读文章</a>
+              <button
+                class="reading-btn"
+                @click="router.push(article.linkName)"
+              >
+                阅读文章
               </button>
             </div>
           </el-carousel-item>
@@ -64,7 +61,7 @@
     </header>
 
     <main>
-      <div class="focus-wrapper content-block">
+      <section class="focus-wrapper content-block">
         <div class="container">
           <div class="row title-block">
             <h1>
@@ -83,11 +80,46 @@
             />
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="moment-wrapper content-block"></div>
+      <section class="moment-wrapper content-block">
+        <div class="container">
+          <div class="row title-block">
+            <h1><font-awesome-icon :icon="['fas', 'fan']" />&nbsp;宇宙漫游</h1>
+            <button
+              class="more-link load-more-btn"
+              @click="router.push({ name: 'moment' })"
+            >
+              查看更多&nbsp;<font-awesome-icon :icon="['fas', 'caret-right']" />
+            </button>
+          </div>
+          <div class="moment-container">
+            <el-row :gutter="24">
+              <el-col
+                v-for="moment in momentsList"
+                :key="moment.id"
+                :lg="8"
+                :md="12"
+                :sm="24"
+                class="moment-item"
+              >
+                <moment-card :moment="moment" />
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+      </section>
 
-      <div class="article-wrapper content-block"></div>
+      <section class="article-wrapper content-block">
+        <div class="container">
+          <div class="row title-block">
+            <h1>
+              <font-awesome-icon :icon="['fas', 'quidditch']" />&nbsp;到处转转
+            </h1>
+          </div>
+          <div class="article-container"></div>
+        </div>
+      </section>
     </main>
   </div>
 </template>
@@ -98,11 +130,14 @@ import { useStore } from 'vuex';
 import ColorThief from 'colorthief';
 import isLightOrDark from '@/utils/util';
 import FocusCard from '@/components/Card/FocusCard';
+import { useRouter } from 'vue-router';
+import MomentCard from '@/components/Card/MomentCard';
 export default defineComponent({
   name: 'HomePage',
-  components: { FocusCard },
+  components: { MomentCard, FocusCard },
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     // 获取推荐文章
     const recommendedArticles = ref([]);
@@ -155,10 +190,31 @@ export default defineComponent({
       }
     };
 
+    const momentCurPage = ref(1);
+    const momentFetchNum = ref(12);
+    const momentsList = ref([]); // 注意，这里的momentsList是一个总list
+    const getMomentsListByPagination = () => {
+      store
+        .dispatch('moments/getMomentsByPagination', {
+          curPage: momentCurPage.value,
+          fetchNum: momentFetchNum.value
+        })
+        .then((response) => {
+          const data = response.data;
+          if (data && data.success) {
+            momentsList.value.push(...store.getters['moments/momentsList']);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
     // lifecycle created
     (() => {
       getRecommendedArticles();
       getFocusList();
+      getMomentsListByPagination();
     })();
 
     // 展示相关API
@@ -168,8 +224,11 @@ export default defineComponent({
     let carousel = ref(null);
     const isDarkColor = ref(true);
     onMounted(() => {
-      header = document.querySelector('#homepage-header');
-      colorThief = new ColorThief();
+      if (!header) header = document.querySelector('#homepage-header');
+      if (!colorThief) colorThief = new ColorThief();
+      carousel.value.setActiveItem(
+        Math.floor(Math.random() * recommendedArticles.value.length)
+      );
     });
     watch(recommendedArticles, () => {
       // Actually, this is a bug of element-plus
@@ -212,7 +271,9 @@ export default defineComponent({
       carousel,
       initialChangeHeaderBG,
       isDarkColor,
-      focusList
+      focusList,
+      router,
+      momentsList
     };
   }
 });
@@ -269,15 +330,18 @@ export default defineComponent({
     width: 100%;
     height: 100%;
 
-    &__placeholder img {
-      object-fit: cover;
+    .placeholder {
+      background-image: url('../../../assets/loading.gif');
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
       position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 40px;
-      height: 40px;
+      top: 36%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: auto;
+      width: 120px;
+      height: 120px;
     }
   }
 
@@ -312,18 +376,11 @@ export default defineComponent({
       border: 1px solid #fff;
       border-radius: var(--el-border-radius-small);
       outline: 0;
-
-      a {
-        color: white;
-      }
+      cursor: pointer;
 
       &:hover {
         background-color: #fff;
         color: #333;
-
-        a {
-          color: #333;
-        }
       }
     }
   }
@@ -368,7 +425,7 @@ export default defineComponent({
 .content-block {
   position: relative;
   width: 100%;
-  padding: 50px 0;
+  padding: 30px 0 0;
 }
 
 .title-block {
@@ -385,7 +442,11 @@ export default defineComponent({
   margin-bottom: 30px;
 
   h1 {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  button {
+    margin-bottom: -4px;
   }
 }
 
@@ -407,6 +468,28 @@ export default defineComponent({
   margin-right: -15px;
 }
 
+button.load-more-btn {
+  cursor: pointer;
+  opacity: 0.7;
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 0.75em;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.more-link {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 2px solid #888;
+  border-radius: var(--el-border-radius-small);
+  vertical-align: middle;
+  line-height: 1.2em;
+  opacity: 0.5;
+  transition: all 0.15s ease-out;
+}
+
 .content-container {
   display: flex;
   flex-wrap: wrap;
@@ -418,6 +501,16 @@ export default defineComponent({
 
   > div {
     margin: 12px 0;
+  }
+}
+
+.moment-container {
+  margin-top: -12px;
+  margin-bottom: -12px;
+
+  .el-col {
+    margin-top: 12px;
+    margin-bottom: 12px;
   }
 }
 </style>
