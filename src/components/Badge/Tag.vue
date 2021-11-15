@@ -145,11 +145,19 @@ export default defineComponent({
   }
 
   &.href:visited {
-    color: var(--el-color-white);
+    color: coral;
+  }
+
+  &.href:focus {
+    color: var(--el-color-warning);
   }
 
   &.href:hover {
-    color: var(--el-color-primary-light-1);
+    color: orange;
+  }
+
+  &.href:active {
+    color: orange;
   }
 }
 

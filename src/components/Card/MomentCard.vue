@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
 import VueMarkdownEditor, { xss } from '@kangc/v-md-editor';
 import { useRouter } from 'vue-router';
@@ -99,12 +99,6 @@ export default defineComponent({
         likeHeart.value.style.backgroundPosition = 'right';
         store.commit('moments/storeMomentLikes', { id: props.moment.id });
       });
-    });
-
-    onUnmounted(() => {
-      likeHeart.value.removeEventListener('click');
-      likeHeart.value.removeEventListener('touchstart');
-      likeHeart.value.removeEventListener('animationend');
     });
 
     const numFormat = (num) => normalizeNum(num);

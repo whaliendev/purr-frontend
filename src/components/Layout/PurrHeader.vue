@@ -174,6 +174,29 @@ export default defineComponent({
       });
     });
 
+    // when navbar is not at top, add a mask to navbar
+    let navbar;
+    let lastKnownScrollPosition = 0;
+    let ticking = false;
+    onMounted(() => {
+      if (!navbar) navbar = document.querySelector('#purr-header');
+    });
+    document.addEventListener('scroll', () => {
+      lastKnownScrollPosition = window.scrollY;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (lastKnownScrollPosition === 0) {
+            navbar.classList.add('ontop');
+          } else {
+            navbar.classList.remove('ontop');
+          }
+          ticking = false;
+        });
+
+        ticking = true;
+      }
+    });
+
     return {
       menuList
     };
@@ -191,6 +214,10 @@ export default defineComponent({
   padding-top: 8px;
   background-color: rgba(0, 0, 0, 0);
   backdrop-filter: saturate(100%) blur(0);
+
+  .nav-content .tab-indicator {
+    background-color: #777;
+  }
 }
 
 .navbar-full,
@@ -209,6 +236,10 @@ export default defineComponent({
   opacity: 1;
   transition: background-color 0.3s ease-out, opacity 0.3s ease-out,
     padding 0.3s ease-out, backdrop-filter 0s ease-out, box-shadow 0.3s ease-out;
+
+  .nav-content .tab-indicator {
+    background-color: var(--el-color-primary-light-2);
+  }
 }
 
 .nav-shade {
@@ -322,7 +353,6 @@ export default defineComponent({
     bottom: 0;
     height: 2px;
     width: 60px;
-    background-color: #777;
     border-radius: 2px;
     transition: left 0.3s ease, width 0.3s ease, background-color 0.3s ease;
   }
