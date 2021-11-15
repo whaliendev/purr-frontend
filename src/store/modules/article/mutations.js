@@ -9,11 +9,8 @@ const mutations = {
     state.fgArticlesList.data = payload.articlesList;
   },
   storeFGPageParams(state, payload) {
-    state.fgArticlesList.pageParams = {
-      pageSize: payload.pageSize,
-      pageNum: payload.pageNum,
-      curPage: payload.curPage
-    };
+    console.log(payload.pageParams);
+    state.fgArticlesList.pageParams = payload.pageParams;
   },
   storeRecommendedArticles(state, payload) {
     state.recommendedArticlesList = {

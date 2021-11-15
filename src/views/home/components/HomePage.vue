@@ -49,6 +49,7 @@
         </el-carousel>
       </div>
       <!--    创意来源： https://velasx.com    -->
+      <!--    背景图    -->
       <div class="disable-hover" id="disable-hover">
         <div
           class="header-bg header-bg-image"
@@ -57,6 +58,7 @@
           :key="article.id"
         ></div>
       </div>
+      <!--    背景图上的遮罩    -->
       <div class="header-bg header-bg-overlay"></div>
     </header>
 
@@ -118,19 +120,30 @@
             </h1>
           </div>
           <div class="article-container">
-            <el-row>
+            <el-row :gutter="20">
               <el-col
                 v-for="article in articlesList"
                 :key="article.id"
-                :lg="24"
-                :md="24"
+                :lg="8"
+                :md="12"
                 :sm="24"
                 class="article-item"
               >
-                <article-card :article="article" />
+                <post-card :article="article" />
               </el-col>
             </el-row>
           </div>
+          <div class="load-more-block" v-if="!loadingArticles">
+            <button
+              class="load-more-btn more-link"
+              v-if="!noMoreArticles"
+              @click="loadMoreArticles"
+            >
+              加载更多&nbsp;<font-awesome-icon :icon="['fas', 'caret-down']" />
+            </button>
+            <p class="no-more-articles" v-else>真的已经被掏空了&lt;(ToT)&gt;</p>
+          </div>
+          <div class="loading-articles" v-else></div>
         </div>
       </section>
     </main>
@@ -145,10 +158,10 @@ import isLightOrDark from '@/utils/util';
 import FocusCard from '@/components/Card/FocusCard';
 import { useRouter } from 'vue-router';
 import MomentCard from '@/components/Card/MomentCard';
-import ArticleCard from '@/components/Card/ArticleCard';
+import PostCard from '@/components/Card/PostCard';
 export default defineComponent({
   name: 'HomePage',
-  components: { ArticleCard, MomentCard, FocusCard },
+  components: { PostCard, MomentCard, FocusCard },
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -225,7 +238,7 @@ export default defineComponent({
     };
 
     const articleCurPage = ref(1);
-    const articleFetchNum = ref(5);
+    const articleFetchNum = ref(6);
     const articlesList = ref([]);
     const loadingArticles = ref(false);
     const noMoreArticles = ref(false);
@@ -243,6 +256,7 @@ export default defineComponent({
               ...store.getters['articles/fgArticlesList']
             );
             const pageParams = store.getters['articles/fgPageParams'];
+            console.log(pageParams);
             if (pageParams.curPage >= pageParams.pageNum) {
               noMoreArticles.value = true;
             } else if (pageParams.curPage < pageParams.pageNum) {
@@ -562,7 +576,8 @@ button.load-more-btn {
   }
 }
 
-.moment-container {
+.moment-container,
+.article-container {
   margin-top: -12px;
   margin-bottom: -12px;
 
@@ -570,5 +585,24 @@ button.load-more-btn {
     margin-top: 12px;
     margin-bottom: 12px;
   }
+}
+
+.load-more-block {
+  color: #888;
+  padding: 36px 0;
+  text-align: center;
+
+  .no-more-articles {
+    font-size: 0.8em;
+  }
+}
+
+.loading-articles {
+  margin: 50px auto;
+  width: 48px;
+  height: 48px;
+  background-image: url('../../../assets/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 </style>

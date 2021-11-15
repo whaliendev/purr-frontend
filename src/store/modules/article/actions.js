@@ -11,9 +11,11 @@ const actions = {
               articlesList: response.data.data.data
             });
             context.commit('storeFGPageParams', {
-              pageSize: response.data.data.pageSize,
-              pageNum: response.data.data.pageNum,
-              curPage: response.data.data.curPage
+              pageParams: {
+                pageSize: response.data.data.pageSize,
+                pageNum: response.data.data.pageNum,
+                curPage: response.data.data.currentPage
+              }
             });
           }
           resolve(response);
@@ -36,7 +38,7 @@ const actions = {
               pageParams: {
                 pageSize: response.data.data.pageSize,
                 pageNum: response.data.data.pageNum,
-                curPage: response.data.data.curPage
+                curPage: response.data.data.currentPage
               }
             });
           }
