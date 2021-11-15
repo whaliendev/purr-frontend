@@ -355,6 +355,7 @@ export default defineComponent({
 #home-page {
   font-family: var(--site-font-family);
   background-color: #f5f5f5;
+  padding-bottom: 50px;
 }
 
 .homepage-header {
@@ -598,7 +599,7 @@ button.load-more-btn {
 }
 
 .loading-articles {
-  margin: 50px auto;
+  margin: 50px auto 0 auto;
   width: 48px;
   height: 48px;
   background-image: url('../../../assets/loading.gif');
