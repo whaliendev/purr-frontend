@@ -42,12 +42,12 @@ ul, ol {
 }
 
 a {
-  color: rgba(94, 53, 177, 0.5);
+  color: #e67474;
   text-decoration: none;
   outline: 0;
 
   &:visited {
-    color: rgb(94, 53, 177);
+    color: coral;
   }
 
   &:focus {
@@ -55,7 +55,11 @@ a {
   }
 
   &:hover {
-    color: rgba(94, 53, 177, 0.8);
+    color: orange;
+  }
+
+  &:active {
+    color: orange;
   }
 }
 

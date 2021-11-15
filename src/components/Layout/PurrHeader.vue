@@ -185,7 +185,6 @@ export default defineComponent({
       lastKnownScrollPosition = window.scrollY;
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          console.log('1');
           if (lastKnownScrollPosition === 0) {
             navbar.classList.add('ontop');
           } else {
