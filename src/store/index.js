@@ -14,7 +14,17 @@ import createPersistedState from 'vuex-persistedstate';
 
 const dataState = createPersistedState({
   key: 'purr',
-  path: ['user.accessToken', 'user.refreshToken', 'user.accessExpiredTime']
+  reducer(val) {
+    return {
+      user: val.user,
+      app: val.app,
+      menus: val.menus,
+      moments: val.moments,
+      articles: {
+        articleDetails: val.articles.articleDetails
+      }
+    };
+  }
 });
 
 const store = createStore({
