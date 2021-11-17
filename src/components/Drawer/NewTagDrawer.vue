@@ -1,7 +1,7 @@
 <template>
   <el-drawer
     custom-class="new-tag-drawer"
-    size="24%"
+    :size="drawerWidth"
     :before-close="handleClose"
     :lock-scroll="false"
     :destroy-on-close="true"
@@ -140,8 +140,14 @@ import { useStore } from 'vuex';
 export default defineComponent({
   name: 'NewTagDrawer',
   components: { UploadFilled },
-  emits: ['readyToClose'],
-  setup(props, context) {
+  props: {
+    drawerWidth: {
+      type: String,
+      required: false,
+      default: '24%'
+    }
+  },
+  setup() {
     const store = useStore();
 
     const handleClose = (done) => {
@@ -151,11 +157,10 @@ export default defineComponent({
       })
         .then(() => {
           // TODO save current settings to localStorage
-          context.emit('readyToClose');
           done();
         })
         .catch(() => {
-          logger.info('user closed new-tag-drawer');
+          logger.info('user cancelled close new-tag-drawer');
         });
     };
 

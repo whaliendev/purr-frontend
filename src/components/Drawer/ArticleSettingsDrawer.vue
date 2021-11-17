@@ -382,7 +382,9 @@
 
     <new-tag-drawer
       v-model="newTagDrawerVisible"
-      @ready-to-close="hideNewTagDrawer"
+      :drawer-width="newTagDrawerWidth"
+      @open="expandArticleSettingsDrawer"
+      @close="hideNewTagDrawer"
     />
 
     <!--    end of body-->
@@ -398,14 +400,7 @@
   </el-drawer>
 </template>
 <script>
-import {
-  defineComponent,
-  nextTick,
-  onMounted,
-  reactive,
-  ref,
-  watchEffect
-} from 'vue';
+import { defineComponent, nextTick, reactive, ref, watchEffect } from 'vue';
 import logger from '@/plugins/logger';
 import ReactiveButton from '@/components/Button/ReactiveButton';
 import Tag from '@/components/Badge/Tag';
@@ -420,7 +415,6 @@ export default defineComponent({
   setup: function () {
     const store = useStore();
 
-    const articleSettingsDrawerWidth = ref('24%');
     const handleClose = (done) => {
       ElMessageBox.confirm('你确定退出当前设置页吗？', '小提示', {
         confirmButtonText: '确认并保存',
@@ -434,10 +428,6 @@ export default defineComponent({
           logger.info('user closed article-settings-drawer');
         });
     };
-
-    onMounted(() => {
-      hideNewTagDrawer();
-    });
 
     const articleSettings = reactive({
       // 是否开启评论
@@ -469,19 +459,10 @@ export default defineComponent({
         });
       }
     });
-
     // 存放完整tag对象
     const tagsList = ref([]);
     const newTagDrawerVisible = ref(false);
     const getAllTags = () => {};
-    const showNewTagDrawer = () => {
-      newTagDrawerVisible.value = true;
-      articleSettingsDrawerWidth.value = '30%';
-    };
-    const hideNewTagDrawer = () => {
-      newTagDrawerVisible.value = false;
-      articleSettingsDrawerWidth.value = '24%';
-    };
 
     // cover相关的API
     const coverVisible = ref(articleSettings.backgroundUrl !== '');
@@ -508,6 +489,41 @@ export default defineComponent({
       showCoverPreview();
     };
 
+    const articleSettingsDrawerWidth = ref('24%');
+    const newTagDrawerWidth = ref('24%');
+    // 和tags drawer相关的开合操作
+    const showNewTagDrawer = () => {
+      newTagDrawerVisible.value = true;
+    };
+    const hideNewTagDrawer = () => {
+      newTagDrawerVisible.value = false;
+      collapseArticleSettingsDrawer();
+    };
+    const expandArticleSettingsDrawer = () => {
+      articleSettingsDrawerWidth.value =
+        parseInt(
+          articleSettingsDrawerWidth.value.slice(
+            0,
+            articleSettingsDrawerWidth.value.length - 1
+          ),
+          10
+        ) +
+        6 +
+        '%';
+    };
+    const collapseArticleSettingsDrawer = () => {
+      articleSettingsDrawerWidth.value =
+        parseInt(
+          articleSettingsDrawerWidth.value.slice(
+            0,
+            articleSettingsDrawerWidth.value.length - 1
+          ),
+          10
+        ) -
+        6 +
+        '%';
+    };
+
     return {
       handleClose,
       articleSettings,
@@ -523,7 +539,9 @@ export default defineComponent({
       onUploadSuccessfully,
       newTagDrawerVisible,
       articleSettingsDrawerWidth,
-      hideNewTagDrawer
+      hideNewTagDrawer,
+      expandArticleSettingsDrawer,
+      newTagDrawerWidth
     };
   }
 });
