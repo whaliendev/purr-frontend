@@ -65,6 +65,23 @@ const actions = {
           reject(error);
         });
     });
+  },
+  getArticleDetailsByLinkName(context, payload) {
+    return new Promise((resolve, reject) => {
+      articleApi
+        .getArticleDetailsByLinkName(payload.linkName)
+        .then((response) => {
+          if (response.data && response.data.success) {
+            context.commit('storeArticleDetails', {
+              articleDetails: response.data.data
+            });
+          }
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 };
 

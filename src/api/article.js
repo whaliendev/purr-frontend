@@ -26,4 +26,18 @@ articleApi.getRecommendedArticles = () => {
   });
 };
 
+articleApi.getArticleDetailsByLinkName = (linkName) => {
+  return service({
+    url: `${baseUrl}/details?linkName=${linkName}`,
+    method: 'get'
+  });
+};
+
+articleApi.getRelatedArticles = (linkName) => {
+  return service({
+    url: `${baseUrl}/previous-and-next?linkName=${linkName}`,
+    method: 'get'
+  });
+};
+
 export default articleApi;

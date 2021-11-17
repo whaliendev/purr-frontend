@@ -25,7 +25,8 @@ export default {
           pageSize: -1,
           pageNum: -1
         }
-      }
+      },
+      articleDetails: {}
     };
   },
   getters,

@@ -256,7 +256,7 @@ export default defineComponent({
               ...store.getters['articles/fgArticlesList']
             );
             const pageParams = store.getters['articles/fgPageParams'];
-            console.log(pageParams);
+
             if (pageParams.curPage >= pageParams.pageNum) {
               noMoreArticles.value = true;
             } else if (pageParams.curPage < pageParams.pageNum) {
@@ -352,12 +352,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#home-page {
-  font-family: var(--site-font-family);
-  background-color: #f5f5f5;
-  padding-bottom: 50px;
-}
-
 .homepage-header {
   position: relative;
   width: 100%;
@@ -485,14 +479,6 @@ export default defineComponent({
   background-image: linear-gradient(135deg, #fdfcfb, #e2d1c3);
   opacity: 0.7;
   z-index: 2;
-}
-
-.container {
-  width: 100%;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .content-block {

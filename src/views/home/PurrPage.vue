@@ -37,6 +37,11 @@ export default {
       padding: 0;
     }
 
+    .el-main {
+      font-family: var(--site-font-family);
+      background-color: #f5f5f5;
+    }
+
     .el-header {
       position: absolute;
     }
@@ -49,6 +54,14 @@ export default {
 </style>
 
 <style>
+.container {
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @media (min-width: 1200px) {
   .container,
   .container-lg,

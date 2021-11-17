@@ -1,7 +1,7 @@
 <template>
   <span
     class="tag-wrapper"
-    :class="[round]"
+    :class="[round, flatClass]"
     :style="
       `background-color: ${color}; background-image: radial-gradient(${color}, ${edgeColor});` +
       style
@@ -82,6 +82,11 @@ export default defineComponent({
       required: false,
       default: 'medium'
     },
+    flat: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     style: {
       validator(val) {
         return typeof val === 'string' || val instanceof String;
@@ -96,6 +101,9 @@ export default defineComponent({
     },
     link() {
       return this.linkName.length !== 0;
+    },
+    flatClass() {
+      return this.flat ? 'flat' : '';
     }
   },
   methods: {
@@ -172,6 +180,35 @@ export default defineComponent({
 
   &.black {
     color: var(--el-color-black);
+  }
+}
+
+.tag-wrapper.flat {
+  background-color: transparent !important;
+  background-image: none !important;
+
+  .tag-name {
+    color: #999 !important;
+
+    &.black {
+      color: var(--el-color-black) !important;
+    }
+
+    &.href:visited {
+      color: coral !important;
+    }
+
+    &.href:focus {
+      color: var(--el-color-warning) !important;
+    }
+
+    &.href:hover {
+      color: orange !important;
+    }
+
+    &.href:active {
+      color: orange !important;
+    }
   }
 }
 </style>

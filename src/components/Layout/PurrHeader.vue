@@ -1,7 +1,7 @@
 <template>
   <nav id="purr-header" class="navbar-full ontop">
     <svg class="nav-shade"></svg>
-    <div class="nav-container">
+    <div class="nav-container" id="nav-container">
       <div role="navigation" class="container nav-content content-item">
         <div class="logo">
           <router-link :to="{ name: 'homepage' }">
@@ -262,6 +262,24 @@ export default defineComponent({
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
+}
+
+.ontop .nav-container.leave-home {
+  .tab-indicator {
+    background-color: #fff;
+  }
+
+  .nav-controls-container {
+    color: #fff;
+  }
+
+  .menu-item-container a {
+    color: #fff;
+  }
+
+  .logo a {
+    color: #fff;
+  }
 }
 
 .content-item {
