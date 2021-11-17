@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, watch} from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import tippy from 'tippy.js';
 import { useRoute } from 'vue-router';
