@@ -305,7 +305,7 @@ export default {
         allowHTML: true,
         delay: [150, 50],
         placement: 'top',
-        arrow: true
+        theme: 'github'
       });
     });
   }
@@ -347,15 +347,12 @@ svg.vch__wrapper rect.vch__day__square:focus {
 </style>
 
 <style>
-.tippy-box {
+.tippy-box[data-theme~='github'] {
+  font-family: var(--site-font-family);
   background: #24292f;
   color: white;
-  padding: 4px 8px;
+  padding: 8px 12px;
   font-size: 12px;
   border-radius: 6px;
-}
-
-.tippy-arrow {
-  background-color: #24292f;
 }
 </style>

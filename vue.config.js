@@ -10,7 +10,7 @@ module.exports = {
     https: false,
     proxy: {
       '/api': {
-        target: 'http://purr.group',
+        target: 'https://purr.group',
         changeOrigin: true
       }
     }

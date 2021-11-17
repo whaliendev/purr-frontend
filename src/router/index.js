@@ -27,7 +27,7 @@ const router = createRouter({
       children: [
         {
           path: 'dashboard',
-          name: 'dashboard',
+          name: 'admin-dashboard',
           meta: {
             title: '首页'
           },
@@ -35,7 +35,7 @@ const router = createRouter({
         },
         {
           path: 'article',
-          name: 'article',
+          name: 'admin-article',
           redirect: { name: 'article-manage' }
         },
         {
@@ -64,7 +64,7 @@ const router = createRouter({
         },
         {
           path: 'comment',
-          name: 'comment',
+          name: 'admin-comment',
           meta: {
             title: '评论管理'
           },
@@ -72,7 +72,7 @@ const router = createRouter({
         },
         {
           path: 'moment',
-          name: 'moment',
+          name: 'admin-moment',
           meta: {
             title: '动态管理'
           },
@@ -80,7 +80,7 @@ const router = createRouter({
         },
         {
           path: 'page',
-          name: 'page',
+          name: 'admin-page',
           redirect: { name: 'page-manage' }
         },
         {
@@ -101,7 +101,7 @@ const router = createRouter({
         },
         {
           path: 'media',
-          name: 'media',
+          name: 'admin-media',
           meta: {
             title: '多媒体库'
           },
@@ -109,7 +109,7 @@ const router = createRouter({
         },
         {
           path: 'link',
-          name: 'link',
+          name: 'admin-link',
           meta: {
             title: '链接'
           },
@@ -117,7 +117,7 @@ const router = createRouter({
         },
         {
           path: 'settings',
-          name: 'settings',
+          name: 'admin-settings',
           redirect: { name: 'settings-app' }
         },
         {
@@ -143,6 +143,91 @@ const router = createRouter({
             title: '系统设置'
           },
           component: () => import('../views/admin/components/SettingsApp')
+        }
+      ]
+    },
+    {
+      path: '',
+      name: 'home',
+      component: () => import('../views/home/PurrPage'),
+      redirect: '/',
+      children: [
+        {
+          path: '',
+          name: 'homepage',
+          meta: {
+            title: '首页'
+          },
+          component: () => import('../views/home/components/HomePage')
+        },
+        {
+          path: 'archives',
+          name: 'article-archives',
+          meta: {
+            title: '归档'
+          },
+          component: () => import('../views/home/components/ArticleArchive')
+        },
+        {
+          path: 'moment',
+          name: 'moment',
+          meta: {
+            title: '动态'
+          },
+          component: () => import('../views/home/components/PurrMoment')
+        },
+        {
+          path: 'comment',
+          name: 'comment',
+          meta: {
+            title: '留言板'
+          },
+          component: () => import('../views/home/components/CommentBoard')
+        },
+        {
+          path: 'friends',
+          name: 'friends',
+          meta: {
+            title: 'friends'
+          },
+          component: () => import('../views/home/components/PurrFriends')
+        },
+        {
+          path: 'about',
+          name: 'about',
+          meta: {
+            title: '关于'
+          },
+          component: () => import('../views/home/components/PageSheet')
+        },
+        {
+          path: 'me',
+          name: 'me',
+          meta: {
+            title: '关于我'
+          },
+          component: () => import('../views/home/components/PageSheet')
+        },
+        {
+          path: 'sitemap',
+          name: 'sitemap',
+          meta: {
+            title: '站点地图'
+          },
+          component: () => import('../views/home/components/PageSheet')
+        },
+        {
+          path: 'rss',
+          name: 'rss',
+          meta: {
+            title: 'RSS'
+          },
+          component: () => import('../views/home/components/PageSheet')
+        },
+        {
+          path: 'articles/:articleName',
+          name: 'article-reading',
+          component: () => import('../views/home/components/ArticleReading')
         }
       ]
     }

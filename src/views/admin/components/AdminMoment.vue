@@ -49,12 +49,32 @@
             class-name="moment-content-column"
           >
             <template #default="scope">
-              <el-popover placement="right" :width="200" trigger="click">
+              <el-popover
+                placement="right-end"
+                :width="360"
+                trigger="hover"
+                popper-class="moment-popover"
+              >
                 <template #reference>
                   <span class="moment-content-cell">
                     {{ ellipsisTitleFormat(scope.row.content, 30) }}
                   </span>
                 </template>
+                <div
+                  class="moment-content-wrapper"
+                  :style="`background-image: linear-gradient(135deg, ${
+                    scope.row.backgroundColor
+                  } 15%, ${scope.row.backgroundColor + '99'} 75%)`"
+                >
+                  <div class="content-body">
+                    <el-scrollbar max-height="370px">
+                      <div
+                        class="moment-content-container"
+                        v-html="momentHtml(scope.row.content)"
+                      ></div>
+                    </el-scrollbar>
+                  </div>
+                </div>
               </el-popover>
             </template>
           </el-table-column>
@@ -143,6 +163,7 @@ import { ref } from 'vue';
 import BaseCard from '@/components/UI/BaseCard';
 import { useStore } from 'vuex';
 import { ellipsisFormat, normalizeNum } from '@/utils/util';
+import VueMarkdownEditor, { xss } from '@kangc/v-md-editor';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
 
 export default {
@@ -174,6 +195,12 @@ export default {
 
     const handleMoveMomentToTrash = (momentId) => {
       console.log(momentId);
+    };
+
+    const momentHtml = (content) => {
+      return xss.process(
+        VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(content)
+      );
     };
 
     const fetchMomentsByPagination = () => {
@@ -237,6 +264,7 @@ export default {
       momentsList,
       loadingData,
       visible,
+      momentHtml,
       handleMomentSearch,
       handleUndoFilter,
       fetchMomentsByPagination,
@@ -264,6 +292,10 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.structure-divider {
+  margin: 12px 0 0 0;
 }
 
 .moment-management-header {
@@ -369,6 +401,46 @@ export default {
 
     .operation-divider {
       margin: 0 8px;
+    }
+  }
+}
+
+.moment-management-footer {
+  margin-top: 12px;
+}
+</style>
+
+<style lang="scss">
+.moment-popover.el-popper {
+  padding: 0;
+  overflow: hidden;
+  font-size: 1.03em;
+  box-shadow: 0 1px 20px -6px #666666aa;
+  border-radius: var(--el-border-radius-base);
+  color: white;
+
+  img {
+    margin: 8px auto;
+    max-width: 100%;
+    border-radius: var(--el-border-radius-base);
+  }
+
+  .moment-content-wrapper {
+    width: 100%;
+    height: 100%;
+    .content-body{
+      padding: 8px 5px 23px 15px;
+      border-radius: var(--el-border-radius-base);
+
+      .el-scrollbar{
+        border-radius: var(--el-border-radius-base);
+      }
+
+      .moment-content-container {
+        //border-radius: var(--el-border-radius-base);
+        overflow: hidden;
+        padding-right: 10px;
+      }
     }
   }
 }

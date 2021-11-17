@@ -1,6 +1,6 @@
 import getters from './getters';
-import actions from './actions';
 import mutations from './mutations';
+import actions from './actions';
 
 export default {
   namespaced: true,
@@ -11,7 +11,8 @@ export default {
         curPage: 1,
         pageSize: 10,
         pageNum: 1
-      }
+      },
+      likeMomentsList: []
     };
   },
   getters,

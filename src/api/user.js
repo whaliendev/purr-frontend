@@ -21,4 +21,14 @@ userApi.refreshToken = (refreshToken) => {
   });
 };
 
+userApi.checkTokenValidity = (token) => {
+  return service({
+    method: 'post',
+    url: `${baseUrl}/token/check`,
+    data: {
+      token: token
+    }
+  });
+};
+
 export default userApi;
