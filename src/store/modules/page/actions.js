@@ -6,7 +6,7 @@ const actions = {
       pageApi
         .getLatestAdminPages(payload.curPage, payload.fetchNum)
         .then((response) => {
-          if(response.data && response.data.success){
+          if (response.data && response.data.success) {
             context.commit('storeLatestPages', {
               pagesList: response.data.data.data
             });

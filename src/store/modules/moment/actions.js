@@ -6,7 +6,7 @@ const actions = {
       momentApi
         .getLatestAdminMoments(payload.curPage, payload.fetchNum)
         .then((response) => {
-          if(response.data && response.data.success){
+          if (response.data && response.data.success) {
             context.commit('storeLatestMoments', {
               momentsList: response.data.data.data
             });
@@ -22,7 +22,7 @@ const actions = {
         })
         .catch((error) => {
           reject(error);
-        })
+        });
     });
   }
 };

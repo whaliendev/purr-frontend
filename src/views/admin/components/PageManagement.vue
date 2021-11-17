@@ -49,10 +49,12 @@
               <font-awesome-icon :icon="['fas', 'search']" /> &nbsp; 查询 &nbsp;
             </el-button>
             <el-button @click="handleUndoFilter" size="small">
-              <font-awesome-icon :icon="['fas', 'undo-alt']" /> &nbsp; 重置 &nbsp;
+              <font-awesome-icon :icon="['fas', 'undo-alt']" /> &nbsp; 重置
+              &nbsp;
             </el-button>
             <el-button type="primary" @click="handleNewPage" size="small">
-              <font-awesome-icon :icon="['fas', 'plus']" /> &nbsp; 添加页面 &nbsp;
+              <font-awesome-icon :icon="['fas', 'plus']" /> &nbsp; 添加页面
+              &nbsp;
             </el-button>
           </div>
         </div>
@@ -91,19 +93,21 @@
                 <template #error>
                   <i class="el-icon-picture-outline"></i>
                 </template>
-
               </el-image>
 
               <span class="page-title-cell" :title="scope.row.name">
-                {{ellipsisTitleFormat(scope.row.name, 15)}}
+                {{ ellipsisTitleFormat(scope.row.name, 15) }}
               </span>
             </template>
           </el-table-column>
 
           <el-table-column label="描述" class-name="page-description-column">
             <template #default="scope">
-              <span class="page-description-cell" :title="scope.row.description">
-                {{ellipsisTitleFormat(scope.row.description, 20)}}
+              <span
+                class="page-description-cell"
+                :title="scope.row.description"
+              >
+                {{ ellipsisTitleFormat(scope.row.description, 20) }}
               </span>
             </template>
           </el-table-column>
@@ -115,10 +119,11 @@
                   class="page-status-indicator"
                   :class="[
                     statusToIndicator(scope.row.deleteTime, scope.row.status)
-                  ]">
+                  ]"
+                >
                 </span>
                 <span class="page-status-msg">
-                  {{statusToMsg(scope.row.deleteTime, scope.row.status)}}
+                  {{ statusToMsg(scope.row.deleteTime, scope.row.status) }}
                 </span>
               </span>
             </template>
@@ -141,7 +146,7 @@
           <el-table-column label="评论" class-name="page-commentCount-column">
             <template #default="scope">
               <span class="page-commentCount-cell">
-                {{numFormat(scope.row.commentCount)}}
+                {{ numFormat(scope.row.commentCount) }}
               </span>
             </template>
           </el-table-column>
@@ -149,7 +154,7 @@
           <el-table-column label="赞" class-name="page-thumbCount-column">
             <template #default="scope">
               <span class="page-thumbCount-cell">
-                {{numFormat(scope.row.thumbCount)}}
+                {{ numFormat(scope.row.thumbCount) }}
               </span>
             </template>
           </el-table-column>
@@ -157,7 +162,7 @@
           <el-table-column label="分享" class-name="page-shareCount-column">
             <template #default="scope">
               <span class="page-shareCount-cell">
-                {{numFormat(scope.row.shareCount)}}
+                {{ numFormat(scope.row.shareCount) }}
               </span>
             </template>
           </el-table-column>
@@ -165,24 +170,32 @@
           <el-table-column label="浏览" class-name="page-viewCount-column">
             <template #default="scope">
               <span class="page-viewCount-cell">
-                {{numFormat(scope.row.viewCount)}}
+                {{ numFormat(scope.row.viewCount) }}
               </span>
             </template>
           </el-table-column>
 
           <el-table-column label="操作" class-name="page-operation-column">
             <template #default="scope">
-              <font-awesome-icon :icon="['fas', 'edit']" title="编辑"
-                                 @click="handleEditPage(scope.row.id)"/>
-              <el-divider class="operation-divider" direction="vertical"/>
-              <font-awesome-icon :icon="['fas', 'trash-alt']" title="回收站"
-                                 @click="handleMovePageToTrash(scope.row.id)"/>
-              <el-divider class="operation-divider" direction="vertical"/>
-              <font-awesome-icon :icon="['fas', 'cog']" title="设置"
-                                 @click="handlePageSettings(scope.row.id)"/>
+              <font-awesome-icon
+                :icon="['fas', 'edit']"
+                title="编辑"
+                @click="handleEditPage(scope.row.id)"
+              />
+              <el-divider class="operation-divider" direction="vertical" />
+              <font-awesome-icon
+                :icon="['fas', 'trash-alt']"
+                title="回收站"
+                @click="handleMovePageToTrash(scope.row.id)"
+              />
+              <el-divider class="operation-divider" direction="vertical" />
+              <font-awesome-icon
+                :icon="['fas', 'cog']"
+                title="设置"
+                @click="handlePageSettings(scope.row.id)"
+              />
             </template>
           </el-table-column>
-
         </el-table>
       </div>
 
@@ -198,13 +211,12 @@
           :page-count="pageNum"
         ></el-pagination>
       </div>
-
     </base-card>
   </div>
 </template>
 <script>
 import BaseCard from '@/components/UI/BaseCard';
-import {useStore} from 'vuex';
+import { useStore } from 'vuex';
 import { ref } from 'vue';
 import { ellipsisFormat, normalizeNum } from '@/utils/util';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
@@ -226,17 +238,11 @@ export default {
     const pageList = ref([]);
     const loadingData = ref(false);
 
-    const handlePageSearch = () => {
+    const handlePageSearch = () => {};
 
-    };
+    const handleUndoFilter = () => {};
 
-    const handleUndoFilter = () => {
-
-    };
-
-    const handleNewPage = () => {
-
-    };
+    const handleNewPage = () => {};
 
     const handleEditPage = (pageId) => {
       console.log(pageId);
@@ -259,7 +265,7 @@ export default {
         })
         .then((response) => {
           const data = response.data;
-          if(data && data.success){
+          if (data && data.success) {
             pageList.value = store.getters['pages/pagesList'];
             pageNum.value = store.getters['pages/pageParams'].pageNum;
           }
@@ -282,39 +288,38 @@ export default {
       const datetime = deleteTime
         ? deleteTime
         : updateTime
-          ? updateTime
-          : createTime;
+        ? updateTime
+        : createTime;
       return timeAgo(datetimeFormat(datetime), pattern);
     };
 
     const numFormat = (num) => normalizeNum(num);
 
     const statusToIndicator = (deleteTime, status) => {
-      if(deleteTime !== null){
+      if (deleteTime !== null) {
         return 'trash';
       }
-      if(status === 1){
+      if (status === 1) {
         return 'public';
       }
-      if(status === 0){
+      if (status === 0) {
         return 'draft';
       }
     };
 
     const statusToMsg = (deleteTime, status) => {
-      if(deleteTime !== null){
+      if (deleteTime !== null) {
         return '回收站';
       }
-      if(status === 1){
+      if (status === 1) {
         return '公开';
       }
-      if(status === 0){
+      if (status === 0) {
         return '草稿';
       }
     };
 
-
-    return{
+    return {
       keyword,
       statusFilterList,
       tagOptions,
@@ -340,8 +345,8 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
-#page-management{
+<style lang="scss" scoped>
+#page-management {
   width: 100%;
   overflow: visible;
 }
@@ -353,13 +358,13 @@ export default {
   flex-direction: column;
 }
 
-.page-management-header{
-  .page-management-title{
+.page-management-header {
+  .page-management-title {
     font-weight: bold;
     font-size: 16px;
   }
 
-  .controls-container{
+  .controls-container {
     margin-top: 12px;
     display: flex;
     flex-flow: row wrap;
@@ -371,7 +376,7 @@ export default {
     display: inline-block;
   }
 
-  .el-input{
+  .el-input {
     width: max-content;
   }
 }
@@ -435,8 +440,8 @@ export default {
     }
   }
 
-  .page-description-column{
-    .cell{
+  .page-description-column {
+    .cell {
       margin-left: 0;
       display: flex;
       flex-wrap: wrap;
@@ -474,7 +479,7 @@ export default {
       }
     }
 
-    .page-status-msg{
+    .page-status-msg {
       vertical-align: middle;
     }
   }
@@ -491,7 +496,7 @@ export default {
   }
 }
 
-.page-management-footer{
+.page-management-footer {
   margin-top: 12px;
 }
 </style>

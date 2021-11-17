@@ -22,7 +22,8 @@
               <font-awesome-icon :icon="['fas', 'search']" /> &nbsp; 查询 &nbsp;
             </el-button>
             <el-button @click="handleUndoFilter" size="small">
-              <font-awesome-icon :icon="['fas', 'undo-alt']" />&nbsp; 重置 &nbsp;
+              <font-awesome-icon :icon="['fas', 'undo-alt']" />&nbsp; 重置
+              &nbsp;
             </el-button>
           </div>
         </div>
@@ -48,17 +49,12 @@
             class-name="moment-content-column"
           >
             <template #default="scope">
-              <el-popover placement="right" :width="200"
-                          trigger="click"
-              >
+              <el-popover placement="right" :width="200" trigger="click">
                 <template #reference>
                   <span class="moment-content-cell">
-                    {{ellipsisTitleFormat(scope.row.content, 30)}}
+                    {{ ellipsisTitleFormat(scope.row.content, 30) }}
                   </span>
                 </template>
-
-
-
               </el-popover>
             </template>
           </el-table-column>
@@ -68,12 +64,11 @@
               <span class="moment-status-container">
                 <span
                   class="moment-status-indicator"
-                  :class="[
-                    statusToIndicator(scope.row.visible)
-                  ]">
+                  :class="[statusToIndicator(scope.row.visible)]"
+                >
                 </span>
                 <span class="moment-status-msg">
-                  {{statusToMsg(scope.row.visible)}}
+                  {{ statusToMsg(scope.row.visible) }}
                 </span>
               </span>
             </template>
@@ -82,7 +77,7 @@
           <el-table-column label="作者" class-name="moment-annotation-column">
             <template #default="scope">
               <span class="moment-annotation-cell">
-                {{ellipsisTitleFormat(scope.row.annotation, 15)}}
+                {{ ellipsisTitleFormat(scope.row.annotation, 15) }}
               </span>
             </template>
           </el-table-column>
@@ -90,12 +85,7 @@
           <el-table-column label="操作时间" class-name="moment-time-column">
             <template #default="scope">
               <span class="moment-time-cell">
-                {{
-                dateFormat(
-                  scope.row.updateTime,
-                  scope.row.createTime
-                )
-                }}
+                {{ dateFormat(scope.row.updateTime, scope.row.createTime) }}
               </span>
             </template>
           </el-table-column>
@@ -103,24 +93,32 @@
           <el-table-column label="赞" class-name="moment-thumbCount-column">
             <template #default="scope">
               <span class="moment-thumbCount-cell">
-                {{numFormat(scope.row.thumbCount)}}
+                {{ numFormat(scope.row.thumbCount) }}
               </span>
             </template>
           </el-table-column>
 
           <el-table-column label="操作" class-name="moment-operation-column">
             <template #default="scope">
-              <font-awesome-icon :icon="['fas', 'edit']" title="编辑"
-                                 @click="handleEditMoment(scope.row.id)"/>
-              <el-divider class="operation-divider" direction="vertical"/>
-              <font-awesome-icon :icon="['fas', 'trash-alt']" title="回收站"
-                                 @click="handleMoveMomentToTrash(scope.row.id)"/>
-              <el-divider class="operation-divider" direction="vertical"/>
-              <font-awesome-icon :icon="['fas', 'cog']" title="设置"
-                                 @click="handleMomentSettings(scope.row.id)"/>
+              <font-awesome-icon
+                :icon="['fas', 'edit']"
+                title="编辑"
+                @click="handleEditMoment(scope.row.id)"
+              />
+              <el-divider class="operation-divider" direction="vertical" />
+              <font-awesome-icon
+                :icon="['fas', 'trash-alt']"
+                title="回收站"
+                @click="handleMoveMomentToTrash(scope.row.id)"
+              />
+              <el-divider class="operation-divider" direction="vertical" />
+              <font-awesome-icon
+                :icon="['fas', 'cog']"
+                title="设置"
+                @click="handleMomentSettings(scope.row.id)"
+              />
             </template>
           </el-table-column>
-
         </el-table>
       </div>
 
@@ -136,7 +134,6 @@
           :page-count="pageNum"
         ></el-pagination>
       </div>
-
     </base-card>
   </div>
 </template>
@@ -149,7 +146,7 @@ import { ellipsisFormat, normalizeNum } from '@/utils/util';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
 
 export default {
-  components: {BaseCard},
+  components: { BaseCard },
   setup() {
     const store = useStore();
 
@@ -163,13 +160,9 @@ export default {
 
     const visible = ref(true);
 
-    const handleMomentSearch = () => {
+    const handleMomentSearch = () => {};
 
-    };
-
-    const handleUndoFilter = () => {
-
-    };
+    const handleUndoFilter = () => {};
 
     const handleEditMoment = (momentId) => {
       console.log(momentId);
@@ -186,19 +179,19 @@ export default {
     const fetchMomentsByPagination = () => {
       loadingData.value = true;
       store
-      .dispatch('moments/getLatestAdminMoments', {
-        curPage: curPage.value,
-        fetchNum: fetchNum.value
-      })
-      .then((response) => {
-        const data = response.data;
-        if(data && data.success){
-          momentsList.value = store.getters['moments/momentsList'];
-          pageNum.value = store.getters['moments/pageParams'].pageNum;
-        }
-      })
-      .catch(() => {})
-      .finally(() => (loadingData.value = false));
+        .dispatch('moments/getLatestAdminMoments', {
+          curPage: curPage.value,
+          fetchNum: fetchNum.value
+        })
+        .then((response) => {
+          const data = response.data;
+          if (data && data.success) {
+            momentsList.value = store.getters['moments/momentsList'];
+            pageNum.value = store.getters['moments/pageParams'].pageNum;
+          }
+        })
+        .catch(() => {})
+        .finally(() => (loadingData.value = false));
     };
 
     fetchMomentsByPagination();
@@ -211,32 +204,30 @@ export default {
       createTime,
       pattern = 'HH:mm, DD MMM, YYYY'
     ) => {
-      const datetime = updateTime
-        ? updateTime
-        : createTime;
+      const datetime = updateTime ? updateTime : createTime;
       return timeAgo(datetimeFormat(datetime), pattern);
     };
 
     const numFormat = (num) => normalizeNum(num);
 
     const statusToIndicator = (visible) => {
-      if(visible === 1){
-        console.log("visible");
+      if (visible === 1) {
+        console.log('visible');
         return 'public';
       }
-      if(visible === 0){
+      if (visible === 0) {
         return 'private';
       }
     };
 
     const statusToMsg = (visible) => {
-      if(visible === 1){
+      if (visible === 1) {
         return '公开';
       }
-      if(visible === 0){
+      if (visible === 0) {
         return '私人';
       }
-    }
+    };
 
     return {
       keyword,
@@ -262,26 +253,26 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
-#moment-management{
+<style lang="scss" scoped>
+#moment-management {
   width: 100%;
   overflow: visible;
 }
 
-.moment-management-wrapper{
+.moment-management-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.moment-management-header{
-  .moment-management-title{
+.moment-management-header {
+  .moment-management-title {
     font-weight: bold;
     font-size: 16px;
   }
 
-  .controls-container{
+  .controls-container {
     margin-top: 12px;
     display: flex;
     flex-flow: row wrap;
@@ -293,12 +284,12 @@ export default {
     display: inline-block;
   }
 
-  .el-input{
+  .el-input {
     width: max-content;
   }
 }
 
-:deep(.moment-management-table){
+:deep(.moment-management-table) {
   th .cell {
     display: flex;
     justify-content: center;
@@ -321,54 +312,54 @@ export default {
     }
   }
 
-    .moment-content-column {
-      .cell {
-        margin-left: 0;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-      }
-
-      .moment-description-cell {
-        flex: 1;
-      }
+  .moment-content-column {
+    .cell {
+      margin-left: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
     }
 
-    .moment-status-column {
-      //.cell{
-      //  margin-left: 12px;
-      //  display: flex;
-      //  flex-wrap: wrap;
-      //  justify-content: flex-start;
-      //  align-items: flex-start;
-      //}
+    .moment-description-cell {
+      flex: 1;
+    }
+  }
 
-      span {
-        display: inline-block;
-      }
+  .moment-status-column {
+    //.cell{
+    //  margin-left: 12px;
+    //  display: flex;
+    //  flex-wrap: wrap;
+    //  justify-content: flex-start;
+    //  align-items: flex-start;
+    //}
 
-      .moment-status-indicator {
-        width: 8px;
-        height: 8px;
-        vertical-align: middle;
-        margin-right: 6px;
-        border-radius: 50%;
+    span {
+      display: inline-block;
+    }
+
+    .moment-status-indicator {
+      width: 8px;
+      height: 8px;
+      vertical-align: middle;
+      margin-right: 6px;
+      border-radius: 50%;
+      background-color: var(--el-color-success);
+
+      &.public {
         background-color: var(--el-color-success);
-
-        &.public {
-          background-color: var(--el-color-success);
-        }
-
-        &.private {
-          background-color: var(--el-color-warning);
-        }
       }
 
-      .moment-status-msg {
-        vertical-align: middle;
+      &.private {
+        background-color: var(--el-color-warning);
       }
     }
+
+    .moment-status-msg {
+      vertical-align: middle;
+    }
+  }
 
   .moment-operation-column {
     svg {
@@ -376,7 +367,7 @@ export default {
       cursor: pointer;
     }
 
-    .operation-divider{
+    .operation-divider {
       margin: 0 8px;
     }
   }

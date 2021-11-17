@@ -1,5 +1,5 @@
 const mutations = {
-  storeLatestPages(state, payload){
+  storeLatestPages(state, payload) {
     state.pagesList = payload.pagesList;
   },
   storePageParams(state, payload) {
