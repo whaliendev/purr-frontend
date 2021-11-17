@@ -17,6 +17,12 @@ const mutations = {
       data: payload.articlesList,
       timestamp: Date.now()
     };
+  },
+  storeArticleDetails(state, payload) {
+    state.articleDetails[payload.articleDetails.linkName] = {
+      data: payload.articleDetails,
+      timestamp: Date.now()
+    };
   }
 };
 

@@ -1,4 +1,11 @@
 const mutations = {
+  storeLatestMoments(state, payload) {
+    state.momentsList = payload.momentsList;
+  },
+  storePageParams(state, payload) {
+    state.pageParams = payload.pageParams;
+  },
+
   storePaginationMomentsList(state, payload) {
     state.momentsList = payload.momentsList;
   },
@@ -15,4 +22,5 @@ const mutations = {
     }
   }
 };
+
 export default mutations;

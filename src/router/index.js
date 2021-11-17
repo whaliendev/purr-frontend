@@ -9,7 +9,8 @@ const router = createRouter({
       meta: {
         title: '安装向导'
       },
-      component: () => import('../views/system/Installation')
+      component: () =>
+        import(/* webpackChunkName: "install" */ '../views/system/Installation')
     },
     {
       path: '/login',
@@ -17,12 +18,14 @@ const router = createRouter({
       meta: {
         title: '登录'
       },
-      component: () => import('../views/user/Login')
+      component: () =>
+        import(/* webpackChunkName: "login" */ '../views/user/Login')
     },
     {
       path: '/admin',
       name: 'admin',
-      component: () => import('../views/admin/AdminPage'),
+      component: () =>
+        import(/* webpackChunkName: "admin-page" */ '../views/admin/AdminPage'),
       redirect: '/admin/dashboard',
       children: [
         {
@@ -31,7 +34,10 @@ const router = createRouter({
           meta: {
             title: '首页'
           },
-          component: () => import('../views/admin/components/AdminDashboard')
+          component: () =>
+            import(
+              /* webpackChunkName: "admin-dashboard" */ '../views/admin/components/AdminDashboard'
+            )
         },
         {
           path: 'article',
@@ -44,7 +50,10 @@ const router = createRouter({
           meta: {
             title: '管理'
           },
-          component: () => import('../views/admin/components/ArticleManagement')
+          component: () =>
+            import(
+              /* webpackChunkName: "article-management" */ '../views/admin/components/ArticleManagement'
+            )
         },
         {
           path: 'article/compose',
@@ -52,7 +61,10 @@ const router = createRouter({
           meta: {
             title: '🖊 写作'
           },
-          component: () => import('../views/admin/components/ArticleCompose')
+          component: () =>
+            import(
+              /* webpackChunkName: "article-compose" */ '../views/admin/components/ArticleCompose'
+            )
         },
         {
           path: 'article/tag',
@@ -60,7 +72,10 @@ const router = createRouter({
           meta: {
             title: '标签'
           },
-          component: () => import('../views/admin/components/ArticleTag')
+          component: () =>
+            import(
+              /* webpackChunkName: "article-tag" */ '../views/admin/components/ArticleTag'
+            )
         },
         {
           path: 'comment',
@@ -68,7 +83,10 @@ const router = createRouter({
           meta: {
             title: '评论管理'
           },
-          component: () => import('../views/admin/components/AdminComment')
+          component: () =>
+            import(
+              /* webpackChunkName: "admin-comment" */ '../views/admin/components/AdminComment'
+            )
         },
         {
           path: 'moment',
@@ -76,7 +94,10 @@ const router = createRouter({
           meta: {
             title: '动态管理'
           },
-          component: () => import('../views/admin/components/AdminMoment')
+          component: () =>
+            import(
+              /* webpackChunkName: "admin-moment" */ '../views/admin/components/AdminMoment'
+            )
         },
         {
           path: 'page',
@@ -89,7 +110,10 @@ const router = createRouter({
           meta: {
             title: '❀ 设计页面'
           },
-          component: () => import('../views/admin/components/PageCompose')
+          component: () =>
+            import(
+              /* webpackChunkName: "page-compose" */ '../views/admin/components/PageCompose'
+            )
         },
         {
           path: 'page/manage',
@@ -97,7 +121,10 @@ const router = createRouter({
           meta: {
             title: '管理页面'
           },
-          component: () => import('../views/admin/components/PageManagement')
+          component: () =>
+            import(
+              /* webpackChunkName: "page-manage" */ '../views/admin/components/PageManagement'
+            )
         },
         {
           path: 'media',
@@ -105,7 +132,10 @@ const router = createRouter({
           meta: {
             title: '多媒体库'
           },
-          component: () => import('../views/admin/components/AdminMedia')
+          component: () =>
+            import(
+              /* webpackChunkName: "admin-media" */ '../views/admin/components/AdminMedia'
+            )
         },
         {
           path: 'link',
@@ -113,7 +143,10 @@ const router = createRouter({
           meta: {
             title: '链接'
           },
-          component: () => import('../views/admin/components/AdminLink')
+          component: () =>
+            import(
+              /* webpackChunkName: "admin-link" */ '../views/admin/components/AdminLink'
+            )
         },
         {
           path: 'settings',
@@ -126,7 +159,10 @@ const router = createRouter({
           meta: {
             title: '菜单设置'
           },
-          component: () => import('../views/admin/components/SettingsMenu')
+          component: () =>
+            import(
+              /* webpackChunkName: "settings-menu" */ '../views/admin/components/SettingsMenu'
+            )
         },
         {
           path: 'settings/user',
@@ -134,7 +170,10 @@ const router = createRouter({
           meta: {
             title: '用户设置'
           },
-          component: () => import('../views/admin/components/SettingsUser')
+          component: () =>
+            import(
+              /* webpackChunkName: "settings-user" */ '../views/admin/components/SettingsUser'
+            )
         },
         {
           path: 'settings/app',
@@ -142,7 +181,10 @@ const router = createRouter({
           meta: {
             title: '系统设置'
           },
-          component: () => import('../views/admin/components/SettingsApp')
+          component: () =>
+            import(
+              /* webpackChunkName: "settings-app" */ '../views/admin/components/SettingsApp'
+            )
         }
       ]
     },
@@ -230,6 +272,16 @@ const router = createRouter({
           component: () => import('../views/home/components/ArticleReading')
         }
       ]
+    },
+    {
+      // 不要在这个路由后面写路由啊
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      meta: {
+        title: '没有这个页面啊喂(-o-)／'
+      },
+      component: () =>
+        import(/* webpackChunkName: "not-found" */ '../views/system/NotFound')
     }
   ]
 });

@@ -4,6 +4,7 @@ import mutations from './mutations';
 import getters from './getters';
 import app from './modules/app';
 import comments from './modules/comment';
+import pages from './modules/page';
 import articles from './modules/article';
 import statistics from './modules/statistic';
 import menus from './modules/menu';
@@ -14,13 +15,24 @@ import createPersistedState from 'vuex-persistedstate';
 
 const dataState = createPersistedState({
   key: 'purr',
-  path: ['user.accessToken', 'user.refreshToken', 'user.accessExpiredTime']
+  reducer(val) {
+    return {
+      user: val.user,
+      app: val.app,
+      menus: val.menus,
+      moments: val.moments,
+      articles: {
+        articleDetails: val.articles.articleDetails
+      }
+    };
+  }
 });
 
 const store = createStore({
   modules: {
     app,
     comments,
+    pages,
     articles,
     statistics,
     menus,
