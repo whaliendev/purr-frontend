@@ -10,3 +10,7 @@ mediaService.uploadSingleFile = (data) => {
     data: data
   });
 };
+
+mediaService.uploadMediaActionUrl = `${baseUrl}/upload`;
+
+export default mediaService;
