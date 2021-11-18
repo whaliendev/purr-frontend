@@ -52,7 +52,7 @@ const actions = {
                 reject(error);
               });
           }
-        })
+        });
     });
   }
 };

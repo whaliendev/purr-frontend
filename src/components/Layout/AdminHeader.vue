@@ -76,7 +76,7 @@ import logger from '../../plugins/logger';
 import commentApi from '../../api/comment';
 import appConfig from '../../config/config';
 import metaApi from '../../api/meta';
-import mediaService from '@/api/media';
+import mediaApi from '@/api/media';
 import { useStore } from 'vuex';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router';
@@ -213,7 +213,7 @@ export default defineComponent({
       avatarUrl,
       uploadDialogVisible,
       openUploadDialog,
-      mediaUploadActionUrl: mediaService.uploadMediaActionUrl,
+      mediaUploadActionUrl: mediaApi.uploadMediaActionUrl,
       uploadHeaders,
       handleUploadError,
       mediaUploader,

@@ -2,33 +2,331 @@
   <div id="admin-media">
     <base-card style="padding: 20px" class="media-admin-header">
       <span class="media-admin-title">媒体库</span>
-      <div class="controls-container">
-        <div class="keyword-control-container">
-          <label class="keyword-label">关键词：</label>
-          <el-input
-            size="small"
-            type="text"
-            minlength="1"
-            maxlength="240"
-            v-model="keyword"
-            class="keyword-input"
-            placeholder="输入关键词以搜索"
-          />
+      <div class="controls-wrapper">
+        <div class="controls-container">
+          <div class="keyword-control-container">
+            <label class="keyword-label">关键词：</label>
+            <el-input
+              size="small"
+              type="text"
+              minlength="1"
+              maxlength="240"
+              v-model="mediaFilter.keyword"
+              class="keyword-input"
+              placeholder="输入关键词以搜索"
+            />
+          </div>
+          <div class="location-control-container">
+            <label class="location-label">存储位置：</label>
+            <el-select
+              v-model="mediaFilter.locationList"
+              class="media-status-select"
+              filterable
+              placeholder="请选择存储位置"
+              size="small"
+              multiple
+              popper-class="media-select-popper"
+              :popper-append-to-body="true"
+            >
+              <el-option
+                v-for="location in locationMapping"
+                :key="location.label"
+                :label="location.label"
+                :value="location.value"
+              />
+            </el-select>
+          </div>
+          <div class="category-control-container">
+            <label class="category-label">文件类型：</label>
+            <el-select
+              v-model="mediaFilter.categoriesList"
+              class="media-category-select"
+              filterable
+              placeholder="请选择文件类型"
+              size="small"
+              multiple
+              popper-class="media-select-popper"
+              :popper-append-to-body="true"
+            >
+              <el-option
+                v-for="category in categoryMapping"
+                :key="category.label"
+                :label="category.label"
+                :value="category.value"
+              />
+            </el-select>
+          </div>
+          <div class="status-control-container">
+            <label class="status-label">文件状态：</label>
+            <el-select
+              v-model="mediaFilter.status"
+              class="media-status-select"
+              filterable
+              placeholder="请选择文件状态"
+              size="small"
+              popper-class="media-select-popper"
+              :popper-append-to-body="true"
+            >
+              <el-option
+                v-for="status in statusMapping"
+                :key="status.label"
+                :label="status.label"
+                :value="status.value"
+              />
+            </el-select>
+          </div>
+
+          <div class="btn-controls-container">
+            <el-button type="primary" @click="handleMediaSearch" size="small">
+              <font-awesome-icon :icon="['fas', 'search']" /> &nbsp; 查询
+            </el-button>
+            <el-button @click="handleResetFilter" size="small">
+              <font-awesome-icon :icon="['fas', 'undo-alt']" />&nbsp; 重置/刷新
+            </el-button>
+            <el-button
+              type="primary"
+              @click="handleBatchOperation"
+              size="small"
+            >
+              <font-awesome-icon :icon="['fas', 'object-group']" />&nbsp;
+              批量操作
+            </el-button>
+          </div>
         </div>
       </div>
     </base-card>
-
-    <base-card style="padding: 20px" class="media-admin-body"> </base-card>
+    <base-card style="padding: 20px" class="media-admin-body">
+      <div class="media-admin-content">
+        <el-row :gutter="24" v-loading="loadingData">
+          <el-col v-for="media in mediaList" :key="media.id">
+            <media-preview-card
+              :media="media"
+              :mode="mediaPreviewMode"
+              @preview-media="handlePreviewMedia"
+          /></el-col>
+        </el-row>
+      </div>
+      <div class="media-admin-footer">
+        <el-pagination
+          background
+          layout="->, sizes, prev, pager, next, jumper"
+          v-model:current-page="curPage"
+          v-model:page-size="fetchNum"
+          :default-page-size="24"
+          :page-sizes="[24, 48, 72, 96, 120]"
+          :default-current-page="1"
+          :pager-count="5"
+          :page-count="pageNum"
+        ></el-pagination>
+      </div>
+    </base-card>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  watch
+} from 'vue';
 import BaseCard from '@/components/UI/BaseCard';
+import MediaPreviewCard from '@/components/Card/MediaPreviewCard';
+import { useStore } from 'vuex';
 
 export default defineComponent({
-  components: { BaseCard }
+  components: { MediaPreviewCard, BaseCard },
+  setup() {
+    const store = useStore();
+
+    const locationMapping = [
+      { label: '全部', value: -1 },
+      { label: '服务器', value: 0 }
+    ];
+    let categoryMapping = [];
+    const statusMapping = [
+      { label: '全部', value: -1 },
+      { label: '回收站', value: 0 },
+      { label: '未删除', value: 1 }
+    ];
+
+    // filter相关变量
+    const mediaFilter = reactive({
+      keyword: '',
+      locationList: [-1],
+      categoriesList: [],
+      status: -1
+    });
+
+    // header里的控制按钮
+    const mediaPreviewMode = ref('normal');
+    const handleMediaSearch = () => {
+      fetchMediaByPagination(true);
+    };
+    const handleResetFilter = () => {
+      mediaFilter.keyword = '';
+      mediaFilter.locationList = [-1];
+      mediaFilter.categoriesList = [];
+      mediaFilter.status = -1;
+      resetPageParams();
+      fetchMediaByPagination(true);
+    };
+    const handleBatchOperation = () => {};
+
+    // 获取数据API
+    const curPage = ref(1);
+    const fetchNum = ref(24);
+    const pageNum = ref(1);
+    const mediaList = ref([]);
+    const loadingData = ref(false);
+    const resetPageParams = () => {
+      curPage.value = 1;
+      fetchNum.value = 24;
+      pageNum.value = 1;
+    };
+    const fetchMediaByPagination = (force = false) => {
+      const adminPageParams = store.getters['medias/adminPageParams'];
+      if (
+        !force &&
+        adminPageParams.curPage === curPage.value &&
+        adminPageParams.pageNum === pageNum.value &&
+        adminPageParams.pageSize === fetchNum.value &&
+        (store.getters['medias/adminMediaListTimestamp'] - Date.now()) / 1000 <=
+          30
+      ) {
+        mediaList.value = store.getters['medias/adminMediaList'];
+        const localPageParams = store.getters['medias/adminPageParams'];
+        curPage.value = localPageParams.curPage;
+        fetchNum.value = localPageParams.pageSize;
+        pageNum.value = localPageParams.pageNum;
+      } else {
+        loadingData.value = true;
+        store
+          .dispatch('medias/getAdminMediasByPaginationWithCondition', {
+            status: mediaFilter.status,
+            categories: mediaFilter.categoriesList,
+            locations: mediaFilter.locationList,
+            curPage: curPage.value,
+            pageSize: fetchNum.value
+          })
+          .then((response) => {
+            if (response.data && response.data.success) {
+              const localMediaList = store.getters['medias/adminMediaList'];
+              if (mediaFilter.keyword !== '') {
+                mediaList.value = localMediaList.filter(
+                  (media) =>
+                    media.originalName.indexOf(mediaFilter.keyword) !== -1
+                );
+              } else {
+                mediaList.value = localMediaList;
+              }
+              const localPageParams = store.getters['medias/adminPageParams'];
+              curPage.value = localPageParams.curPage;
+              fetchNum.value = localPageParams.pageSize;
+              pageNum.value = localPageParams.pageNum;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            loadingData.value = false;
+          });
+      }
+    };
+    watch([curPage, fetchNum], () => {
+      fetchMediaByPagination();
+    });
+
+    const refreshMediaCategories = () => {
+      if (
+        (store.getters['medias/adminCategoriesTimestamp'] - Date.now()) / 1000 >
+          300 ||
+        store.getters['medias/adminCategories'].length === 0
+      ) {
+        store.dispatch('medias/getAdminAllCategories').then((response) => {
+          if (response.data && response.data.success) {
+            categoryMapping = store.getters['medias/adminCategories'];
+          }
+        });
+      } else {
+        categoryMapping = store.getters['medias/adminCategories'];
+      }
+    };
+
+    (() => {
+      refreshMediaCategories();
+      fetchMediaByPagination();
+    })();
+
+    let categoryInterval = -1;
+    onMounted(() => {
+      categoryInterval = setInterval(refreshMediaCategories, 360);
+    });
+    onUnmounted(() => {
+      clearInterval(categoryInterval);
+    });
+
+    const handlePreviewMedia = (e) => {
+      console.log(e);
+    };
+
+    return {
+      statusMapping,
+      locationMapping,
+      mediaFilter,
+      categoryMapping,
+      handleMediaSearch,
+      handleResetFilter,
+      handleBatchOperation,
+      curPage,
+      fetchNum,
+      pageNum,
+      mediaList,
+      loadingData,
+      mediaPreviewMode,
+      handlePreviewMedia
+    };
+  }
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.media-admin-header {
+  .media-admin-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .controls-wrapper {
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+
+  .controls-container {
+    margin-top: 12px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+
+    > div {
+      display: inline-block;
+      margin: 8px;
+    }
+
+    .el-input {
+      width: max-content;
+    }
+  }
+}
+
+.media-admin-body {
+  margin-top: 12px;
+  .media-admin-footer {
+    margin-top: 12px;
+  }
+}
+</style>

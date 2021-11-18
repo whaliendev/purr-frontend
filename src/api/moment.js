@@ -8,7 +8,7 @@ momentApi.getLatestAdminMoments = (curPage, fetchNum) => {
     url: `${baseUrl}/admin/recent?curPage=${curPage}&pageSize=${fetchNum}`,
     method: 'get'
   });
-}
+};
 
 momentApi.getMomentsByPagination = (curPage, fetchNum) => {
   return service({
