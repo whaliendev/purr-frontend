@@ -187,6 +187,7 @@ export default defineComponent({
     const mediaPreviewMode = ref('normal');
     const mediaBatchOpList = ref([]);
     const handleMediaSearch = () => {
+      resetPageParams();
       fetchMediaByPagination(true);
     };
     const handleResetFilter = () => {

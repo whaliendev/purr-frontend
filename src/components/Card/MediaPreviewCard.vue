@@ -1,7 +1,11 @@
 <template>
   <div
     class="media-preview-card"
-    :class="{ 'select-mode': mode === 'batch', selected: selected }"
+    :class="{
+      'select-mode': mode === 'batch',
+      selected: selected,
+      'box-shadow': boxShadow
+    }"
     @click="handleClickCard"
   >
     <div class="media-preview-header" title="点击以查看详情">
@@ -36,12 +40,12 @@
         :visible-arrow="false"
         :disabled="
           mode === 'batch' ||
-          ellipsisFormat(media.originalName, 22).length ===
+          ellipsisFormat(media.originalName, titleLength).length ===
             media.originalName.length
         "
       >
         <span class="media-name">{{
-          ellipsisFormat(media.originalName, 22)
+          ellipsisFormat(media.originalName, titleLength)
         }}</span>
       </el-tooltip>
       <span class="op-container">
@@ -82,6 +86,20 @@ export default defineComponent({
       },
       required: false,
       default: 'normal'
+    },
+    titleLength: {
+      type: Number,
+      validator(val) {
+        if (typeof val !== 'number') return false;
+        return val >= 13 && val <= 53;
+      },
+      required: false,
+      default: 22
+    },
+    boxShadow: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   emits: ['previewMedia', 'isSelected'],
@@ -114,9 +132,11 @@ export default defineComponent({
 
     const handleCopyMarkdownLink = () => {
       if (props.mode === 'batch') return;
-      copyTextToClipboard(
-        `[${props.media.originalName}](${props.media.url})`
-      ).then((res) => {
+      const copyText =
+        props.media.fileCategory === 'image'
+          ? `![${props.media.originalName}](${props.media.url})`
+          : `[${props.media.originalName}](${props.media.url})`;
+      copyTextToClipboard(copyText).then((res) => {
         if (res) {
           ElMessage.success({
             center: true,
@@ -177,7 +197,6 @@ export default defineComponent({
   overflow: hidden;
   border: 1px solid #ccc;
   color: #888;
-  box-shadow: 3px 2px 4px #ccc;
   position: relative;
   box-sizing: border-box;
 
@@ -205,6 +224,10 @@ export default defineComponent({
     .el-checkbox {
       display: block;
     }
+  }
+
+  &.box-shadow {
+    box-shadow: 3px 2px 4px #ccc;
   }
 }
 

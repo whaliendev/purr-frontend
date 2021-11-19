@@ -173,14 +173,14 @@ export default defineComponent({
       uploadedSuccessFiles.value = [];
     };
     const checkFileSize = (file) => {
-      const isLt100M = file.size / 1024 / 1024 < 100;
-      if (!isLt100M) {
+      const isLt1G = file.size / 1024 / 1024 < 1024;
+      if (!isLt1G) {
         ElMessage.error({
           center: true,
-          message: '上传文件最大大小不能超过100M'
+          message: '上传文件最大大小不能超过1G'
         });
       }
-      return isLt100M;
+      return isLt1G;
     };
     const uploadedSuccessFiles = ref([]);
     const uploadingFiles = ref([]);
@@ -193,9 +193,11 @@ export default defineComponent({
       const uploadedSuccessFile = uploadedSuccessFiles.value.filter(
         (uploadedFile) => uploadedFile.originalName === file.name
       )[0];
-      copyTextToClipboard(
-        `[${uploadedSuccessFile.originalName}](${uploadedSuccessFile.url})`
-      ).then((res) => {
+      const copyText =
+        file.fileCategory === 'image'
+          ? `![${uploadedSuccessFile.originalName}](${uploadedSuccessFile.url})`
+          : `[${uploadedSuccessFile.originalName}](${uploadedSuccessFile.url})`;
+      copyTextToClipboard(copyText).then((res) => {
         if (res) {
           ElMessage.success({
             center: true,
