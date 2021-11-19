@@ -80,16 +80,32 @@
             <el-button type="primary" @click="handleMediaSearch" size="small">
               <font-awesome-icon :icon="['fas', 'search']" /> &nbsp; 查询
             </el-button>
-            <el-button @click="handleResetFilter" size="small">
+            <el-button
+              @click="handleResetFilter"
+              size="small"
+              v-if="mediaPreviewMode === 'normal'"
+            >
               <font-awesome-icon :icon="['fas', 'undo-alt']" />&nbsp; 重置/刷新
+            </el-button>
+            <el-button
+              @click="handleDeleteBatch"
+              size="small"
+              type="danger"
+              v-else
+            >
+              <font-awesome-icon :icon="['fas', 'trash-alt']" />&nbsp; 删除选中
             </el-button>
             <el-button
               type="primary"
               @click="handleBatchOperation"
               size="small"
+              v-if="mediaPreviewMode === 'normal'"
             >
               <font-awesome-icon :icon="['fas', 'object-group']" />&nbsp;
               批量操作
+            </el-button>
+            <el-button @click="handleCancelDeleteBatch" size="small" v-else>
+              <font-awesome-icon :icon="['fas', 'times']" />&nbsp; 取消操作
             </el-button>
           </div>
         </div>
@@ -98,11 +114,18 @@
     <base-card style="padding: 20px" class="media-admin-body">
       <div class="media-admin-content">
         <el-row :gutter="24" v-loading="loadingData">
-          <el-col v-for="media in mediaList" :key="media.id">
+          <el-col
+            v-for="media in mediaList"
+            :key="media.id"
+            :lg="4"
+            :md="12"
+            :sm="24"
+          >
             <media-preview-card
               :media="media"
               :mode="mediaPreviewMode"
               @preview-media="handlePreviewMedia"
+              @is-selected="handleIsSelected"
           /></el-col>
         </el-row>
       </div>
@@ -113,7 +136,7 @@
           v-model:current-page="curPage"
           v-model:page-size="fetchNum"
           :default-page-size="24"
-          :page-sizes="[24, 48, 72, 96, 120]"
+          :page-sizes="[18, 36, 54, 72, 90]"
           :default-current-page="1"
           :pager-count="5"
           :page-count="pageNum"
@@ -162,6 +185,7 @@ export default defineComponent({
 
     // header里的控制按钮
     const mediaPreviewMode = ref('normal');
+    const mediaBatchOpList = ref([]);
     const handleMediaSearch = () => {
       fetchMediaByPagination(true);
     };
@@ -173,17 +197,36 @@ export default defineComponent({
       resetPageParams();
       fetchMediaByPagination(true);
     };
-    const handleBatchOperation = () => {};
+    const handleBatchOperation = () => {
+      mediaPreviewMode.value = 'batch';
+      mediaBatchOpList.value = [];
+    };
+    const handleDeleteBatch = () => {
+      // TODO add api for batch delete
+      fetchMediaByPagination(true);
+    };
+    const handleCancelDeleteBatch = () => {
+      mediaPreviewMode.value = 'normal';
+    };
+    const handleIsSelected = (e) => {
+      if (mediaBatchOpList.value.indexOf(e) !== -1) {
+        mediaBatchOpList.value = mediaBatchOpList.value.filter(
+          (id) => id !== e
+        );
+      } else {
+        mediaBatchOpList.value.push(e);
+      }
+    };
 
     // 获取数据API
     const curPage = ref(1);
-    const fetchNum = ref(24);
+    const fetchNum = ref(18);
     const pageNum = ref(1);
     const mediaList = ref([]);
     const loadingData = ref(false);
     const resetPageParams = () => {
       curPage.value = 1;
-      fetchNum.value = 24;
+      fetchNum.value = 18;
       pageNum.value = 1;
     };
     const fetchMediaByPagination = (force = false) => {
@@ -287,7 +330,10 @@ export default defineComponent({
       mediaList,
       loadingData,
       mediaPreviewMode,
-      handlePreviewMedia
+      handlePreviewMedia,
+      handleDeleteBatch,
+      handleCancelDeleteBatch,
+      handleIsSelected
     };
   }
 });
@@ -324,9 +370,14 @@ export default defineComponent({
 }
 
 .media-admin-body {
-  margin-top: 12px;
+  margin-top: 24px;
   .media-admin-footer {
     margin-top: 12px;
+  }
+
+  .el-col {
+    margin-top: 12px;
+    margin-bottom: 12px;
   }
 }
 </style>

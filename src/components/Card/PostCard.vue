@@ -3,7 +3,6 @@
     <div class="post-thumb">
       <a :href="article.linkName" :target="article.target">
         <el-image
-          crossorigin="anonymous"
           :alt="`cover of article ${article.name}`"
           :src="article.backgroundUrl"
           lazy
