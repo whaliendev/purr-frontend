@@ -428,11 +428,11 @@ export default {
   .moment-content-wrapper {
     width: 100%;
     height: 100%;
-    .content-body{
+    .content-body {
       padding: 8px 5px 23px 15px;
       border-radius: var(--el-border-radius-base);
 
-      .el-scrollbar{
+      .el-scrollbar {
         border-radius: var(--el-border-radius-base);
       }
 
