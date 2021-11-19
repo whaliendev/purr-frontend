@@ -6,6 +6,7 @@
           <span class="compose-title">新文章</span>
           <ul class="article-tags-container">
             <tag
+              :id="tag.id"
               :name="tag.name"
               :color="tag.color"
               :link-name="tag.linkName"
@@ -13,17 +14,19 @@
               :deletable="true"
               v-for="tag in articleToPost.tags"
               :key="tag.id"
+              @delete-tag="handleDeleteTag"
             ></tag>
           </ul>
           <el-select
             v-if="selectVisible"
             ref="addTagSelect"
-            v-model="tagsList"
+            v-model="articleToPost.tags"
             collapse-tags
             multiple
             filterable
             remote
             reserve-keyword
+            value-key="id"
             class="add-tag-select"
             placeholder="enter a keyword to filter"
             :remote-method="searchTags"
@@ -44,6 +47,7 @@
                 :name="tagOption.name"
                 :link="false"
                 :color="tagOption.color"
+                :style="'height: 90%; width: 100%; '"
               />
             </el-option>
           </el-select>
@@ -98,7 +102,11 @@
       </base-card>
     </div>
     <div class="purr-editor">
-      <markdown-editor :content="articleToPost.content" />
+      <markdown-editor
+        v-model="articleToPost.content"
+        @save-draft="handleSaveDraft"
+        @preview-image="handlePreviewImage"
+      />
     </div>
 
     <article-settings-drawer v-model="showSettingsDrawer" />
@@ -115,7 +123,23 @@ import Tag from '@/components/Badge/Tag';
 import ArticleSettingsDrawer from '@/components/Drawer/ArticleSettingsDrawer';
 import NewTagDrawer from '@/components/Drawer/NewTagDrawer';
 import MediaRepoDrawer from '@/components/Drawer/MediaRepoDrawer';
+import { debounce } from '@/utils/util';
+import { useStore } from 'vuex';
+import { ElMessage } from 'element-plus';
+import { datetimeFormat } from '@/utils/datetime';
+
 export default defineComponent({
+  props: {
+    query: {
+      validator(val) {
+        return (
+          typeof val === 'undefined' ||
+          (typeof parseInt(val, 10) === 'number' && parseInt(val, 10) > 0)
+        );
+      },
+      required: true
+    }
+  },
   components: {
     MediaRepoDrawer,
     ArticleSettingsDrawer,
@@ -125,7 +149,53 @@ export default defineComponent({
     BaseCard,
     NewTagDrawer
   },
-  setup() {
+  setup(props) {
+    const store = useStore();
+
+    const transformBEArticle = (article) => {
+      articleToPost.id = article.id;
+      articleToPost.abstract = article.articleAbstract;
+      articleToPost.author = article.author;
+      articleToPost.backgroundUrl = article.backgroundUrl;
+      articleToPost.commentStatus = article.commentStatus;
+      articleToPost.content = article.content;
+      articleToPost.ccLicense = article.contract;
+      articleToPost.attachCopyText = article.copyright; // 是否要附加版权信息,
+      articleToPost.copyrightAttachText = article.copyrightInfo;
+      articleToPost.postTime = datetimeFormat(
+        article.updateTime ? article.updateTime : article.createTime
+      );
+      articleToPost.originalStatus = article.isOriginal;
+      articleToPost.pinnedStatus = article.isPinned;
+      articleToPost.recommendedStatus = article.isRecommended;
+      articleToPost.linkName = article.linkName;
+      articleToPost.title = article.name;
+      articleToPost.allowPing = parseInt(article.pingStatus, 10);
+      articleToPost.tags = article.tags;
+      articleToPost.target = article.target;
+      console.log('articleToPost: ', articleToPost);
+    };
+
+    (() => {
+      if (typeof props.query !== 'undefined') {
+        store
+          .dispatch('articles/getAdminArticleDetailsById', {
+            id: parseInt(props.query, 10)
+          })
+          .then((response) => {
+            if (response.data && response.data.success) {
+              transformBEArticle(response.data.data);
+            }
+          })
+          .catch((err) => {
+            ElMessage.error({
+              center: true,
+              message: `获取文章失败，失败原因可能是${err.message}`
+            });
+          });
+      }
+    })();
+
     const draftSavedErrored = ref(false);
     const draftSaving = ref(false);
     const articleToPost = reactive({
@@ -133,7 +203,25 @@ export default defineComponent({
       title: '',
       content: '',
       author: '',
-      tags: []
+      linkName: '',
+      postTime: '',
+      // 是否开启评论
+      commentStatus: 1,
+      recommendedStatus: 0,
+      pinnedStatus: 0,
+      // 是否原创
+      originalStatus: 1,
+      // 是否需要在复制时自动添加版权信息
+      attachCopyText: 1,
+      // 选择的CC License
+      ccLicense: 1,
+      // 当非原创时选择添加的附加信息
+      copyrightAttachText: '',
+      target: '_blank',
+      allowPing: 1,
+      tags: [], // 存放id
+      abstract: '',
+      backgroundUrl: ''
     });
 
     // 右上角的控件相关功能
@@ -141,18 +229,15 @@ export default defineComponent({
       console.log('draftOnly', draftOnly);
       //TODO
     };
-
     const showSettingsDrawer = ref(false);
     const handlePostArticle = () => {
       showSettingsDrawer.value = true;
       // TODO check the validity of settings and post article
     };
-
     const mediaRepoVisible = ref(false);
     const openMediaRepoDrawer = () => {
       mediaRepoVisible.value = true;
     };
-
     const newTagDrawerVisible = ref(false);
     const handleCreateNewTag = () => {
       newTagDrawerVisible.value = true;
@@ -167,7 +252,24 @@ export default defineComponent({
     // el-select对象
     const addTagSelect = ref({});
     const searchTags = (keyword) => {
-      console.log(keyword);
+      debounce(() => {
+        searchingTags.value = true;
+        store
+          .dispatch('tags/searchAdminTagsByKeyword', {
+            keyword: keyword
+          })
+          .then((response) => {
+            if (response.data && response.data.success) {
+              tagOptions.value = response.data.data;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            searchingTags.value = false;
+          });
+      }, 1000);
     };
     const showSelect = async () => {
       selectVisible.value = true;
@@ -176,8 +278,16 @@ export default defineComponent({
       });
     };
     const handleSelectBlur = () => {
+      if (articleToPost.tags.length === 0) return;
       selectVisible.value = false;
     };
+    const handleDeleteTag = (id) => {
+      console.log(id);
+      articleToPost.tags = articleToPost.tags.filter((tag) => tag.id !== id);
+    };
+
+    // 文章内的图片预览
+    const handlePreviewImage = () => {};
 
     return {
       draftSavedErrored,
@@ -196,7 +306,9 @@ export default defineComponent({
       newTagDrawerVisible,
       handleCreateNewTag,
       openMediaRepoDrawer,
-      mediaRepoVisible
+      mediaRepoVisible,
+      handleDeleteTag,
+      handlePreviewImage
     };
   }
 });

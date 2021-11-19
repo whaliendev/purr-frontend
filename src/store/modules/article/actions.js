@@ -82,6 +82,40 @@ const actions = {
           reject(error);
         });
     });
+  },
+  // 只允许在本actions中的其他action中调用，不能在组件中dispatch
+  validateArticleArgs(context, payload) {
+    return new Promise((resolve) => {
+      articleApi
+        .validateArticleArgs(payload.name, payload.linkName)
+        .then((response) => {
+          if (response.data && response.data.success) {
+            resolve(true);
+          }
+          resolve(false);
+        })
+        .catch(() => {
+          resolve(false);
+        });
+    });
+  },
+  editOrSaveArticleDraft(context, payload) {
+    console.log(context, payload);
+  },
+  editOrCreateArticle(context, payload) {
+    console.log(context, payload);
+  },
+  getAdminArticleDetailsById(context, payload) {
+    return new Promise((resolve, reject) => {
+      articleApi
+        .getAdminArticleDetailById(payload.id)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 };
 

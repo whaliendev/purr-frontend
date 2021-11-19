@@ -44,6 +44,33 @@ const actions = {
           reject(error);
         });
     });
+  },
+  uploadSingleFile(context, payload) {
+    return new Promise((resolve, reject) => {
+      mediaApi
+        .uploadSingleFile(payload.data)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  getMediaDetailsByLinkName(context, payload) {
+    return new Promise((resolve, reject) => {
+      mediaApi
+        .getMediaDetailsByLinkName(payload.linkName)
+        .then((response) => {
+          if (response.data && response.data.success) {
+            resolve(true);
+          }
+          resolve(false);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 };
 

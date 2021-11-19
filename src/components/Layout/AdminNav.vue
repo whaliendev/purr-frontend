@@ -190,11 +190,11 @@ export default defineComponent({
       isCollapsed: false
     };
   },
-  // computed: {
-  //   path() {
-  //     return this.$route.path;
-  //   }
-  // },
+  computed: {
+    path() {
+      return this.$route.path;
+    }
+  },
   mounted() {
     const that = this;
 
@@ -264,6 +264,19 @@ export default defineComponent({
     navItem.classList.add('is-active');
     navItem.classList.remove('close');
     curNav.classList.add('is-active');
+  },
+  watch: {
+    path(val) {
+      const firstClassNav = /\/\w+\/\w+/;
+      const matches = val.match(firstClassNav);
+      const curNav = document.querySelector(`a[href="${matches[0]}"]`);
+      let navItem = curNav.parentElement.parentElement.parentElement;
+      if (!navItem.classList.contains('menu-item'))
+        navItem = curNav.parentElement;
+      navItem.classList.add('is-active');
+      navItem.classList.remove('close');
+      curNav.classList.add('is-active');
+    }
   }
 });
 </script>

@@ -61,6 +61,7 @@ const router = createRouter({
           meta: {
             title: '🖊 写作'
           },
+          props: (route) => ({ query: route.query.id }),
           component: () =>
             import(
               /* webpackChunkName: "article-compose" */ '../views/admin/components/ArticleCompose'

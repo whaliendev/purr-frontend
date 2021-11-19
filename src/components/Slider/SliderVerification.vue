@@ -15,13 +15,8 @@
   </div>
 </template>
 <script>
-const debounce = (function () {
-  let timer = 0;
-  return function (callback, ms) {
-    clearTimeout(timer);
-    timer = setTimeout(callback, ms);
-  };
-})();
+import { debounce } from '@/utils/util';
+
 export default {
   name: 'SliderVerification',
   props: {

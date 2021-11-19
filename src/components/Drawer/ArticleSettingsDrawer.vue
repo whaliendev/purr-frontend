@@ -49,7 +49,7 @@
         <label class="settings-item-label">文章短链名</label>
         <el-input
           placeholder="文章短链接名，如：article-short-link-name"
-          v-model="articleSettings.author"
+          v-model="articleSettings.linkName"
           size="medium"
           type="text"
           minlength="1"
@@ -430,6 +430,12 @@ export default defineComponent({
     };
 
     const articleSettings = reactive({
+      id: -1,
+      title: '',
+      author: '',
+      content: '',
+      linkName: '',
+      postTime: '',
       // 是否开启评论
       commentStatus: 1,
       recommendedStatus: 0,
