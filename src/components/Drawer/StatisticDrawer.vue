@@ -2,6 +2,8 @@
   <div id="statistic-drawer"></div>
 </template>
 
-<script></script>
+<script>
+// put it in home page aside container
+</script>
 
 <style lang="scss" scoped></style>
