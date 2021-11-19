@@ -190,6 +190,11 @@ export default defineComponent({
       isCollapsed: false
     };
   },
+  // computed: {
+  //   path() {
+  //     return this.$route.path;
+  //   }
+  // },
   mounted() {
     const that = this;
 
@@ -249,13 +254,16 @@ export default defineComponent({
 
     // activate dashboard nav item initially
     const pathname = window.location.pathname;
+
     const firstClassNav = /\/\w+\/\w+/;
     const matches = pathname.match(firstClassNav);
     const curNav = document.querySelector(`a[href="${matches[0]}"]`);
-    const navItem = curNav.parentElement.parentElement.parentElement;
+    let navItem = curNav.parentElement.parentElement.parentElement;
+    if (!navItem.classList.contains('menu-item'))
+      navItem = curNav.parentElement;
     navItem.classList.add('is-active');
     navItem.classList.remove('close');
-    // curNav.classList.add('is-active');
+    curNav.classList.add('is-active');
   }
 });
 </script>

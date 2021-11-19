@@ -10,6 +10,7 @@ import statistics from './modules/statistic';
 import menus from './modules/menu';
 import links from './modules/link';
 import moments from './modules/moment';
+import medias from './modules/media';
 
 import createPersistedState from 'vuex-persistedstate';
 
@@ -23,7 +24,8 @@ const dataState = createPersistedState({
       moments: val.moments,
       articles: {
         articleDetails: val.articles.articleDetails
-      }
+      },
+      medias: val.medias
     };
   }
 });
@@ -37,7 +39,8 @@ const store = createStore({
     statistics,
     menus,
     links,
-    moments
+    moments,
+    medias
   },
   plugins: [dataState],
   state() {
