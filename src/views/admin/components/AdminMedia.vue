@@ -143,6 +143,11 @@
         ></el-pagination>
       </div>
     </base-card>
+
+    <media-detail-drawer
+      v-model="mediaDetailDrawerVisible"
+      :media="previewMedia"
+    ></media-detail-drawer>
   </div>
 </template>
 
@@ -158,9 +163,10 @@ import {
 import BaseCard from '@/components/UI/BaseCard';
 import MediaPreviewCard from '@/components/Card/MediaPreviewCard';
 import { useStore } from 'vuex';
+import MediaDetailDrawer from '@/components/Drawer/MediaDetailDrawer';
 
 export default defineComponent({
-  components: { MediaPreviewCard, BaseCard },
+  components: { MediaDetailDrawer, MediaPreviewCard, BaseCard },
   setup() {
     const store = useStore();
 
@@ -187,6 +193,7 @@ export default defineComponent({
     const mediaPreviewMode = ref('normal');
     const mediaBatchOpList = ref([]);
     const handleMediaSearch = () => {
+      resetPageParams();
       fetchMediaByPagination(true);
     };
     const handleResetFilter = () => {
@@ -312,8 +319,12 @@ export default defineComponent({
       clearInterval(categoryInterval);
     });
 
+    // 预览媒体详情相关
+    const mediaDetailDrawerVisible = ref(false);
+    const previewMedia = ref({});
     const handlePreviewMedia = (e) => {
-      console.log(e);
+      mediaDetailDrawerVisible.value = true;
+      previewMedia.value = e;
     };
 
     return {
@@ -333,7 +344,9 @@ export default defineComponent({
       handlePreviewMedia,
       handleDeleteBatch,
       handleCancelDeleteBatch,
-      handleIsSelected
+      handleIsSelected,
+      mediaDetailDrawerVisible,
+      previewMedia
     };
   }
 });
