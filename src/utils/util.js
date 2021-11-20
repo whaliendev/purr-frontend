@@ -1,4 +1,5 @@
 import logger from '@/plugins/logger';
+import VueMarkdownEditor, { xss } from '@kangc/v-md-editor';
 
 export function isObject(value) {
   return (
@@ -159,3 +160,37 @@ export const debounce = (function () {
     timer = setTimeout(callback, ms);
   };
 })();
+
+export function transformArticleToDTO(payload) {
+  console.log(payload.abstract);
+  return {
+    id: payload.id,
+    name: payload.title,
+    linkName: payload.linkName,
+    target: payload.target,
+    backgroundUrl: payload.backgroundUrl,
+    author: payload.author,
+    commentStatus: payload.commentStatus,
+    pingStatus: payload.allowPing,
+    toPing: '',
+    pinged: '',
+    isOriginal: payload.originalStatus,
+    isPinned: payload.pinnedStatus,
+    isRecommended: payload.recommendedStatus,
+    articleAbstract: payload.abstract,
+    content: payload.content,
+    tags: payload.tags.map((tag) => tag.id),
+    copyright: payload.attachCopyText,
+    contract: payload.ccLicense,
+    copyrightInfo: payload.copyrightAttachText,
+    createTime:
+      payload.postTime && payload.postTime.getTime
+        ? payload.postTime.getTime()
+        : Date.now(),
+    html: xss.process(
+      VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(
+        payload.content
+      )
+    )
+  };
+}

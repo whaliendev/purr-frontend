@@ -74,7 +74,8 @@ articleApi.saveArticleToDraft = (article) => {
       copyright: article.copyright,
       contract: article.contract,
       copyrightInfo: article.copyrightInfo,
-      createTime: article.createTime
+      createTime: article.createTime,
+      html: article.html
     }
   });
 };
@@ -97,13 +98,14 @@ articleApi.updateOrComposeArticle = (article) => {
       isOriginal: article.isOriginal,
       isPinned: article.isPinned,
       isRecommended: article.isRecommended,
-      articleAbstract: article.abstract,
+      articleAbstract: article.articleAbstract,
       content: article.content,
       tags: article.tags,
       copyright: article.copyright,
       contract: article.contract,
       copyrightInfo: article.copyrightInfo,
-      createTime: article.createTime
+      createTime: article.createTime,
+      html: article.html
     }
   });
 };

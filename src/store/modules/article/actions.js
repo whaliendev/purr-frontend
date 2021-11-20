@@ -1,4 +1,5 @@
 import articleApi from '@/api/article';
+import { transformArticleToDTO } from '@/utils/util';
 
 const actions = {
   getArticlesByPagination(context, payload) {
@@ -100,7 +101,6 @@ const actions = {
     });
   },
   editOrSaveArticleDraft(context, payload) {
-    console.log('payload: ', payload);
     return new Promise((resolve, reject) => {
       context
         .dispatch('validateArticleArgs', {
@@ -109,30 +109,7 @@ const actions = {
         })
         .then((res) => {
           if (res) {
-            const articleToSave = {
-              id: payload.id,
-              name: payload.title,
-              linkName: payload.linkName,
-              target: payload.target,
-              backgroundUrl: payload.backgroundUrl,
-              author: payload.author,
-              commentStatus: payload.commentStatus,
-              pingStatus: payload.allowPing,
-              toPing: '',
-              pinged: '',
-              isOriginal: payload.originalStatus,
-              isPinned: payload.pinnedStatus,
-              isRecommended: payload.recommendedStatus,
-              articleAbstract: payload.abstract,
-              content: payload.content,
-              tags: payload.tags.map((tag) => tag.id),
-              copyright: payload.attachCopyText,
-              contract: payload.ccLicense,
-              copyrightInfo: payload.copyrightAttachText,
-              createTime: payload.postTime.getTime()
-                ? payload.postTime.getTime()
-                : Date.now()
-            };
+            const articleToSave = transformArticleToDTO(payload);
             console.log('articleToSave: ', articleToSave);
             articleApi
               .saveArticleToDraft(articleToSave)
@@ -147,12 +124,12 @@ const actions = {
           }
         })
         .catch((res) => {
+          console.log('err', res);
           resolve(res); // 返回值等同于false
         });
     });
   },
   editOrCreateArticle(context, payload) {
-    console.log('payload: ', payload);
     return new Promise((resolve, reject) => {
       context
         .dispatch('validateArticleArgs', {
@@ -161,33 +138,10 @@ const actions = {
         })
         .then((res) => {
           if (res) {
-            const articleToCreate = {
-              id: payload.id,
-              name: payload.title,
-              linkName: payload.linkName,
-              target: payload.target,
-              backgroundUrl: payload.backgroundUrl,
-              author: payload.author,
-              commentStatus: payload.commentStatus,
-              pingStatus: payload.allowPing,
-              toPing: '',
-              pinged: '',
-              isOriginal: payload.originalStatus,
-              isPinned: payload.pinnedStatus,
-              isRecommended: payload.recommendedStatus,
-              articleAbstract: payload.abstract,
-              content: payload.content,
-              tags: payload.tags.map((tag) => tag.id),
-              copyright: payload.attachCopyText,
-              contract: payload.ccLicense,
-              copyrightInfo: payload.copyrightAttachText,
-              createTime: payload.postTime.getTime()
-                ? payload.postTime.getTime()
-                : Date.now()
-            };
-            console.log('articleToCreate: ', articleToCreate);
+            const articleToSave = transformArticleToDTO(payload);
+            console.log('articleToCreate: ', articleToSave);
             articleApi
-              .updateOrComposeArticle(articleToCreate)
+              .updateOrComposeArticle(articleToSave)
               .then((response) => {
                 resolve(response);
               })
@@ -199,6 +153,7 @@ const actions = {
           }
         })
         .catch((res) => {
+          console.log('err', res);
           resolve(res); // 返回值是false
         });
     });

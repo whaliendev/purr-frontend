@@ -65,7 +65,7 @@
         <el-row>
           <el-col :lg="20">
             <article class="article-content">
-              <div class="markdown-body" v-html="articleContent"></div>
+              <div class="markdown-body" v-html="article.html"></div>
               <hr class="content-divider" />
               <div class="tags-container" v-if="article.tags.length !== 0">
                 <a
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { ElNotification, ElMessage } from 'element-plus';
@@ -125,7 +125,6 @@ import { normalizeNum } from '@/utils/util';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
 import CollectionTag from '@/components/Icon/CollectionTag';
 import Tag from '@/components/Badge/Tag';
-import VueMarkdownEditor, { xss } from '@kangc/v-md-editor';
 
 export default defineComponent({
   name: 'ArticleReading',
@@ -200,14 +199,6 @@ export default defineComponent({
       else return timeAgo(timeVarString, 'YYYY-MM-DD');
     };
 
-    const articleContent = computed(() => {
-      return xss.process(
-        VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(
-          curArticle.value.content
-        )
-      );
-    });
-
     let navContainer = null;
     onMounted(() => {
       navContainer = document.querySelector('#nav-container');
@@ -222,8 +213,7 @@ export default defineComponent({
       article: curArticle,
       normalizeNum,
       formatTimestamp,
-      loadingData,
-      articleContent
+      loadingData
     };
   }
 });

@@ -444,12 +444,17 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['syncArticleSettings'],
+  emits: ['syncArticleSettings', 'readyToClose'],
   components: { NewTagDrawer, UploadFilled, ReactiveButton, Tag },
   setup: function (props, context) {
     const store = useStore();
 
+    let skip = false;
     const handleClose = (done) => {
+      if (skip) {
+        skip = false;
+        return;
+      }
       ElMessageBox.confirm('你确定退出当前设置页吗？', '小提示', {
         confirmButtonText: '确认并保存',
         cancelButtonText: '取消'
@@ -656,6 +661,8 @@ export default defineComponent({
               message: '保存草稿成功'
             });
             articleSettings.status = 0;
+            skip = true;
+            context.emit('readyToClose');
           } else {
             draftSavedErrored.value = true;
             ElMessage.error({
@@ -686,6 +693,8 @@ export default defineComponent({
               message: '发布成功'
             });
             articleSettings.status = 1;
+            skip = true;
+            context.emit('readyToClose');
           } else {
             postSavedErrored.value = true;
             ElMessage.error({

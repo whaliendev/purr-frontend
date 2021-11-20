@@ -118,6 +118,7 @@
       v-model="showSettingsDrawer"
       :article-to-save="articleToPost"
       @sync-article-settings="handleSyncArticleSettings"
+      @ready-to-close="handleCloseArticleSettings"
     />
     <new-tag-drawer v-model="newTagDrawerVisible" />
     <media-repo-drawer v-model="mediaRepoVisible" />
@@ -291,6 +292,9 @@ export default defineComponent({
         });
     };
     const showSettingsDrawer = ref(false);
+    const handleCloseArticleSettings = () => {
+      showSettingsDrawer.value = false;
+    };
     const handlePostArticle = () => {
       showSettingsDrawer.value = true;
       // TODO check the validity of settings and post article
@@ -372,7 +376,8 @@ export default defineComponent({
       handleDeleteTag,
       handlePreviewImage,
       handleSyncArticleSettings,
-      articleStatus
+      articleStatus,
+      handleCloseArticleSettings
     };
   }
 });
