@@ -65,7 +65,7 @@
         <el-row>
           <el-col :lg="20">
             <article class="article-content">
-              <div class="markdown-body" v-html="article.content"></div>
+              <div class="markdown-body" v-html="articleContent"></div>
               <hr class="content-divider" />
               <div class="tags-container" v-if="article.tags.length !== 0">
                 <a
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { ElNotification, ElMessage } from 'element-plus';
@@ -125,6 +125,7 @@ import { normalizeNum } from '@/utils/util';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
 import CollectionTag from '@/components/Icon/CollectionTag';
 import Tag from '@/components/Badge/Tag';
+import VueMarkdownEditor, { xss } from '@kangc/v-md-editor';
 
 export default defineComponent({
   name: 'ArticleReading',
@@ -134,7 +135,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
-    const curArticle = ref(null);
+    const curArticle = ref({ content: '' });
     const loadingData = ref(false);
     const getArticleDetailsByLinkName = () => {
       const linkName = route.path;
@@ -143,7 +144,7 @@ export default defineComponent({
       // 如果本地有三分钟内的缓存，那么先不请求数据
       if (
         curArticleDetail == null ||
-        (Date.now() - curArticleDetail.timestamp) / 1000 > 180
+        (Date.now() - curArticleDetail.timestamp) / 1000 > 60
       ) {
         loadingData.value = true;
         store
@@ -179,7 +180,7 @@ export default defineComponent({
           });
       } else {
         logger.log(
-          '文章阅读界面有三分钟的缓存，如果在调试文章效果，可以考虑删除缓存'
+          '文章阅读界面有一分钟的缓存，如果在调试文章效果，可以考虑删除缓存'
         );
         curArticle.value = curArticleDetail.data;
       }
@@ -199,6 +200,14 @@ export default defineComponent({
       else return timeAgo(timeVarString, 'YYYY-MM-DD');
     };
 
+    const articleContent = computed(() => {
+      return xss.process(
+        VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(
+          curArticle.value.content
+        )
+      );
+    });
+
     let navContainer = null;
     onMounted(() => {
       navContainer = document.querySelector('#nav-container');
@@ -213,7 +222,8 @@ export default defineComponent({
       article: curArticle,
       normalizeNum,
       formatTimestamp,
-      loadingData
+      loadingData,
+      articleContent
     };
   }
 });

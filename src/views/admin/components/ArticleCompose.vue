@@ -1,9 +1,14 @@
 <template>
-  <div id="article-compose">
+  <div id="article-compose" v-loading="draftSaving">
     <div class="article-compose-header">
       <base-card style="padding: 12px" class="article-controls-wrapper">
         <div class="article-tags-wrapper">
           <span class="compose-title">新文章</span>
+          <span
+            class="article-status-badge"
+            :class="{ posted: articleStatus !== '草稿' }"
+            >{{ articleStatus }}</span
+          >
           <ul class="article-tags-container">
             <tag
               :id="tag.id"
@@ -67,7 +72,7 @@
             loaded-text="保存成功"
             text="保存草稿"
             @callback="draftSavedErrored = false"
-            @click="handleSaveDraft(false)"
+            @click="handleSaveDraft"
             size="small"
           ></reactive-button>
           <el-button size="small">预览</el-button>
@@ -119,7 +124,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, nextTick, reactive, ref } from 'vue';
+import { computed, defineComponent, nextTick, reactive, ref } from 'vue';
 import ReactiveButton from '@/components/Button/ReactiveButton';
 import MarkdownEditor from '@/components/Editor/MarkdownEditor';
 import BaseCard from '@/components/UI/BaseCard';
@@ -155,6 +160,11 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
 
+    const articleStatus = computed(() => {
+      return articleToPost.status === 0 ? '草稿' : '已发布';
+    });
+
+    // from backend to front end
     const transformBEArticle = (article) => {
       articleToPost.id = article.id;
       articleToPost.abstract = article.articleAbstract;
@@ -176,8 +186,10 @@ export default defineComponent({
       articleToPost.allowPing = parseInt(article.pingStatus, 10);
       articleToPost.tags = article.tags;
       articleToPost.target = article.target;
+      articleToPost.status = article.status;
     };
 
+    // from drawer to editor
     const handleSyncArticleSettings = (articleSettings) => {
       // console.log('articleSettings', articleSettings);
       articleToPost.id = articleSettings.id;
@@ -189,7 +201,7 @@ export default defineComponent({
       articleToPost.ccLicense = articleSettings.ccLicense;
       articleToPost.attachCopyText = articleSettings.attachCopyText; // 是否要附加版权信息,
       articleToPost.copyrightAttachText = articleSettings.copyrightAttachText;
-      // articleToPost.postTime = articleSettings.postTime;
+      articleToPost.postTime = articleSettings.postTime;
       articleToPost.originalStatus = articleSettings.originalStatus;
       articleToPost.pinnedStatus = articleSettings.pinnedStatus;
       articleToPost.recommendedStatus = articleSettings.recommendedStatus;
@@ -198,6 +210,7 @@ export default defineComponent({
       articleToPost.allowPing = articleSettings.allowPing;
       articleToPost.tags = articleSettings.tags;
       articleToPost.target = articleSettings.target;
+      articleToPost.status = articleSettings.status;
     };
 
     (() => {
@@ -245,13 +258,37 @@ export default defineComponent({
       allowPing: 1,
       tags: [], // 存放id
       abstract: '',
-      backgroundUrl: ''
+      backgroundUrl: '',
+      status: 0
     });
 
     // 右上角的控件相关功能
-    const handleSaveDraft = (draftOnly = false) => {
-      console.log('draftOnly', draftOnly);
-      //TODO
+    const handleSaveDraft = () => {
+      draftSaving.value = true;
+      store
+        .dispatch('articles/editOrSaveArticleDraft', articleToPost)
+        .then((res) => {
+          if (res) {
+            ElMessage.success({
+              center: true,
+              message: '保存草稿成功'
+            });
+            articleToPost.status = 0;
+          } else {
+            draftSavedErrored.value = true;
+            ElMessage.error({
+              center: true,
+              message: '保存草稿失败'
+            });
+          }
+        })
+        .catch((err) => {
+          draftSavedErrored.value = true;
+          console.log(err);
+        })
+        .finally(() => {
+          draftSaving.value = false;
+        });
     };
     const showSettingsDrawer = ref(false);
     const handlePostArticle = () => {
@@ -334,7 +371,8 @@ export default defineComponent({
       mediaRepoVisible,
       handleDeleteTag,
       handlePreviewImage,
-      handleSyncArticleSettings
+      handleSyncArticleSettings,
+      articleStatus
     };
   }
 });
@@ -344,6 +382,20 @@ export default defineComponent({
 #article-compose {
   width: 100%;
   height: 100%;
+}
+
+.article-status-badge {
+  display: inline-block;
+  font-size: 0.8em;
+  margin: 4px 2px 4px 8px;
+  padding: 2px 12px 4px;
+  color: var(--el-color-white);
+  background-color: var(--el-color-danger);
+  border-radius: var(--el-border-radius-small);
+
+  &.posted {
+    background-color: var(--el-color-success);
+  }
 }
 
 .article-tags-container {

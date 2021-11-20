@@ -394,11 +394,27 @@
     <div class="bottom-controls-container">
       <el-button type="danger" size="medium"> 高级设置 </el-button>
       <reactive-button
+        :errored="draftSavedErrored"
+        :loading="draftSaving"
+        errored-text="保存失败"
+        loaded-text="保存成功"
         text="保存草稿"
+        @callback="draftSavedErrored = false"
+        @click="handleSaveDraft"
         type="primary"
         size="medium"
       ></reactive-button>
-      <el-button type="primary" size="medium"> 发布 </el-button>
+      <reactive-button
+        :errored="postSavedErrored"
+        :loading="postSaving"
+        errored-text="发布失败"
+        loaded-text="发布成功"
+        text="发布"
+        @callback="postSavedErrored = false"
+        @click="handlePostArticle"
+        type="primary"
+        size="medium"
+      ></reactive-button>
     </div>
   </el-drawer>
 </template>
@@ -469,6 +485,7 @@ export default defineComponent({
       articleSettings.allowPing = article.allowPing;
       articleSettings.tags = article.tags;
       articleSettings.target = article.target;
+      articleSettings.status = article.status;
     };
     watch(props.articleToSave, (article) => {
       syncFromEditToDrawer(article);
@@ -498,7 +515,8 @@ export default defineComponent({
       allowPing: props.articleToSave.allow,
       tags: props.articleToSave.tags, // 存放id
       abstract: props.articleToSave.abstract,
-      backgroundUrl: props.articleToSave.backgroundUrl
+      backgroundUrl: props.articleToSave.backgroundUrl,
+      status: props.articleToSave.status
     });
     const copyrightAttachTextarea = ref({});
     watchEffect(async () => {
@@ -625,6 +643,70 @@ export default defineComponent({
         '%';
     };
 
+    const draftSavedErrored = ref(false);
+    const draftSaving = ref(false);
+    const handleSaveDraft = () => {
+      draftSaving.value = true;
+      store
+        .dispatch('articles/editOrSaveArticleDraft', articleSettings)
+        .then((res) => {
+          if (res) {
+            ElMessage.success({
+              center: true,
+              message: '保存草稿成功'
+            });
+            articleSettings.status = 0;
+          } else {
+            draftSavedErrored.value = true;
+            ElMessage.error({
+              center: true,
+              message: '保存草稿失败'
+            });
+          }
+        })
+        .catch((err) => {
+          draftSavedErrored.value = true;
+          console.log(err);
+        })
+        .finally(() => {
+          draftSaving.value = false;
+        });
+    };
+
+    const postSavedErrored = ref(false);
+    const postSaving = ref(false);
+    const handlePostArticle = () => {
+      postSaving.value = true;
+      store
+        .dispatch('articles/editOrCreateArticle', articleSettings)
+        .then((res) => {
+          if (res) {
+            ElMessage.success({
+              center: true,
+              message: '发布成功'
+            });
+            articleSettings.status = 1;
+          } else {
+            postSavedErrored.value = true;
+            ElMessage.error({
+              center: true,
+              message: '发布文章失败'
+            });
+          }
+        })
+        .catch((err) => {
+          draftSavedErrored.value = true;
+          ElMessage.error({
+            center: true,
+            message: '发布文章失败'
+          });
+          console.log(err);
+        })
+        .finally(() => {
+          postSaving.value = false;
+        });
+    };
+
     return {
       handleClose,
       articleSettings,
@@ -644,7 +726,13 @@ export default defineComponent({
       expandArticleSettingsDrawer,
       newTagDrawerWidth,
       uploadMediaActionUrl: mediaApi.uploadMediaActionUrl,
-      loadingTags
+      loadingTags,
+      draftSavedErrored,
+      draftSaving,
+      handleSaveDraft,
+      postSavedErrored,
+      postSaving,
+      handlePostArticle
     };
   }
 });

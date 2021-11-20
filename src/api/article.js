@@ -1,5 +1,4 @@
 import service from '@/utils/service';
-
 const baseUrl = '/api/article';
 const articleApi = {};
 
@@ -74,7 +73,8 @@ articleApi.saveArticleToDraft = (article) => {
       tags: article.tags,
       copyright: article.copyright,
       contract: article.contract,
-      copyrightInfo: article.copyrightInfo
+      copyrightInfo: article.copyrightInfo,
+      createTime: article.createTime
     }
   });
 };
@@ -102,7 +102,8 @@ articleApi.updateOrComposeArticle = (article) => {
       tags: article.tags,
       copyright: article.copyright,
       contract: article.contract,
-      copyrightInfo: article.copyrightInfo
+      copyrightInfo: article.copyrightInfo,
+      createTime: article.createTime
     }
   });
 };
