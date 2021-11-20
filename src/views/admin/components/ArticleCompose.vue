@@ -109,6 +109,7 @@
     <div class="purr-editor">
       <markdown-editor
         v-model="articleToPost.content"
+        @update-html="handleUpdateHTML"
         @save-draft="handleSaveDraft"
         @preview-image="handlePreviewImage"
       />
@@ -167,6 +168,7 @@ export default defineComponent({
 
     // from backend to front end
     const transformBEArticle = (article) => {
+      console.log(article);
       articleToPost.id = article.id;
       articleToPost.abstract = article.articleAbstract;
       articleToPost.author = article.author;
@@ -188,6 +190,7 @@ export default defineComponent({
       articleToPost.tags = article.tags;
       articleToPost.target = article.target;
       articleToPost.status = article.status;
+      articleToPost.html = article.html;
     };
 
     // from drawer to editor
@@ -212,6 +215,7 @@ export default defineComponent({
       articleToPost.tags = articleSettings.tags;
       articleToPost.target = articleSettings.target;
       articleToPost.status = articleSettings.status;
+      articleToPost.html = articleSettings.html;
     };
 
     (() => {
@@ -260,8 +264,12 @@ export default defineComponent({
       tags: [], // 存放id
       abstract: '',
       backgroundUrl: '',
-      status: 0
+      status: 0,
+      html: ''
     });
+    const handleUpdateHTML = (html) => {
+      articleToPost.html = html;
+    };
 
     // 右上角的控件相关功能
     const handleSaveDraft = () => {
@@ -377,7 +385,8 @@ export default defineComponent({
       handlePreviewImage,
       handleSyncArticleSettings,
       articleStatus,
-      handleCloseArticleSettings
+      handleCloseArticleSettings,
+      handleUpdateHTML
     };
   }
 });

@@ -491,6 +491,7 @@ export default defineComponent({
       articleSettings.tags = article.tags;
       articleSettings.target = article.target;
       articleSettings.status = article.status;
+      articleSettings.html = article.html;
     };
     watch(props.articleToSave, (article) => {
       syncFromEditToDrawer(article);
@@ -521,7 +522,8 @@ export default defineComponent({
       tags: props.articleToSave.tags, // 存放id
       abstract: props.articleToSave.abstract,
       backgroundUrl: props.articleToSave.backgroundUrl,
-      status: props.articleToSave.status
+      status: props.articleToSave.status,
+      html: props.articleToSave.html
     });
     const copyrightAttachTextarea = ref({});
     watchEffect(async () => {

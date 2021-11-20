@@ -1,5 +1,4 @@
 import logger from '@/plugins/logger';
-import VueMarkdownEditor, { xss } from '@kangc/v-md-editor';
 
 export function isObject(value) {
   return (
@@ -187,10 +186,6 @@ export function transformArticleToDTO(payload) {
       payload.postTime && payload.postTime.getTime
         ? payload.postTime.getTime()
         : Date.now(),
-    html: xss.process(
-      VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(
-        payload.content
-      )
-    )
+    html: payload.html
   };
 }

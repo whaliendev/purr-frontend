@@ -28,10 +28,11 @@ export default defineComponent({
       default: ''
     }
   },
-  emits: ['saveDraft', 'previewImage', 'update:articleContent'],
+  emits: ['saveDraft', 'previewImage', 'updateHtml', 'update:articleContent'],
   methods: {
-    handleContentChange(text) {
+    handleContentChange(text, html) {
       this.$emit('update:articleContent', text);
+      this.$emit('updateHtml', html);
     },
     handleAttachmentUpload(event, insertImage, files) {
       if (files[0].size / 1024 / 1024 >= 1024) {
