@@ -491,7 +491,7 @@ export default {
 
       .bottom-controls-container {
         border-top: var(--el-border-base);
-        padding: 8px 16px;
+        padding: 8px 0px;
         left: 0;
         bottom: 0;
         //position: absolute;

@@ -22,6 +22,12 @@ const mutations = {
       data: focusList,
       timestamp: Date.now()
     };
+  },
+  storeLatestLinks(state, payload) {
+    state.linksList = payload.linksList;
+  },
+  storePageParams(state, payload) {
+    state.pageParams = payload.pageParams;
   }
 };
 

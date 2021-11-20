@@ -9,6 +9,12 @@ export default {
       focusList: {
         data: [],
         timestamp: -1
+      },
+      linksList: [],
+      pageParams: {
+        curPage: 1,
+        pageSize: 10,
+        pageNum: 1
       }
     };
   },
