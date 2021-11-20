@@ -9,11 +9,10 @@
     <div class="tag-info">
       <div class="tag-name-wrapper">
         <h4 class="tag-name">{{ tag.name }}</h4>
-        <span class="tag-operation-container">
+        <span class="tag-operation-container" @click="handleDeleteTag()">
           <font-awesome-icon
             :icon="['fas', 'times']"
             title="删除"
-            @click="handleDeleteTag()"
           >
           </font-awesome-icon>
         </span>

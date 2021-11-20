@@ -11,4 +11,11 @@ linkApi.getFocus = () => {
   });
 };
 
+linkApi.getLatestAdminLinks = (curPage, fetchNum) => {
+  return service({
+    url: `${baseUrl}/admin/recent?curPage=${curPage}&pageSize=${fetchNum}`,
+    method: 'get'
+  });
+}
+
 export default linkApi;
