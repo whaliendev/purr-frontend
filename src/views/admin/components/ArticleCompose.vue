@@ -109,7 +109,11 @@
       />
     </div>
 
-    <article-settings-drawer v-model="showSettingsDrawer" />
+    <article-settings-drawer
+      v-model="showSettingsDrawer"
+      :article-to-save="articleToPost"
+      @sync-article-settings="handleSyncArticleSettings"
+    />
     <new-tag-drawer v-model="newTagDrawerVisible" />
     <media-repo-drawer v-model="mediaRepoVisible" />
   </div>
@@ -126,7 +130,6 @@ import MediaRepoDrawer from '@/components/Drawer/MediaRepoDrawer';
 import { debounce } from '@/utils/util';
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus';
-import { datetimeFormat } from '@/utils/datetime';
 
 export default defineComponent({
   props: {
@@ -162,9 +165,9 @@ export default defineComponent({
       articleToPost.ccLicense = article.contract;
       articleToPost.attachCopyText = article.copyright; // 是否要附加版权信息,
       articleToPost.copyrightAttachText = article.copyrightInfo;
-      articleToPost.postTime = datetimeFormat(
-        article.updateTime ? article.updateTime : article.createTime
-      );
+      // articleToPost.postTime = new Date(
+      //   article.updateTime ? article.updateTime : article.createTime
+      // );
       articleToPost.originalStatus = article.isOriginal;
       articleToPost.pinnedStatus = article.isPinned;
       articleToPost.recommendedStatus = article.isRecommended;
@@ -173,7 +176,28 @@ export default defineComponent({
       articleToPost.allowPing = parseInt(article.pingStatus, 10);
       articleToPost.tags = article.tags;
       articleToPost.target = article.target;
-      console.log('articleToPost: ', articleToPost);
+    };
+
+    const handleSyncArticleSettings = (articleSettings) => {
+      // console.log('articleSettings', articleSettings);
+      articleToPost.id = articleSettings.id;
+      articleToPost.abstract = articleSettings.abstract;
+      articleToPost.author = articleSettings.author;
+      articleToPost.backgroundUrl = articleSettings.backgroundUrl;
+      articleToPost.commentStatus = articleSettings.commentStatus;
+      articleToPost.content = articleSettings.content;
+      articleToPost.ccLicense = articleSettings.ccLicense;
+      articleToPost.attachCopyText = articleSettings.attachCopyText; // 是否要附加版权信息,
+      articleToPost.copyrightAttachText = articleSettings.copyrightAttachText;
+      // articleToPost.postTime = articleSettings.postTime;
+      articleToPost.originalStatus = articleSettings.originalStatus;
+      articleToPost.pinnedStatus = articleSettings.pinnedStatus;
+      articleToPost.recommendedStatus = articleSettings.recommendedStatus;
+      articleToPost.linkName = articleSettings.linkName;
+      articleToPost.title = articleSettings.title;
+      articleToPost.allowPing = articleSettings.allowPing;
+      articleToPost.tags = articleSettings.tags;
+      articleToPost.target = articleSettings.target;
     };
 
     (() => {
@@ -204,7 +228,7 @@ export default defineComponent({
       content: '',
       author: '',
       linkName: '',
-      postTime: '',
+      // postTime: '',
       // 是否开启评论
       commentStatus: 1,
       recommendedStatus: 0,
@@ -278,8 +302,9 @@ export default defineComponent({
       });
     };
     const handleSelectBlur = () => {
-      if (articleToPost.tags.length === 0) return;
-      selectVisible.value = false;
+      // TODO fix select lose focus
+      // if (articleToPost.tags.length === 0) return;
+      // selectVisible.value = false;
     };
     const handleDeleteTag = (id) => {
       console.log(id);
@@ -308,7 +333,8 @@ export default defineComponent({
       openMediaRepoDrawer,
       mediaRepoVisible,
       handleDeleteTag,
-      handlePreviewImage
+      handlePreviewImage,
+      handleSyncArticleSettings
     };
   }
 });

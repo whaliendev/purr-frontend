@@ -26,7 +26,10 @@ const dataState = createPersistedState({
       articles: {
         articleDetails: val.articles.articleDetails
       },
-      medias: val.medias
+      medias: val.medias,
+      tags: {
+        adminTagsList: val.tags.adminTagsList
+      }
     };
   }
 });

@@ -10,4 +10,11 @@ tagApi.searchAdminTagsByKeyword = (keyword) => {
   });
 };
 
+tagApi.getAdminTagsByPagination = (curPage, pageSize) => {
+  return service({
+    url: `${baseUrl}/admin/recent?curPage=${curPage}&pageSize=${pageSize}`,
+    method: 'get'
+  });
+};
+
 export default tagApi;

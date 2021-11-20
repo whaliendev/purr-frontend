@@ -17,6 +17,28 @@ const actions = {
           reject(err);
         });
     });
+  },
+  getAdminTagsByPagination(context, payload) {
+    return new Promise((resolve, reject) => {
+      tagApi
+        .getAdminTagsByPagination(payload.curPage, payload.pageSize)
+        .then((response) => {
+          if (response.data && response.data.success) {
+            context.commit('storeAdminTagsList', {
+              tagsList: response.data.data.data
+            });
+            context.commit('storeAdminTagsPageParams', {
+              curPage: response.data.data.currentPage,
+              pageSize: response.data.data.pageSize,
+              pageNum: response.data.data.pageNum
+            });
+          }
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 };
 

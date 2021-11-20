@@ -6,7 +6,16 @@ export default {
   namespaced: true,
   state() {
     return {
-      tagOptions: []
+      tagOptions: [],
+      adminTagsList: {
+        data: [],
+        timestamp: -1,
+        pageParams: {
+          curPage: -1,
+          pageNum: -1,
+          pageSize: -1
+        }
+      }
     };
   },
   getters,
