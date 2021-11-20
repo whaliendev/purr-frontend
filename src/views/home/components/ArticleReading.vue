@@ -335,6 +335,7 @@ header {
 
   .markdown-body {
     margin-bottom: 32px;
+    font-size: var(--site-font-family);
   }
 
   .content-divider {
