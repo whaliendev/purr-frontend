@@ -49,7 +49,7 @@
         <label class="settings-item-label">文章短链名</label>
         <el-input
           placeholder="文章短链接名，如：article-short-link-name"
-          v-model="articleSettings.author"
+          v-model="articleSettings.linkName"
           size="medium"
           type="text"
           minlength="1"
@@ -68,6 +68,7 @@
           v-model="articleSettings.postTime"
           type="datetime"
           placeholder="文章的公开时间"
+          :default-value="new Date()"
           size="medium"
         ></el-date-picker>
       </div>
@@ -284,6 +285,8 @@
           v-model="articleSettings.tags"
           multiple
           collapse-tags
+          value-key="id"
+          :loading="loadingTags"
           placeholder="请选择现有标签或创建新标签"
           @visible-change="getAllTags"
           size="medium"
@@ -292,7 +295,7 @@
             v-for="tag in tagsList"
             :key="tag.id"
             :label="tag.name"
-            :value="tag.id"
+            :value="tag"
           >
             <tag
               :id="tag.id"
@@ -349,7 +352,7 @@
         <el-upload
           id="cover-upload"
           drag
-          action=""
+          :action="uploadMediaActionUrl"
           :headers="uploadHeaders"
           :multiple="false"
           accept="image/*"
@@ -391,16 +394,39 @@
     <div class="bottom-controls-container">
       <el-button type="danger" size="medium"> 高级设置 </el-button>
       <reactive-button
+        :errored="draftSavedErrored"
+        :loading="draftSaving"
+        errored-text="保存失败"
+        loaded-text="保存成功"
         text="保存草稿"
+        @callback="draftSavedErrored = false"
+        @click="handleSaveDraft"
         type="primary"
         size="medium"
       ></reactive-button>
-      <el-button type="primary" size="medium"> 发布 </el-button>
+      <reactive-button
+        :errored="postSavedErrored"
+        :loading="postSaving"
+        errored-text="发布失败"
+        loaded-text="发布成功"
+        text="发布"
+        @callback="postSavedErrored = false"
+        @click="handlePostArticle"
+        type="primary"
+        size="medium"
+      ></reactive-button>
     </div>
   </el-drawer>
 </template>
 <script>
-import { defineComponent, nextTick, reactive, ref, watchEffect } from 'vue';
+import {
+  defineComponent,
+  nextTick,
+  reactive,
+  ref,
+  watch,
+  watchEffect
+} from 'vue';
 import logger from '@/plugins/logger';
 import ReactiveButton from '@/components/Button/ReactiveButton';
 import Tag from '@/components/Badge/Tag';
@@ -408,45 +434,94 @@ import UploadFilled from '@/components/Icon/UploadFilled';
 import { useStore } from 'vuex';
 import NewTagDrawer from '@/components/Drawer/NewTagDrawer';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import mediaApi from '../../api/media';
 
 export default defineComponent({
   name: 'ArticleSettingsDrawer',
+  props: {
+    articleToSave: {
+      type: Object,
+      required: true
+    }
+  },
+  emits: ['syncArticleSettings', 'readyToClose'],
   components: { NewTagDrawer, UploadFilled, ReactiveButton, Tag },
-  setup: function () {
+  setup: function (props, context) {
     const store = useStore();
 
+    let skip = false;
     const handleClose = (done) => {
+      if (skip) {
+        skip = false;
+        return;
+      }
       ElMessageBox.confirm('你确定退出当前设置页吗？', '小提示', {
         confirmButtonText: '确认并保存',
         cancelButtonText: '取消'
       })
         .then(() => {
-          // TODO save current settings to localStorage
+          context.emit('syncArticleSettings', articleSettings);
           done();
         })
         .catch(() => {
           logger.info('user closed article-settings-drawer');
+          syncFromEditToDrawer(props.articleToSave);
         });
     };
 
+    // from edit to drawer
+    const syncFromEditToDrawer = (article) => {
+      articleSettings.id = article.id;
+      articleSettings.abstract = article.abstract;
+      articleSettings.author = article.author;
+      articleSettings.backgroundUrl = article.backgroundUrl;
+      if (articleSettings.backgroundUrl) showCoverPreview();
+      articleSettings.commentStatus = article.commentStatus;
+      articleSettings.content = article.content;
+      articleSettings.ccLicense = article.ccLicense;
+      articleSettings.attachCopyText = article.attachCopyText; // 是否要附加版权信息,
+      articleSettings.copyrightAttachText = article.copyrightAttachText;
+      // articleSettings.postTime = new Date();
+      articleSettings.originalStatus = article.originalStatus;
+      articleSettings.pinnedStatus = article.pinnedStatus;
+      articleSettings.recommendedStatus = article.recommendedStatus;
+      articleSettings.linkName = article.linkName;
+      articleSettings.title = article.title;
+      articleSettings.allowPing = article.allowPing;
+      articleSettings.tags = article.tags;
+      articleSettings.target = article.target;
+      articleSettings.status = article.status;
+    };
+    watch(props.articleToSave, (article) => {
+      syncFromEditToDrawer(article);
+    });
+
+    // initial
     const articleSettings = reactive({
+      id: props.articleToSave.id,
+      title: props.articleToSave.title,
+      author: props.articleToSave.author,
+      content: props.articleToSave.content,
+      linkName: props.articleToSave.linkName,
+      // postTime: props.articleToSave.postTime,
       // 是否开启评论
-      commentStatus: 1,
-      recommendedStatus: 0,
-      pinnedStatus: 0,
+      commentStatus: props.articleToSave.commentStatus,
+      recommendedStatus: props.articleToSave.recommendedStatus,
+      pinnedStatus: props.articleToSave.pinnedStatus,
       // 是否原创
-      originalStatus: 1,
+      originalStatus: props.articleToSave.originalStatus,
       // 是否需要在复制时自动添加版权信息
-      attachCopyText: 1,
+      attachCopyText: props.articleToSave.attachCopyText,
       // 选择的CC License
-      ccLicense: 1,
+      ccLicense: props.articleToSave.ccLicense,
       // 当非原创时选择添加的附加信息
-      copyrightAttachText: '',
-      target: '_blank',
-      allowPing: 1,
-      tags: [], // 存放id
-      abstract: '',
-      backgroundUrl: ''
+      copyrightAttachText: props.articleToSave.copyrightAttachText,
+      target: props.articleToSave.target,
+      allowPing: props.articleToSave.allow,
+      tags: props.articleToSave.tags, // 存放id
+      abstract: props.articleToSave.abstract,
+      backgroundUrl: props.articleToSave.backgroundUrl,
+      status: props.articleToSave.status
     });
     const copyrightAttachTextarea = ref({});
     watchEffect(async () => {
@@ -460,14 +535,62 @@ export default defineComponent({
       }
     });
     // 存放完整tag对象
-    const tagsList = ref([]);
     const newTagDrawerVisible = ref(false);
-    const getAllTags = () => {};
+
+    // 获取数据API
+    const curPage = ref(1);
+    const fetchNum = ref(100);
+    const pageNum = ref(1);
+    const tagsList = ref([]);
+    const loadingTags = ref(false);
+    const fetchTagsByPagination = (force = false) => {
+      const adminTagsListPageParams =
+        store.getters['tags/adminTagsListPageParams'];
+      if (
+        !force &&
+        adminTagsListPageParams.curPage === curPage.value &&
+        adminTagsListPageParams.pageNum === pageNum.value &&
+        adminTagsListPageParams.pageSize === fetchNum.value &&
+        (store.getters['tags/adminTagsListTimestamp'] - Date.now()) / 1000 <= 30
+      ) {
+        tagsList.value = store.getters['tags/adminTagsList'];
+        const localPageParams = store.getters['tags/adminTagsListPageParams'];
+        curPage.value = localPageParams.curPage;
+        fetchNum.value = localPageParams.pageSize;
+        pageNum.value = localPageParams.pageNum;
+      } else {
+        loadingTags.value = true;
+        store
+          .dispatch('tags/getAdminTagsByPagination', {
+            curPage: curPage.value,
+            pageSize: fetchNum.value
+          })
+          .then((response) => {
+            if (response.data && response.data.success) {
+              tagsList.value = store.getters['tags/adminTagsList'];
+              const localPageParams =
+                store.getters['tags/adminTagsListPageParams'];
+              curPage.value = localPageParams.curPage;
+              fetchNum.value = localPageParams.pageSize;
+              pageNum.value = localPageParams.pageNum;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            loadingTags.value = false;
+          });
+      }
+    };
+    const getAllTags = () => {
+      fetchTagsByPagination();
+    };
 
     // cover相关的API
     const coverVisible = ref(articleSettings.backgroundUrl !== '');
     const uploadHeaders = reactive({
-      'Access-Key': store.getters.accessToken
+      'Access-Token': store.getters.accessToken
     });
     const showCoverPreview = () => {
       coverVisible.value = true;
@@ -480,12 +603,13 @@ export default defineComponent({
       closeCoverPreview();
     };
     const openGalleryDrawer = () => {};
-    const onUploadSuccessfully = () => {
+    const onUploadSuccessfully = (response) => {
       ElMessage.success({
         center: true,
         message: '上传成功',
         duration: 1000
       });
+      articleSettings.backgroundUrl = `https://purr.group${response.data.url}`;
       showCoverPreview();
     };
 
@@ -524,6 +648,74 @@ export default defineComponent({
         '%';
     };
 
+    const draftSavedErrored = ref(false);
+    const draftSaving = ref(false);
+    const handleSaveDraft = () => {
+      draftSaving.value = true;
+      store
+        .dispatch('articles/editOrSaveArticleDraft', articleSettings)
+        .then((res) => {
+          if (res) {
+            ElMessage.success({
+              center: true,
+              message: '保存草稿成功'
+            });
+            articleSettings.status = 0;
+            skip = true;
+            context.emit('readyToClose');
+          } else {
+            draftSavedErrored.value = true;
+            ElMessage.error({
+              center: true,
+              message: '保存草稿失败'
+            });
+          }
+        })
+        .catch((err) => {
+          draftSavedErrored.value = true;
+          console.log(err);
+        })
+        .finally(() => {
+          draftSaving.value = false;
+        });
+    };
+
+    const postSavedErrored = ref(false);
+    const postSaving = ref(false);
+    const handlePostArticle = () => {
+      postSaving.value = true;
+      store
+        .dispatch('articles/editOrCreateArticle', articleSettings)
+        .then((res) => {
+          if (res) {
+            ElMessage.success({
+              center: true,
+              message: '发布成功'
+            });
+            articleSettings.status = 1;
+            skip = true;
+            context.emit('readyToClose');
+          } else {
+            postSavedErrored.value = true;
+            ElMessage.error({
+              center: true,
+              message: '发布文章失败'
+            });
+          }
+        })
+        .catch((err) => {
+          draftSavedErrored.value = true;
+          ElMessage.error({
+            center: true,
+            message: '发布文章失败'
+          });
+          console.log(err);
+        })
+        .finally(() => {
+          postSaving.value = false;
+        });
+    };
+
     return {
       handleClose,
       articleSettings,
@@ -541,7 +733,15 @@ export default defineComponent({
       articleSettingsDrawerWidth,
       hideNewTagDrawer,
       expandArticleSettingsDrawer,
-      newTagDrawerWidth
+      newTagDrawerWidth,
+      uploadMediaActionUrl: mediaApi.uploadMediaActionUrl,
+      loadingTags,
+      draftSavedErrored,
+      draftSaving,
+      handleSaveDraft,
+      postSavedErrored,
+      postSaving,
+      handlePostArticle
     };
   }
 });

@@ -1,9 +1,17 @@
 const mutations = {
-  storeLatestTags(state, payload) {
-    state.tagList = payload.tagList;
+  storeKeywordTags(state, payload) {
+    state.tagOptions = payload.tagOptions;
   },
-  storePageParams(state, payload) {
-    state.pageParams = payload.pageParams;
+  storeAdminTagsList(state, payload) {
+    state.adminTagsList.data = payload.tagsList;
+    state.adminTagsList.timestamp = Date.now();
+  },
+  storeAdminTagsPageParams(state, payload) {
+    state.adminTagsList.pageParams = {
+      curPage: payload.curPage,
+      pageSize: payload.pageSize,
+      pageNum: payload.pageNum
+    };
   }
 };
 

@@ -2,7 +2,6 @@
   <el-drawer
     custom-class="new-tag-drawer"
     :size="drawerWidth"
-    :before-close="handleClose"
     :lock-scroll="false"
     :destroy-on-close="true"
     :append-to-body="true"
@@ -68,7 +67,7 @@
       <el-upload
         id="cover-upload"
         drag
-        action=""
+        :action="uploadMediaActionUrl"
         :headers="uploadHeaders"
         :multiple="false"
         accept="image/*"
@@ -132,10 +131,10 @@
 
 <script>
 import { defineComponent, reactive, ref, toRef, watch } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import UploadFilled from '@/components/Icon/UploadFilled';
-import logger from '@/plugins/logger';
 import { useStore } from 'vuex';
+import mediaApi from '@/api/media';
 
 export default defineComponent({
   name: 'NewTagDrawer',
@@ -150,19 +149,19 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const handleClose = (done) => {
-      ElMessageBox.confirm('你确定退出当前设置页吗？', '小提示', {
-        confirmButtonText: '确认并保存',
-        cancelButtonText: '取消'
-      })
-        .then(() => {
-          // TODO save current settings to localStorage
-          done();
-        })
-        .catch(() => {
-          logger.info('user cancelled close new-tag-drawer');
-        });
-    };
+    // const handleClose = (done) => {
+    //   ElMessageBox.confirm('你确定退出当前设置页吗？', '小提示', {
+    //     confirmButtonText: '确认并保存',
+    //     cancelButtonText: '取消'
+    //   })
+    //     .then(() => {
+    //       // TODO save current settings to localStorage
+    //       done();
+    //     })
+    //     .catch(() => {
+    //       logger.info('user cancelled close new-tag-drawer');
+    //     });
+    // };
 
     const predefinedColors = [
       '#fe9600',
@@ -184,7 +183,7 @@ export default defineComponent({
     // cover相关的API
     const coverVisible = ref(tagToSave.backgroundUrl !== '');
     const uploadHeaders = reactive({
-      'Access-Key': store.getters.accessToken
+      'Access-Token': store.getters.accessToken
     });
     const showCoverPreview = () => {
       coverVisible.value = true;
@@ -236,7 +235,7 @@ export default defineComponent({
     });
 
     return {
-      handleClose,
+      // handleClose,
       tagToSave,
       uploadHeaders,
       removeCover,
@@ -247,7 +246,8 @@ export default defineComponent({
       customColor,
       syncTagColor,
       predefinedColors,
-      customPredefinedColors
+      customPredefinedColors,
+      uploadMediaActionUrl: mediaApi.uploadMediaActionUrl
     };
   }
 });

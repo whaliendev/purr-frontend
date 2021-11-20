@@ -14,6 +14,10 @@ export function datetimeFormat(
   return dayjs.utc(datetime).tz(timeZone).format(pattern);
 }
 
+export function parseDatetimeString(datetime) {
+  return dayjs.utc(datetime).tz(timeZone);
+}
+
 export function timeAgo(datetime, formatString = 'YYYY/MM/DD') {
   const currentTime = new Date().getTime();
   const between = currentTime - datetime;

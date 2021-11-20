@@ -53,13 +53,13 @@
           :icon="['fab', 'markdown']"
           class="media-op"
           title="复制"
-          @click="handleCopyMarkdownLink"
+          @click.stop="handleCopyMarkdownLink"
         />
         <font-awesome-icon
           :icon="['fas', 'link']"
           class="media-op"
           title="复制"
-          @click="handleCopyLink"
+          @click.stop="handleCopyLink"
         />
       </span>
     </div>

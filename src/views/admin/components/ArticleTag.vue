@@ -187,15 +187,16 @@ export default {
 
     const fetchTagsByPagination = () => {
       store
-        .dispatch('tags/getLatestAdminTags', {
+        .dispatch('tags/getAdminTagsByPagination', {
           curPage: curPage.value,
-          fetchNum: fetchNum.value
+          pageSize: fetchNum.value
         })
         .then((response) => {
           const data = response.data;
           if (data && data.success) {
-            tagList.value = store.getters['tags/tagList'];
-            pageNum.value = store.getters['tags/pageParams'].pageNum;
+            tagList.value = store.getters['tags/adminTagsList'];
+            pageNum.value =
+              store.getters['tags/adminTagsListPageParams'].pageNum;
           }
         })
         .catch(() => {})

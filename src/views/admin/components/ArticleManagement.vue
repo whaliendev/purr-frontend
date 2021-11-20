@@ -240,10 +240,12 @@ import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { ellipsisFormat, normalizeNum } from '@/utils/util';
 import { datetimeFormat, timeAgo } from '@/utils/datetime';
+import { useRouter } from 'vue-router';
 export default {
   components: { BaseCard, Tag },
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     // 控件相关功能
     const keyword = ref('');
@@ -338,8 +340,7 @@ export default {
       console.log(tagId, rowId);
     };
     const handleEditArticle = (articleId) => {
-      // TODO add logic to edit article
-      console.log(articleId);
+      router.push({ name: 'article-compose', query: { id: articleId } });
     };
     const handleMoveArticleToTrash = (articleId) => {
       // TODO add logic to move article to trash

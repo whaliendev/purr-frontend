@@ -65,7 +65,7 @@
         <el-row>
           <el-col :lg="20">
             <article class="article-content">
-              <div class="markdown-body" v-html="article.content"></div>
+              <div class="markdown-body" v-html="article.html"></div>
               <hr class="content-divider" />
               <div class="tags-container" v-if="article.tags.length !== 0">
                 <a
@@ -134,7 +134,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
-    const curArticle = ref(null);
+    const curArticle = ref({ content: '' });
     const loadingData = ref(false);
     const getArticleDetailsByLinkName = () => {
       const linkName = route.path;
@@ -143,7 +143,7 @@ export default defineComponent({
       // 如果本地有三分钟内的缓存，那么先不请求数据
       if (
         curArticleDetail == null ||
-        (Date.now() - curArticleDetail.timestamp) / 1000 > 180
+        (Date.now() - curArticleDetail.timestamp) / 1000 > 60
       ) {
         loadingData.value = true;
         store
@@ -179,7 +179,7 @@ export default defineComponent({
           });
       } else {
         logger.log(
-          '文章阅读界面有三分钟的缓存，如果在调试文章效果，可以考虑删除缓存'
+          '文章阅读界面有一分钟的缓存，如果在调试文章效果，可以考虑删除缓存'
         );
         curArticle.value = curArticleDetail.data;
       }

@@ -46,4 +46,11 @@ mediaApi.getAdminAllCategories = () => {
   });
 };
 
+mediaApi.getMediaDetailsByLinkName = (linkName) => {
+  return service({
+    url: `${baseUrl}/details?linkName=${linkName}`,
+    method: 'get'
+  });
+};
+
 export default mediaApi;

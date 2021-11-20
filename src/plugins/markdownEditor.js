@@ -6,6 +6,7 @@ import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn';
 import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn';
 import createTodoListPlugin from '@kangc/v-md-editor/lib/plugins/todo-list/index';
 import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index';
+import createTipPlugin from '@kangc/v-md-editor/lib/plugins/tip/index';
 
 VueMarkdownEditor.use(githubTheme, {
   Hljs: hljs,
@@ -14,6 +15,8 @@ VueMarkdownEditor.use(githubTheme, {
     console.log(md);
   }
 });
+
+VueMarkdownEditor.use(createTipPlugin());
 VueMarkdownEditor.use(createEmojiPlugin());
 VueMarkdownEditor.use(createKatexPlugin());
 VueMarkdownEditor.use(createTodoListPlugin());

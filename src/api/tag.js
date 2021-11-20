@@ -1,11 +1,18 @@
-import service from '../utils/service';
+import service from '@/utils/service';
 
 const baseUrl = '/api/tag';
 const tagApi = {};
 
-tagApi.getLatestAdminTags = (curPage, fetchNum) => {
+tagApi.searchAdminTagsByKeyword = (keyword) => {
   return service({
-    url: `${baseUrl}/admin/recent?curPage=${curPage}&pageSize=${fetchNum}`,
+    url: `${baseUrl}/searchByKeyword?keyword=${keyword}`,
+    method: 'get'
+  });
+};
+
+tagApi.getAdminTagsByPagination = (curPage, pageSize) => {
+  return service({
+    url: `${baseUrl}/admin/recent?curPage=${curPage}&pageSize=${pageSize}`,
     method: 'get'
   });
 };

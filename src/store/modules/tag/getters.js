@@ -1,6 +1,8 @@
 const getters = {
-  tagList: (state) => state.tagList,
-  pageParams: (state) => state.pageParams
+  tagOptions: (state) => state.tagOptions,
+  adminTagsList: (state) => state.adminTagsList.data,
+  adminTagsListTimestamp: (state) => state.adminTagsList.timestamp,
+  adminTagsListPageParams: (state) => state.adminTagsList.pageParams
 };
 
 export default getters;
