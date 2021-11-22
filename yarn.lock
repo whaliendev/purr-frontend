@@ -4884,14 +4884,15 @@ element-plus@1.1.0-beta.16:
   version "1.1.0-beta.16"
   resolved "https://registry.npmjs.org/element-plus/-/element-plus-1.1.0-beta.16.tgz"
   integrity sha512-4BZEldnIfFZs5A/saRqaWE4PwTot4p3YZU7qsDr3ev2zp35pcCL9TtpWMLIvNTMxvxKew0HTDPTk9fAWIZFQrQ==
+
   dependencies:
     "@popperjs/core" "^2.10.1"
     "@vueuse/core" "~6.1.0"
-    async-validator "^3.4.0"
+    async-validator "^4.0.3"
     dayjs "^1.10.7"
     lodash "^4.17.21"
     memoize-one "^5.2.1"
-    normalize-wheel "^1.0.1"
+    normalize-wheel-es "^1.1.0"
     resize-observer-polyfill "^1.5.1"
 
 elliptic@^6.5.3:
