@@ -11,8 +11,10 @@
   </el-button>
 </template>
 <script>
+import { ElButton } from 'element-plus';
 export default {
   name: 'ReactiveButton',
+  components: [ElButton],
   props: {
     type: {
       type: String,

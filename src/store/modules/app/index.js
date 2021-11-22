@@ -12,6 +12,6 @@ export default {
     };
   },
   getters,
-  actions,
-  mutations
+  actions: actions,
+  mutations: mutations
 };

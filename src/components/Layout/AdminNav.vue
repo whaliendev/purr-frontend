@@ -1,7 +1,9 @@
 <template>
   <nav>
     <div class="purr-logo">
-      <router-link :to="{ name: 'dashboard' }"><span>PURR</span></router-link>
+      <router-link :to="{ name: 'admin-dashboard' }"
+        ><span>PURR</span></router-link
+      >
       <div class="collapse-button">
         <font-awesome-icon
           :icon="['fas', 'chevron-right']"
@@ -14,7 +16,7 @@
       </div>
     </div>
     <ul class="menu main-nav">
-      <li class="menu-item is-active">
+      <li class="menu-item is-active nav-item">
         <el-tooltip
           placement="right"
           content="首页"
@@ -23,7 +25,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'dashboard' }">
+          <router-link :to="{ name: 'admin-dashboard' }">
             <font-awesome-icon :icon="['fas', 'th-large']" />
             <span>首页</span>
           </router-link>
@@ -33,7 +35,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="article-menu">
-            <router-link :to="{ name: 'article' }">
+            <router-link :to="{ name: 'admin-article' }">
               <font-awesome-icon :icon="['fas', 'pen']" />
               <span>文章</span>
             </router-link>
@@ -41,17 +43,17 @@
           </div>
         </div>
         <ul class="menu" id="article-menu">
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'article-manage' }">
               <span>管理文章</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'article-compose' }">
               <span>写作文章</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'article-tag' }">
               <span>标签</span>
             </router-link>
@@ -59,7 +61,7 @@
         </ul>
       </li>
       <!-- end of sub menu of articles -->
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="评论"
@@ -68,13 +70,13 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'comment' }">
+          <router-link :to="{ name: 'admin-comment' }">
             <font-awesome-icon :icon="['fas', 'comment-dots']" />
             <span>评论</span>
           </router-link>
         </el-tooltip>
       </li>
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="动态"
@@ -83,7 +85,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'moment' }">
+          <router-link :to="{ name: 'admin-moment' }">
             <font-awesome-icon :icon="['fas', 'paper-plane']" />
             <span>动态</span>
           </router-link>
@@ -93,7 +95,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="page-menu">
-            <router-link :to="{ name: 'page' }">
+            <router-link :to="{ name: 'admin-page' }">
               <font-awesome-icon :icon="['fas', 'file-alt']" />
               <span>页面</span>
             </router-link>
@@ -101,12 +103,12 @@
           </div>
         </div>
         <ul class="menu" id="page-menu">
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'page-manage' }">
               <span>管理页面</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'page-design' }">
               <span>设计页面</span>
             </router-link>
@@ -114,7 +116,7 @@
         </ul>
       </li>
       <!-- end of pages -->
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="多媒体库"
@@ -123,13 +125,13 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'media' }">
+          <router-link :to="{ name: 'admin-media' }">
             <font-awesome-icon :icon="['fas', 'music']" />
             <span>多媒体库</span>
           </router-link>
         </el-tooltip>
       </li>
-      <li class="menu-item">
+      <li class="menu-item nav-item">
         <el-tooltip
           placement="right"
           content="链接"
@@ -138,7 +140,7 @@
           :show-after="150"
           :visible-arrow="false"
         >
-          <router-link :to="{ name: 'link' }">
+          <router-link :to="{ name: 'admin-link' }">
             <font-awesome-icon :icon="['fas', 'link']" />
             <span>链接</span>
           </router-link>
@@ -148,7 +150,7 @@
       <li class="menu-item sub-menu close">
         <div class="popover-ref-wrapper">
           <div class="sub-menu__title" data-popover-template="settings-menu">
-            <router-link :to="{ name: 'settings' }">
+            <router-link :to="{ name: 'admin-settings' }">
               <font-awesome-icon :icon="['fas', 'wrench']" />
               <span>设置</span>
             </router-link>
@@ -156,17 +158,17 @@
           </div>
         </div>
         <ul class="menu" id="settings-menu">
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'settings-menu' }">
               <span>菜单设置</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'settings-user' }">
               <span>用户设置</span>
             </router-link>
           </li>
-          <li class="menu-item">
+          <li class="menu-item nav-item">
             <router-link :to="{ name: 'settings-app' }">
               <span>系统设置</span>
             </router-link>
@@ -188,12 +190,27 @@ export default defineComponent({
       isCollapsed: false
     };
   },
+  computed: {
+    path() {
+      return this.$route.path;
+    }
+  },
   mounted() {
     const that = this;
+
+    // add event listener for collapse button
+    const aside = document.querySelector('nav');
+    const collapseBtn = document.querySelector('.collapse-button');
+    if (this.isCollapsed) aside.classList.add('is-collapsed');
+    collapseBtn.addEventListener('click', () => {
+      this.isCollapsed = !this.isCollapsed;
+      aside.classList.toggle('is-collapsed');
+    });
+
     // add click event listener of list nav item
     const menuItems = document.querySelectorAll('.main-nav > li');
     menuItems.forEach((menuItem) => {
-      menuItem.addEventListener('click', function() {
+      menuItem.addEventListener('click', function () {
         const that = this;
         menuItems.forEach((menuItem) => {
           menuItem.classList.remove('is-active');
@@ -235,17 +252,31 @@ export default defineComponent({
       }
     });
 
-    // add event listener for collapse button
-    const aside = document.querySelector('nav');
-    const collapseBtn = document.querySelector('.collapse-button');
-    collapseBtn.addEventListener('click', () => {
-      this.isCollapsed = !this.isCollapsed;
-      aside.classList.toggle('is-collapsed');
-    });
-
     // activate dashboard nav item initially
-    const dashboard = document.querySelector('.main-nav > li:nth-of-type(1)');
-    dashboard.classList.add('is-active');
+    const pathname = window.location.pathname;
+
+    const firstClassNav = /\/\w+\/\w+/;
+    const matches = pathname.match(firstClassNav);
+    const curNav = document.querySelector(`a[href="${matches[0]}"]`);
+    let navItem = curNav.parentElement.parentElement.parentElement;
+    if (!navItem.classList.contains('menu-item'))
+      navItem = curNav.parentElement;
+    navItem.classList.add('is-active');
+    navItem.classList.remove('close');
+    curNav.classList.add('is-active');
+  },
+  watch: {
+    path(val) {
+      const firstClassNav = /\/\w+\/\w+/;
+      const matches = val.match(firstClassNav);
+      const curNav = document.querySelector(`a[href="${matches[0]}"]`);
+      let navItem = curNav.parentElement.parentElement.parentElement;
+      if (!navItem.classList.contains('menu-item'))
+        navItem = curNav.parentElement;
+      navItem.classList.add('is-active');
+      navItem.classList.remove('close');
+      curNav.classList.add('is-active');
+    }
   }
 });
 </script>
@@ -264,6 +295,7 @@ li {
 .purr-logo {
   display: flex;
   justify-content: center;
+  align-items: center;
   font-size: 20px;
   font-weight: 900;
   position: relative;
@@ -394,8 +426,8 @@ nav {
   }
 
   > li {
-    margin-left: 28px;
-    margin-right: 28px;
+    margin-left: 24px;
+    margin-right: 24px;
     -webkit-tap-highlight-color: transparent;
   }
 

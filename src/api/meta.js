@@ -11,4 +11,11 @@ metaApi.isInstalled = () => {
   });
 };
 
+metaApi.getUserProfile = () => {
+  return service({
+    url: `${baseUrl}/profile`,
+    method: 'get'
+  });
+};
+
 export default metaApi;

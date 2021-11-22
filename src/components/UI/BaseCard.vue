@@ -1,27 +1,50 @@
 <template>
-  <el-card :class="{ info }" :shadow="shadow">
+  <div class="base-card" :class="[radius, shadow ? 'shadow' : '']">
     <slot></slot>
-  </el-card>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-
 export default defineComponent({
+  name: 'BaseCard',
   props: {
-    shadow: String,
-    info: Boolean
-  }
+    shadow: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    radius: {
+      type: String,
+      required: false,
+      default: 'base',
+      validator: (val) => {
+        return ['base', 'small', 'round'].includes(val);
+      }
+    }
+  },
+  setup() {}
 });
 </script>
 
-<style scoped>
-:deep(.el-card__body) {
-  padding: 8px 8px 8px 14px;
-  font-size: 14px;
+<style lang="scss" scoped>
+.base-card {
+  background-color: var(--el-color-white);
 }
 
-.el-card.info :deep(.el-card__body) {
-  color: var(--el-color-info);
+.base-card.shadow {
+  box-shadow: var(--el-box-shadow-base);
+}
+
+.base-card.base {
+  border-radius: var(--el-border-radius-base);
+}
+
+.base-card.small {
+  border-radius: var(--el-border-radius-small);
+}
+
+.base-card.round {
+  border-radius: var(--el-border-radius-round);
 }
 </style>

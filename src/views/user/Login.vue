@@ -188,6 +188,7 @@ export default defineComponent({
       }
     });
     const handleLogin = () => {
+      store.dispatch('refreshToken');
       domLoginForm.value.validate((valid) => {
         if (valid) {
           loginForm.loading = true;
@@ -199,6 +200,7 @@ export default defineComponent({
           store
             .dispatch('login', loginData)
             .then((response) => {
+              logger.debug(response);
               if (response.data.success) {
                 loginForm.loading = false;
               } else {
@@ -222,7 +224,7 @@ export default defineComponent({
           message: '登录成功！',
           duration: 1000
         });
-        router.replace({ name: 'dashboard' });
+        router.replace({ name: 'admin-dashboard' });
       }
     };
     const submitLoginForm = async () => {

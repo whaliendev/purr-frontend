@@ -6,8 +6,45 @@ const actions = {
       userApi
         .login(loginData)
         .then((response) => {
-          // commit token to local
+          // commit token to local storage
+          const data = response.data.data;
+          context.commit('storeUserSecrets', {
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+            accessExpiredTime: data.accessExpiredTime
+          });
           resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  refreshToken(context, refreshToken) {
+    return new Promise((resolve, reject) => {
+      userApi
+        .refreshToken(refreshToken)
+        .then((response) => {
+          const data = response.data.data;
+          context.commit('refreshToken', {
+            accessToken: data.accessToken
+          });
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  checkTokenValidity(context) {
+    return new Promise((resolve, reject) => {
+      userApi
+        .checkTokenValidity(context.getters.accessToken)
+        .then((response) => {
+          const data = response.data;
+          if (data && data.success) {
+            resolve(data.data);
+          }
         })
         .catch((error) => {
           reject(error);
