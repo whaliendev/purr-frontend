@@ -55,7 +55,7 @@
     >
       <p>点击或拖拽以上传文件</p>
       <template #tip>
-        <em class="upload-tip">上传的单个文件最大大小不能超过100M</em>
+        <em class="upload-tip">上传的单个文件最大大小不能超过1024M</em>
         <em class="upload-tip">单击上传完成的文件以复制链接</em>
       </template>
     </el-upload>
