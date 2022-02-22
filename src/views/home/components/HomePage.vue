@@ -153,8 +153,8 @@
 <script>
 import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import ColorThief from 'colorthief';
-import isLightOrDark from '@/utils/util';
+// import ColorThief from 'colorthief';
+// import isLightOrDark from '@/utils/util';
 import FocusCard from '@/components/Card/FocusCard';
 import { useRouter } from 'vue-router';
 import MomentCard from '@/components/Card/MomentCard';
@@ -287,13 +287,13 @@ export default defineComponent({
 
     // 展示相关API
     let header,
-      colorThief,
+      // colorThief,
       headerBGImages = undefined;
     let carousel = ref(null);
     const isDarkColor = ref(true);
     onMounted(() => {
       if (!header) header = document.querySelector('#homepage-header');
-      if (!colorThief) colorThief = new ColorThief();
+      // if (!colorThief) colorThief = new ColorThief();
       carousel.value.setActiveItem(
         Math.floor(Math.random() * recommendedArticles.value.length)
       );
@@ -324,12 +324,12 @@ export default defineComponent({
           if (carouselIndex === index) headerBGImage.style.display = 'block';
           else headerBGImage.style.display = 'none';
         });
-        const image = document.querySelector(
-          '.el-carousel__item.is-active img'
-        );
-        const [r, g, b] = colorThief.getColor(image);
-        isDarkColor.value = isLightOrDark([r, g, b]) === 'dark';
-        header.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        // const image = document.querySelector(
+        //   '.el-carousel__item.is-active img'
+        // );
+        // const [r, g, b] = colorThief.getColor(image);
+        // isDarkColor.value = isLightOrDark([r, g, b]) === 'dark';
+        // header.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
       }, 100);
     };
 
